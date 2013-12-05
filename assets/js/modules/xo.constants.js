@@ -1,0 +1,20 @@
+XO.CONST = {
+    CLASS:{
+        ACTIVE:'current',
+        ANIMATION_IN:'in',
+        ANIMATION_OUT:'out',
+        ANIMATION_INMOTION:'inmotion'
+    },
+    SELECTOR:{
+        PAGE_WRAPPER:'.ui_app_bd'
+    },
+    ATTR:{
+        PAGE:'data-page',
+        PAGE_SRC:'data-pagesrc',
+        ANIMATION:'data-animate'
+    },
+    DEFAULT:{
+        ANIMATION:'none',
+        TEMPLATE_SUFFIX:'.html'
+    }
+};
