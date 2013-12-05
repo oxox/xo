@@ -1,0 +1,149 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="description" content="A lightweight webapp framework developed by [TENCENT ECC_UX_OS Team](http://ecd.tencent.com)" />
+    <meta name="keywords" content="webapp,xo,xo.js" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no" />
+    <meta name="apple-touch-fullscreen" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <title>xo.js</title>
+    <link rel="stylesheet" href="assets/css/style.css" />
+    <link rel="stylesheet" href="assets/css/touch.css" />
+    <link rel="stylesheet" href="assets/css/ui.loading.css" />
+
+    <!--DNS Prefetch-->
+    <!--<link rel="dns-prefetch" href=""/>-->
+    <!--/DNS Prefetch-->
+
+</head>
+<body>
+    <!--Loading页-->
+    <div id="ui_loading" class="ui_loading">
+        <div class="ui_loading_bd"><img class="ui_loading_img" src="http://static.gtimg.com/icson/img/common/load.gif" alt="Loading"/></div>
+    </div>
+
+    <!--App框架-->
+    <div class="ui_app">
+        <div class="ui_app_bd">
+            
+            <!--页面框架-->
+            <div class="ui_page">
+                <div id="J_header" class="ui_hd">
+                        
+                    <!--首页头部-->
+                    <div id="J_hd1" class="ui_title">
+                        <h1>易迅商城微信概念版</h1>
+                    </div>
+
+                    <!--搜索页头部-->
+                    <div id="J_hd2" class="ui_title">
+                        <div class="mod_search_form">
+                            <input type="input" />
+                            <button type="button" data-back="view1" class="bg1 b_back1">取消</button>
+                        </div>
+                    </div>
+
+                    <!--一级浏览页头部-->
+                    <div id="J_hd3" class="ui_title">
+                        <h1>产品浏览</h1>
+                        <a href="#view1" data-back="view1" class="b_back"></a>
+                    </div>
+
+                    <!--二级浏览页头部-->
+                    <div id="J_hd4" class="ui_title">
+                        <h1>数码家电</h1>
+                        <a href="#view3" data-back="view3"class="b_back"></a>
+                    </div>
+
+                    <!--列表页头部-->
+                    <div id="J_hd5" class="ui_title">
+                        <h1>产品列表</h1>
+                        <a href="#view4" data-back="view4"class="b_back"></a>
+                    </div>
+
+                    <!--详情页头部-->
+                    <div id="J_hd6" class="ui_title">
+                        <h1>产品详情</h1>
+                        <a href="#view5" data-back="view5" class="b_back"></a>
+                    </div>
+
+                </div>
+                <!--/ui_hd-->
+                <div id="J_main" class="ui_bd">
+
+                </div>
+                <!--/ui_bd-->
+            </div>
+            <!--页面框架-->
+
+        </div>
+    </div>
+    <!--/WebApp框架-->
+
+    <div id="J_mask" class="ui_mask">
+        <div id="J_mask_bd" class="ui_mask_bd"><img class="ui_loading_img" src="http://static.gtimg.com/icson/img/common/load.gif" alt="Loading"/></div>
+    </div>
+
+
+    <!--Templates-->
+    <script type="text/jquery-tpl" id="tplView1">
+
+    </script>
+    <script type="text/jquery-tpl" id="tplView2">
+        
+    </script>
+    <script type="text/jquery-tpl" id="tplView3">
+        
+    </script>
+    <script type="text/jquery-tpl" id="tplView4">
+        
+    </script>
+    <script type="text/jquery-tpl" id="tplView5">
+        
+    </script>
+    <script type="text/jquery-tpl" id="tplView6">
+        
+    </script>
+    <!--/Templates-->
+    <!--<script src="http://weinre.qq.com/target/target-script-min.js#levinhuang"></script>-->
+    <script src="assets/libs/js/fastclick.js"></script>
+    <script src="assets/libs/js/iscroll.js"></script>
+    <script src="assets/libs/js/zepto.min.js"></script>
+    <script src="assets/libs/js/underscore-min.js"></script>
+    <script src="assets/libs/js/backbone-min.js"></script>
+
+    <script src="assets/js/App.js"></script>
+    <script src="assets/js/router.js"></script>
+    <script src="assets/js/views/loading.js"></script>
+    <script src="assets/js/views/header.js"></script>
+    <script src="assets/js/views/main.js"></script>
+    <script src="assets/js/views/mask.js"></script>
+    <script src="assets/js/views/view1.js"></script>
+    <script src="assets/js/views/view2.js"></script>
+    <script src="assets/js/views/view3.js"></script>
+    <script src="assets/js/views/view4.js"></script>
+    <script src="assets/js/views/view5.js"></script>
+    <script src="assets/js/views/view6.js"></script>
+    <script>
+        $(document).ready(function(){
+
+            var init = function(){
+                App.init();
+                
+            };
+
+            init();
+
+
+
+            //applicationCache.addEventListener('cached', function(){ init(); });
+            //applicationCache.addEventListener('noupdate', function(){ init(); });
+            //applicationCache.addEventListener('updateready', function(){ init(); });
+            //applicationCache.addEventListener('error', function(){ init(); });
+        });
+    </script>
+</body>
+</html>
