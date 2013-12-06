@@ -6,7 +6,7 @@ XO('support',function($,C){
 
             var mqProp = "transform-3d",
                 vendors = [ "Webkit", "Moz", "O" ],
-                fakeBody = $( "<body>" ).prependTo( "html" ),
+                fakeBody = $( "<body id='XO-3DTEST'>" ).prependTo( "html" ),
                 // Because the `translate3d` test below throws false positives in Android:
                 ret = XO.media.test( "(-" + vendors.join( "-" + mqProp + "),(-" ) + "-" + mqProp + "),(" + mqProp + ")" ),
                 el, transforms, t;

@@ -3,7 +3,8 @@ XO('Router',function($,C){
     this.init = function(opts){
         var customRoutes = opts.routes||{
             'page/:page': 'showPage',
-            'page/:page/:param': 'showPage',
+            'page/:page/:view':'showPage',
+            'page/:page/:view/:data': 'showPage',
             'page/:page/section/:section':'showSection',
             'page/:page/section/:section/:param':'showSection',
             'page/:page/aside/:aside':'showAside',
@@ -41,21 +42,21 @@ XO('Router',function($,C){
                     XO.history.navigate(XO.Router.instance.isGoback, true);
                 });
             },
-            showPage: function(pageId, param){
+            showPage: function(pageId,viewId,param){
+                viewId = viewId||'index';
+                param= JSON.parse(param||'{}');
                 var aniName = (!this.linkClicked)?C.DEFAULT.TRANSITION:null,
                     viewObj = {
                         pid:pageId,
-                        vid:C.DEFAULT.VIEW,
+                        vid:viewId,
                         animation:aniName,
-                        isBack:this.isGoback,
-                        src:null,
+                        back:this.isGoback,
+                        dir:XO.App.opts.viewDir,
                         type:C.ACTION.PAGE,
                         cssHost:C.SELECTOR.PAGE_WRAPPER
                     };
-                param = JSON.parse(param||'{}');
-                viewObj.id=viewObj.pid+'-'+viewObj.vid;
                 viewObj.params = param;
-                XO.Controller[pageId].Index(viewObj);
+                XO.Controller[pageId][viewId](viewObj);
                 this.isGoback = false;
                 this.linkClicked = false;
             },

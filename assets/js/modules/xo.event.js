@@ -1,9 +1,17 @@
 XO('Event',function($){
     this.on= function(fullName,handler){
-        XO.$body.on(fullName,handler);
+        if(arguments.length<=2){
+            XO.$body.bind(fullName,handler);
+            return;
+        }
+        $(arguments[0]).bind(arguments[1],arguments[2]);
     };
     this.trigger = function(fullName,args){
-        XO.$body.trigger(fullName,args);
+        if(arguments.length<=2){
+            XO.$body.trigger(fullName,args);
+            return;
+        }
+        $(arguments[0]).trigger(arguments[1],arguments[2]);
     };
 
     this.init = function(){

@@ -18,6 +18,9 @@ body{
 	-webkit-touch-callout:none;
 	word-break:break-word;
 	color:#666;
+	max-width: 1024px;
+	min-width: 320px;
+	margin:0 auto;
 }
 
 body,input,button,select,textarea,table{
@@ -72,7 +75,6 @@ a{
 		text-align:center;
 		background:#1d7ad9;
 	}
-	.ui_title,.ui_card{display:none;}
 		.ui_hd h1{color:#FFF;}
 
 	.ui_bd{
@@ -84,6 +86,8 @@ a{
 		width:100%;
 		-webkit-overflow-scrolling:touch;
 	}
+
+	.ui_loading_img{padding:1px 9px;border-radius: 50%;background-color: #fff;}
 
 
 	/*===== 组件 =====*/
@@ -158,7 +162,7 @@ a{
 		.mod_list_item{display:block; position:relative; padding:10px; border-top:1px solid #F7F7F7; border-bottom:1px solid #CCC;}
 			.mod_list_item:first-child{border-top:none;}
 			.mod_list_item:last-child{border-bottom:none;}
-			.mod_list_item:after{content:" "; position:absolute; right:10px; top:50%; margin-top:-4px; width:4px; height:8px; background:url("img/ico_arrow.png") no-repeat 0 0;}
+			.mod_list_item:after{content:" "; position:absolute; right:10px; top:50%; margin-top:-4px; width:4px; height:8px; background:url("../img/ico_arrow.png") no-repeat 0 0;}
 			.mod_list_info{font-size:12px;}
 			.mod_list_info p{margin-top:5px;}
 			
@@ -207,8 +211,8 @@ a{
 			.mod_search_list a{display:block; padding:8px 10px; border-bottom:1px solid #CCC;}
 
 		/*===== 星星 =====*/
-			.mod_star{display:inline-block; width:113px; height:21px; background:url("img/ico_star.png") no-repeat 0-23px;}
-			.mod_star i{display:block; height:21px; background:url("img/ico_star.png") no-repeat 0 0;}
+			.mod_star{display:inline-block; width:113px; height:21px; background:url("../img/ico_star.png") no-repeat 0-23px;}
+			.mod_star i{display:block; height:21px; background:url("../img/ico_star.png") no-repeat 0 0;}
 	
 	
 	/*===== 首页 sy =====*/
@@ -228,11 +232,11 @@ a{
 			.sy_nav a{display:inline-block; width:33%; height:80px; text-align:center;}
 			.sy_nav a:nth-child(3n-1){width:34%;}
 			.sy_nav i{display:block; margin:10px auto; width:32px; height:32px;}
-			.sy_nav .ico_search{background:url("img/ico_search.png") no-repeat 50% 50%;}
-			.sy_nav .ico_browser{background:url("img/ico_browser.png") no-repeat 50% 50%;}
-			.sy_nav .ico_fav{background:url("img/ico_fav.png") no-repeat 50% 50%;}
-			.sy_nav .ico_account{background:url("img/ico_account.png") no-repeat 50% 50%;}
-			.sy_nav .ico_about{background:url("img/ico_about.png") no-repeat 50% 50%;}
+			.sy_nav .ico_search{background:url("../img/ico_search.png") no-repeat 50% 50%;}
+			.sy_nav .ico_browser{background:url("../img/ico_browser.png") no-repeat 50% 50%;}
+			.sy_nav .ico_fav{background:url("../img/ico_fav.png") no-repeat 50% 50%;}
+			.sy_nav .ico_account{background:url("../img/ico_account.png") no-repeat 50% 50%;}
+			.sy_nav .ico_about{background:url("../img/ico_about.png") no-repeat 50% 50%;}
 
 
 
@@ -257,8 +261,3 @@ a{
 		.sd_property select,
 		.sd_property input{padding:5px; border:1px solid #CCC;}
 		.sd_property input{width:100px;}
-
-
-	@media all and (min-width:1024px){
-		html{display:none!important;}
-	}

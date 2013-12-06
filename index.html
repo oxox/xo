@@ -12,7 +12,7 @@
     <title>xo.js</title>
     <link rel="stylesheet" href="assets/css/style.css" />
     <link rel="stylesheet" href="assets/css/touch.css" />
-    <link rel="stylesheet" href="assets/css/ui.loading.css" />
+    <link rel="stylesheet" href="assets/css/animations.css" />
 
     <!--DNS Prefetch-->
     <!--<link rel="dns-prefetch" href=""/>-->
@@ -20,10 +20,6 @@
 
 </head>
 <body>
-    <!--Loading页-->
-    <div id="ui_loading" class="ui_loading">
-        <div class="ui_loading_bd"><img class="ui_loading_img" src="http://static.gtimg.com/icson/img/common/load.gif" alt="Loading"/></div>
-    </div>
 
     <!--App框架-->
     <div class="ui_app">
@@ -31,7 +27,7 @@
     </div>
     <!--/WebApp框架-->
 
-    <div id="J_mask" class="ui_mask">
+    <div id="oxview-common-mask" class="ui_mask">
         <div id="J_mask_bd" class="ui_mask_bd"><img class="ui_loading_img" src="http://static.gtimg.com/icson/img/common/load.gif" alt="Loading"/></div>
     </div>
 
@@ -59,6 +55,12 @@
     
     <!--app biz code-->
     <script src="assets/js/controllers/home.js"></script>
+    <script src="assets/js/views/home/index.js"></script>
+    <script src="assets/js/views/home/page1.js"></script>
+    <script src="assets/js/views/home/page2.js"></script>
+    <script src="assets/js/views/home/page3.js"></script>
+    <script src="assets/js/views/home/page4.js"></script>
+    <script src="assets/js/views/home/page5.js"></script>
 
     <script>
         $(document).ready(function(){

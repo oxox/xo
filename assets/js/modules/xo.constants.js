@@ -24,7 +24,8 @@ XO.CONST = {
         ANIMATION_NONE:'none',
         TEMPLATE_SUFFIX:'/',
         VIEW:'index',
-        PAGE:'home'
+        PAGE:'home',
+        VIEW_ID_PREFIX:'oxview'
     },
     ACTION:{
         PAGE:'page',

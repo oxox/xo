@@ -4,6 +4,9 @@ XO('Controller',function($,C){
             id:pageId,
             Index:function(param){
                 XO.warn('XO.Controller.Index was invoked!');
+            },
+            viewId:function(vid){
+                return XO.View.getId(pageId,vid);
             }
         },options||{});
     };

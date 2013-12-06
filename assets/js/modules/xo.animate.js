@@ -53,11 +53,16 @@ XO('Animate',function($,C){
         $obj.addClass(C.CLASS.UIACTIVE);
     };
 
-    this.run = function($el,aniName,goingBack){
+    this.run = function($el,aniName,direction,goingBack){
         var animation = this.get(aniName);
         animation = animation.name!==C.DEFAULT.ANIMATION_NONE?animation:null;
+        direction = !direction? C.CLASS.ANIMATION_IN:direction;
 
         goingBack = goingBack || false;
+
+        var isHiding = direction==C.CLASS.ANIMATION_OUT,
+            finalAnimationName,
+            clOut;
 
         // Error check for target page
         if ($el === undefined || $el.length === 0) {
@@ -67,16 +72,22 @@ XO('Animate',function($,C){
         }
 
         // Error check for $from === $to
-        if ($el.hasClass(C.CLASS.ACTIVE)) {
+        if (!isHiding && $el.hasClass(C.CLASS.ACTIVE)) {
             this.unselect();
             XO.warn('You are already on the page you are trying to navigate to.');
+            return false;
+        }
+
+        if(isHiding && !$el.hasClass(C.CLASS.ACTIVE)){
+            this.unselect();
+            XO.warn('element already hidden!');
             return false;
         }
 
         // Collapse the keyboard
         $(':focus').trigger('blur');
 
-        $el.trigger(XO.EVENT.Animate.Start, { direction: C.CLASS.ANIMATION_IN, back: goingBack });
+        $el.trigger(XO.EVENT.Animate.Start, { "direction": direction, back: goingBack });
 
         if (XO.support.animationEvents && animation && XO.App.opts.useAnimations) {
             // Fail over to 2d animation if need be
@@ -86,7 +97,7 @@ XO('Animate',function($,C){
             }
 
             // Reverse animation if need be
-            var finalAnimationName = animation.name,
+            finalAnimationName = animation.name,
                 is3d = animation.is3d ? (' '+C.CLASS.ANIMATION_3D) : '';
 
             if (goingBack) {
@@ -96,26 +107,40 @@ XO('Animate',function($,C){
             XO.warn('finalAnimationName is ' + finalAnimationName + '.');
 
             // Bind internal 'cleanup' callback
-            $el.one('webkitAnimationEnd', animateEndHandler);
+            $el.bind('webkitAnimationEnd', animateEndHandler);
 
             // Trigger animations
             XO.$body.addClass(C.CLASS.ANIMATING + is3d);
 
-            $el.addClass([finalAnimationName,C.CLASS.ANIMATION_IN,C.CLASS.ACTIVE].join(' '));
+            clOut = [finalAnimationName,C.CLASS.ANIMATION_OUT, C.CLASS.ANIMATION_INMOTION].join(' ');
+
+            if(!isHiding){
+                $el.addClass([finalAnimationName,direction,C.CLASS.ACTIVE].join(' '));
+            }else{
+                $el.removeClass(C.CLASS.ACTIVE).addClass(clOut);
+            }
+
 
         } else {
-            $el.addClass([C.CLASS.ACTIVE,C.CLASS.ANIMATION_IN].join(' '));
+            if(!isHiding){
+                $el.addClass([C.CLASS.ACTIVE,direction].join(' '));
+            }else{
+                $el.remvoeClass(C.CLASS.ACTIVE);
+            }
             animateEndHandler();
         }
 
         // Private navigationEnd callback
         function animateEndHandler(event) {
-            var bufferTime = XO.App.opts.tapBuffer,
-                clOut = [finalAnimationName,C.CLASS.ANIMATION_OUT,C.CLASS.ANIMATION_INMOTION].join(' ');
+            var bufferTime = XO.App.opts.tapBuffer;
 
-            
+            $el.unbind('webkitAnimationEnd', animateEndHandler);
+
             if (finalAnimationName) {
                 $el.removeClass(finalAnimationName);
+            }
+            if(isHiding){
+                $el.removeClass(clOut);
             }
 
             if (XO.support.animationEvents && animation && XO.App.opts.useAnimations) {
@@ -127,13 +152,15 @@ XO('Animate',function($,C){
             // 'in' class is intentionally delayed,
             // as it is our ghost click hack
             setTimeout(function() {
-                $el.removeClass(C.CLASS.ANIMATION_IN);
-                window.scroll(0,0);
+                if(!isHiding){
+                    $el.removeClass(direction);
+                    window.scroll(0,0);
+                }
             }, bufferTime);
 
             // Trigger custom events
             $el.trigger(XO.EVENT.Animate.End, {
-                direction:C.CLASS.ANIMATION_IN,
+                "direction":direction,
                 animation: animation,
                 back: goingBack
             });

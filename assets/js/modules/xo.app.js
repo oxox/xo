@@ -7,9 +7,6 @@ XO('App',function($,C){
 
     this.init = function(opts){
 
-        //浏览器类型
-        $.os.desktop = !($.os.ios || $.os.android || $.os.blackberry || $.os.opera || $.os.fennec);
-
         //fastclick https://github.com/ftlabs/fastclick
         FastClick.attach(document.body);
 

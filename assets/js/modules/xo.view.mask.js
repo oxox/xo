@@ -1,24 +1,21 @@
-XO('uiMask',function($,C){
-    this.init = function(){
-        XO.View.define(this.id,{
-            id:'J_mask'
-        });
-    };
-    this.isMasking = false;
-    this.show =function(aniObj,onShowed){
+XO.View.define({
+    pid:'common',
+    vid:'mask',
+    alias:'uiMask',
+    dir:null,//dir为null说明为页面中已经存在的视图
+    isMasking:false,
+    show:function(aniObj,onShowed){
         if(this.isMasking)
             return;
         
         this.isMasking = true;
-        var view = XO.View.get(this.id);
-        view.show(aniObj);
-        view.$el.one(XO.EVENT.Animate.End,function(e){
+        this.animate(aniObj||{});
+        this.$el.one(XO.EVENT.Animate.End,function(e){
             onShowed&&onShowed();
         });
-    };
-    this.hide=function(){
-        var view = XO.View.get(this.id);
-        view.$el.hide();
+    },
+    hide:function(){
+        this.animate({animation:'fade',direction:XO.CONST.CLASS.ANIMATION_OUT,back:false});
         this.isMasking = false;
-    };
+    }
 });

@@ -30,10 +30,12 @@
         baseRouter:B.Router,
         history:B.history,
         baseView:B.View,
-        warn:function(txt){
+        warn:function(txt,obj){
+            txt = 'XO.JS:'+txt;
             if (window.console !== undefined && XO.App.opts.debug === true) {
-                console.warn('XO.JS',txt);
+                console.warn(txt,obj);
             }
+            return txt;
         },
         isExternalLink:function($el){
             return ($el.attr('target') === '_blank' || $el.attr('rel') === 'external' || $el.is('a[href^="http://maps.google.com"], a[href^="mailto:"], a[href^="tel:"], a[href^="javascript:"], a[href*="youtube.com/v"], a[href*="youtube.com/watch"]'));
@@ -45,11 +47,11 @@
         exposeEvent : function(name){
             if($.isArray(name)){
                 for(var i=0,j=name.length;i<j;i++){
-                    XO.EVENT[this.id][name[i]]='on'+this.id+name[i]+'.XO';;
+                    XO.EVENT[this.id][name[i]]='on'+this.id+name[i];//+'.XO';;
                 }
                 return;
             };
-            XO.EVENT[this.id][name]='on'+this.id+name+'.XO';
+            XO.EVENT[this.id][name]='on'+this.id+name;//+'.XO';//zepto不支持命名空间
         },
         disposeEvent : function(name){
             XO.$body.off(XO.EVENT[this.id][name]);
