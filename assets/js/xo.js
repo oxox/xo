@@ -7,19 +7,19 @@
         };
         var mod = {id:id};
         //event interface for mod
-        this.EVENT[id]={};
+        XO.EVENT[id]={};
         //inherit utils features
         $.extend(mod,_utils);
         //construct the module
         fn.call(mod,$,XO.CONST);
-        this[id] = mod;
+        XO[id] = mod;
         mod = null;
     };
     //extensions
     $.extend(XO,{
         version:'1.0.0',
         author:'http://oxox.io',
-        $body:$(body),
+        $body:$(document.body),
         $win:$(window),
         EVENT:{},
         LS:localStorage,
@@ -29,7 +29,15 @@
         },
         baseRouter:B.Router,
         history:B.history,
-        baseView:B.View
+        baseView:B.View,
+        warn:function(txt){
+            if (window.console !== undefined && XO.App.opts.debug === true) {
+                console.warn('XO.JS',txt);
+            }
+        },
+        isExternalLink:function($el){
+            return ($el.attr('target') === '_blank' || $el.attr('rel') === 'external' || $el.is('a[href^="http://maps.google.com"], a[href^="mailto:"], a[href^="tel:"], a[href^="javascript:"], a[href*="youtube.com/v"], a[href*="youtube.com/watch"]'));
+        }
     });
 
     //EVENT UTILS

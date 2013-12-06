@@ -5,10 +5,6 @@
         $body = $(doc.body),
         local = window.localStorage.setItem;
 
-    app.info = {};
-
-    //浏览器类型
-    $.os.desktop = !($.os.ios || $.os.android || $.os.blackberry || $.os.opera || $.os.fennec);
 
     //事件
     app.hasTouch = 'ontouchstart' in W;
@@ -47,6 +43,7 @@
 
         //fastclick https://github.com/ftlabs/fastclick
         FastClick.attach(document.body);
+        
         //reset
         //$html.height(window.innerHeight + 1000);
 

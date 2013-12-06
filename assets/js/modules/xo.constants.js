@@ -1,9 +1,16 @@
 XO.CONST = {
     CLASS:{
         ACTIVE:'current',
+        UIACTIVE:'active',
         ANIMATION_IN:'in',
         ANIMATION_OUT:'out',
-        ANIMATION_INMOTION:'inmotion'
+        ANIMATION_INMOTION:'inmotion',
+        SUPPORT_3D:'supports3d',
+        IOS5_AND_ABOVE:'ios5up',
+        SUPPORT_TOUCHSCROLL:'touchscroll',
+        SUPPORT_AUTOSCROLL:'autoscroll',
+        ANIMATION_3D:'animating3d',
+        ANIMATING:'animating'
     },
     SELECTOR:{
         PAGE_WRAPPER:'.ui_app_bd'
@@ -14,7 +21,13 @@ XO.CONST = {
         ANIMATION:'data-animate'
     },
     DEFAULT:{
-        ANIMATION:'none',
-        TEMPLATE_SUFFIX:'.html'
+        ANIMATION_NONE:'none',
+        TEMPLATE_SUFFIX:'/',
+        VIEW:'index',
+        PAGE:'home'
+    },
+    ACTION:{
+        PAGE:'page',
+        SECTION:'section'
     }
 };
