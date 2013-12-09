@@ -24,6 +24,7 @@ XO('View',function($,C){
             this.el = document.getElementById(this.id);
             this.$el = $(this.el);
             this.animation = this.animation||(this.el.getAttribute[C.ATTR.ANIMATION]||XO.App.opts.defaultAnimation);
+            //初始化插件
             XO.Event.trigger(this,XO.EVENT.View.Inited,[this]);
         },
         initFromSrc:function(cbk){

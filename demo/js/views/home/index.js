@@ -6,7 +6,7 @@ XO.View.define({
     init:function(){
         XO.warn('View inited:'+this.id);
         var me = this;
-        XO.Event.on(XO.EVENT.View.Inited,function(e){
+        XO.Event.on(this,XO.EVENT.View.Inited,function(e){
             me.onRender();
         });
     },

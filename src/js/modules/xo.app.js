@@ -20,9 +20,10 @@ XO('App',function($,C){
             debug:true,
             defaultPage:C.DEFAULT.PAGE,
             defaultView:C.DEFAULT.VIEW,
-            viewDir:'assets/html/pages/'
+            viewDir:XO.$body[0].getAttribute('data-viewdir')||'assets/html/pages/'
         },opts||{});
-        delete this['init'];
+        //delete self's init method
+        delete this.init;
         //init all modules
         for(var c in XO){
             XO[c].init&&XO[c].init.call(XO[c],this.opts);
@@ -48,8 +49,6 @@ XO('App',function($,C){
         XO.support.touch && window.addEventListener('touchstart', function(){
             XO.App.hideAddressBar();
         }, true);
-
-        delete this.init;
 
     };
 });
