@@ -3,7 +3,6 @@
 		.mod_nav{
 			overflow:hidden;
 			position:absolute;
-			z-index:999;
 			padding-top:1px;
 			width:100%;
 			background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(22,22,22,1)), color-stop(100%,rgba(0,0,0,1)));
@@ -35,6 +34,4 @@
 			}
 
 			.mod_nav_inner a.on:after{display:none;}
-
-			.mod_nav_fixed{position:fixed; top:0;}
 /*====== e - menu =======*/

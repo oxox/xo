@@ -93,7 +93,8 @@ XO('View',function($,C){
 
             aniObj = aniObj||{};
 
-            var $curView = XO.View.getCurView(this.pid),
+            //TODO:如何view的类型是section，则为页面内的切换，获取当前view时要加上pageId
+            var $curView = XO.View.getCurView(/*this.pid*/),
                 animation = aniObj.animation||this.animation;
             if(!$curView || $curView[0].id===this.id){//无前一个View或者前一个View和当前View是同一个
                 XO.Animate.run(this.$el,animation,aniObj.direction,aniObj.back);
@@ -183,9 +184,8 @@ XO('View',function($,C){
     this.setCurView = function($view,pageId){
         if(pageId){
             this.curViews[pageId].$curView = $view;
-        }else{
-            this.curViews['$curView'] = $view;
-        }
+        };
+        this.curViews['$curView'] = $view;
     };
     this.getCurView = function(pageId){
         if(pageId){

@@ -125,3 +125,8 @@
 .navbar-default .navbar-text {
   color: #777777;
 }
+
+.navbar-btn {
+  margin-top: 8px;
+  margin-bottom: 8px;
+}

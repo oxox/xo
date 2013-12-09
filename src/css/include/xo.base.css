@@ -115,10 +115,27 @@ html,body{display: block;height:100%;}
     -webkit-backface-visibility:hidden;
 }
 
-.xo_page,.xo_section,.xo_aside,.xo_popup,.xo_mask{display: block;}
+.xo_page,.xo_section,.xo_aside,.xo_popup{display: none;}
+.current,.inmotion{display: block!important;}
+.current{z-index: 11;}
+.pull-right {
+  float: right !important;
+}
 
-.current{
-    z-index: 11;
+.pull-left {
+  float: left !important;
+}
+
+.hide {
+  display: none !important;
+}
+
+.show {
+  display: block !important;
+}
+
+.invisible {
+  visibility: hidden;
 }
 .hide{
     display: none!important;

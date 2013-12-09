@@ -178,3 +178,5 @@
     .sd_property select,
     .sd_property input{padding:5px; border:1px solid #CCC;}
     .sd_property input{width:100px;}
+
+.page_mall_index .navbar-btn{position: relative;z-index: 2;color:#fff;}
