@@ -140,10 +140,3 @@ html,body{display: block;height:100%;}
 .hide{
     display: none!important;
 }
-.ui_page:not(.current):not(.inmotion),
-.ui_section:not(.current):not(.inmotion),
-.ui_aside:not(.current):not(.inmotion),
-.ui_popup:not(.current):not(.inmotion),
-.ui_mask:not(.current):not(.inmotion) {
-    display: none!important;
-}
