@@ -16,9 +16,11 @@ XO.Controller.define('home',{
             }else{
                 view.animate(param);
             }
-
+            var diyige = XO.plugin.get('diyige');
             XO.warn('controller.home.Index',view);
         });
+
+
     },
     page1:function(param){
         XO.View.get(param.pid,param.vid,function(err,view){
