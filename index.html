@@ -67,7 +67,9 @@
     <script>
         $(document).ready(function(){
 
-            XO.App.init();
+            XO.App.init({
+                debug:false
+            });
 
             //applicationCache.addEventListener('cached', function(){ init(); });
             //applicationCache.addEventListener('noupdate', function(){ init(); });

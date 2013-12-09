@@ -17,7 +17,7 @@ XO('App',function($,C){
             trackScrollPositions:true,
             useTouchScroll:true,
             tapBuffer:100, // High click delay = ~350, quickest animation (slide) = 250
-            debug:true,
+            debug:false,
             defaultPage:C.DEFAULT.PAGE,
             defaultView:C.DEFAULT.VIEW,
             viewDir:XO.$body[0].getAttribute('data-viewdir')||'assets/html/pages/'

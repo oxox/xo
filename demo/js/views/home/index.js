@@ -1,7 +1,7 @@
 XO.View.define({
     pid:'home',
     vid:'index',
-    version:'20131206',
+    version:'20131209',
     init:function(){
         XO.warn('View inited:'+this.id);
         var me = this;
