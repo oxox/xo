@@ -1,18 +1,17 @@
 XO.View.define({
     pid:'common',
-    vid:'mask',
-    alias:'uiMask',
+    vid:'loader',
+    alias:'uiLoader',
     dir:null,//dir为null说明为页面中已经存在的视图
-    isMasking:false,
+    isLoading:false,
     show:function(){
-        if(this.isMasking)
+        if(this.isLoading)
             return;
-        
-        this.isMasking = true;
+        this.isLoading = true;
         this.$el.removeClass(XO.CONST.CLASS.HIDE);
     },
     hide:function(){
         this.$el.addClass(XO.CONST.CLASS.HIDE);
-        this.isMasking = false;
+        this.isLoading = false;
     }
 });

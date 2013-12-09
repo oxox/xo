@@ -44,7 +44,7 @@ XO('View',function($,C){
             // remote template
             this.src = this.dir+this.pid+'/'+this.vid+'.html';
             // check localstorage firstly
-            if(lsObj&&(lsObj = JSON.parse(lsObj))&&lsObj.src===this.src&&lsObj.version===this.version){
+            if(lsObj&&(lsObj = JSON.parse(lsObj))&&lsObj.src===this.src&&lsObj.version===this.version&&!XO.App.opts.debug){
                 this.tpl = lsObj.tpl;
                 XO.Event.trigger(XO.EVENT.View.InitedTemplate,[this]);
                 cbk&&cbk(null,this);
@@ -75,7 +75,7 @@ XO('View',function($,C){
         render:function(data){
             
             var html = XO.toHtml(this.tpl,data);
-            this.$host.append(html);
+            this.$host.prepend(html);
             this.isRendered = true;
             this.initFromDom();
         },
@@ -113,7 +113,7 @@ XO('View',function($,C){
         }
 
         this.curViews[opts.pid] = this.curViews[opts.pid] ||{};
-
+        opts.cssHost = opts.cssHost||C.SELECTOR.DEFAULT_CSS_HOST;
         opts.id = this.getId(opts.pid,opts.vid);
         opts = $.extend(opts,this.defaultActions);
         opts.isInited = false;
@@ -162,9 +162,9 @@ XO('View',function($,C){
             cbk(null,view);
             return;
         }
-        XO.View.uiMask.show({animation:'none'});
+        XO.View.uiLoader.show();
         view.initFromSrc(function(err,view1){
-            XO.View.uiMask.hide();
+            XO.View.uiLoader.hide();
             cbk(err,view1);
         });
     };

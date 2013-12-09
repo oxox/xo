@@ -1,5 +1,10 @@
-@import url(../../src/css/ox.base.css);
-@import url(../../src/css/ox.animations.css);
+.navbar-header {
+  position: absolute;
+  left: 50%;
+}
+.navbar-header .navbar-brand {
+  margin-left: -50%;
+}
 
 .c_tx1{color:#FF0000;}
 /*===== 组件 =====*/

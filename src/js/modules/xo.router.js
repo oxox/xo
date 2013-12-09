@@ -45,7 +45,7 @@ XO('Router',function($,C){
             showPage: function(pageId,viewId,param){
                 viewId = viewId||'index';
                 param= JSON.parse(param||'{}');
-                var aniName = (!this.linkClicked)?C.DEFAULT.TRANSITION:null,
+                var aniName = (!this.linkClicked)?C.DEFAULT.ANIMATION_NONE:null,
                     viewObj = {
                         pid:pageId,
                         vid:viewId,

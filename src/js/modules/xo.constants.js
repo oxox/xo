@@ -10,10 +10,12 @@ XO.CONST = {
         SUPPORT_TOUCHSCROLL:'touchscroll',
         SUPPORT_AUTOSCROLL:'autoscroll',
         ANIMATION_3D:'animating3d',
-        ANIMATING:'animating'
+        ANIMATING:'animating',
+        HIDE:'hide'
     },
     SELECTOR:{
-        PAGE_WRAPPER:'.ui_app_bd'
+        PAGE_WRAPPER:'body',
+        DEFAULT_CSS_HOST:'body'
     },
     ATTR:{
         PAGE:'data-page',
@@ -25,7 +27,7 @@ XO.CONST = {
         TEMPLATE_SUFFIX:'/',
         VIEW:'index',
         PAGE:'home',
-        VIEW_ID_PREFIX:'oxview'
+        VIEW_ID_PREFIX:'xoview'
     },
     ACTION:{
         PAGE:'page',

@@ -10,24 +10,21 @@
     <meta name="format-detection" content="telephone=no" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
     <title>xo.js</title>
+    <link rel="stylesheet" href="src/css/xo.css" />
     <link rel="stylesheet" href="demo/css/style.css" />
-
-    <!--DNS Prefetch-->
-    <!--<link rel="dns-prefetch" href=""/>-->
-    <!--/DNS Prefetch-->
 
 </head>
 <body data-viewdir="demo/html/pages/">
 
-    <!--App框架-->
-    <div class="ui_app">
-        <div class="ui_app_bd"></div>
-    </div>
-    <!--/WebApp框架-->
 
-    <div id="oxview-common-mask" class="ui_mask">
-        <div id="J_mask_bd" class="ui_mask_bd"><img class="ui_loading_img" src="http://static.gtimg.com/icson/img/common/load.gif" alt="Loading"/></div>
-    </div>
+    <!--S 遮罩-->
+    <!--页面切换过程中遮罩用于屏蔽用户操作-->
+    <div id="xoview-common-mask" class="xo_mask hide"></div>
+    <!--E 遮罩-->
+
+    <!--S loader-->
+    <div id="xoview-common-loader" class="xo_loader hide"><div class="xo_loader_animate"><span></span><span></span><span></span></div></div>
+    <!--E loader-->
 
     <!--<script src="http://weinre.qq.com/target/target-script-min.js#levinhuang"></script>-->
     <!--3party libs-->
@@ -47,6 +44,7 @@
     <script src="src/js/modules/xo.controller.js"></script>
     <script src="src/js/modules/xo.view.js"></script>
     <script src="src/js/modules/xo.view.mask.js"></script>
+    <script src="src/js/modules/xo.view.loader.js"></script>
     <script src="src/js/modules/xo.router.js"></script>
     <script src="src/js/modules/xo.animate.js"></script>
     <script src="src/js/modules/xo.app.js"></script>

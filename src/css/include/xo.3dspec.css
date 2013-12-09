@@ -1,0 +1,4 @@
+.supports3d{-webkit-perspective: 1000;}
+.supports3d .ox_page,.supports3d .ox_section,.supports3d .ox_aside,.supports3d .ox_popup,.supports3d .ox_mask{
+    -webkit-transform: translate3d(0, 0, 0) rotate(0) scale(1);
+}
