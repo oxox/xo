@@ -47,6 +47,24 @@ XO('Controller',function($,C){
                     data = opts1.data,
                     dataIsFunction = $.isFunction(data);
 
+                //TODO:finish the switchTo function
+                XO.View.switchTo(pid,vid,opts1.param,function(err,view,onDataReady){
+                    if(err){
+                        cbk(actionName+err);
+                        return;
+                    }
+                    if(!dataIsFunction){
+                        onDataReady(null,data);
+                        cbk(null,view);
+                        return;
+                    }
+                    data.call(opts1.dataPointer,opts1.param,function(err1,jsonData){
+                        onDataReady(err1,jsonData);
+                        cbk(err1,view);
+                    });
+
+                },opts1.hardRefresh);
+
                 XO.View.get(pid,vid,function(err,view){
                     if(err){
                         XO.warn(actionName+err);

@@ -98,6 +98,14 @@ XO('View',function($,C){
 
             XO.View.switch(curView,this,animation,aniObj.back,this.pid);
             
+        },
+        //显示视图
+        animateIn:function(aniObj){
+            //TODO：XO.Animate.animateIn(this,aniObj);
+        },
+        //隐藏视图
+        animateOut:function(aniObj){
+            //TODO:XO.Animate.animateOut(this,aniObj);
         }
     };
     /**
@@ -204,6 +212,41 @@ XO('View',function($,C){
 
         return true;
     };//switch
+    //TODO:
+    this.switchTo = function(pid,vid,aniObj,cbk,forceRefresh){
+        return;
+        var curView = this.getCurView();
+        //移出当前view
+        if(curView){
+            curView.animateOut(aniObj);
+        }
+        //加载目标视图
+        this.get(pid,vid,function(err,view){
+            if(err){
+                //TODO:用浮层组件显示错误
+                XO.warn('XO.View.switchTo:'+err);
+                cbk(err);
+                return;
+            }
+            if(view.isRendered&&!forceRefresh){
+                view.animateIn(aniObj);
+                return;
+            }
+            //获取数据，渲染视图
+            XO.uiLoader.show();
+            cbk(null,view,function(err1,data1){
+                XO.uiLoader.hide();
+                if(err1){
+                    //获取数据出错
+                    XO.warn('XO.View.switchTo:'+err1);
+                    return;
+                }
+                //渲染视图
+                view.render(data1);
+                view.animateIn({animation:'none'});
+            });
+        });
+    };
 
     this.init = function(){
         //初始化所有未初始化的视图
