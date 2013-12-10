@@ -57,7 +57,7 @@
 	            var self = this;
 	            setTimeout(function(){
 	                self._isInActive = false;
-	            },800);
+	            },300);
 	        }
 	    },
 		activeTab: function(x){

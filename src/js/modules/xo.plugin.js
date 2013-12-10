@@ -62,6 +62,7 @@ XO('plugin',function($,C){
         var constr = function(){
             base.apply(this, arguments);
             this.super = base;
+            this.name = name;
         };
         constr.prototype = (function(){
             var tmp = function(){};

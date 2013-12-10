@@ -1,0 +1,13 @@
+.xo_section{overflow:hidden;}
+/*===== 商品列表 =====*/
+	.mod_goods{display:block; margin:10px 10px 0; background-color:#FFF;}
+		.mod_goods_photo img{display:block; margin:auto; width:290px;}
+		.mod_goods_info{padding:5px 10px; background-color:#F5F5F5;}
+		.mod_goods_info h4{color:#000;}
+		.mod_goods_info p{margin:5px 0;}
+		.mod_goods_price{color:#C73D00; font-size:18px; vertical-align:middle;}
+
+	/*===== 查看更多 =====*/
+	.mod_more{box-shadow:0 -2px 2px rgba(0,0,0,0.2); background-color:#FFF; text-align:center; position: absolute; bottom:-40px; left: 50%; margin-left: -100px;}
+		.mod_more a{display:block; line-height:40px;}
+		.loading a{background: red;}
