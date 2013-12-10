@@ -1,5 +1,5 @@
 
-/*===== 商品列表.xo_section{overflow:hidden;} =====*/
+/*===== 商品列表 =====*/
 	.mod_goods{display:block; margin:10px 10px 0; background-color:#FFF;}
 		.mod_goods_photo img{display:block; margin:auto; width:290px;}
 		.mod_goods_info{padding:5px 10px; background-color:#F5F5F5;}
