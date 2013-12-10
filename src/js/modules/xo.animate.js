@@ -163,10 +163,14 @@ XO('Animate',function($,C){
                 }
             }, bufferTime);
 
+            // 插件初始化
+            XO.plugin.applyToView(view);
+
             // Trigger custom events
             XO.Event.trigger(view,XO.EVENT.Animate.End, eventData);
             //onAnimated callback detect
             view.onAnimated&&view.onAnimated.call(view,eventData);
+            
         }
 
     };
@@ -311,6 +315,11 @@ XO('Animate',function($,C){
             }, bufferTime);
 
             XO.Animate.unselect($from);
+
+
+            // 插件初始化
+            XO.plugin.applyToView(from);
+            XO.plugin.applyToView(to);
 
             // Trigger custom events
             XO.Event.trigger(to,XO.EVENT.Animate.End, eventDataTo);

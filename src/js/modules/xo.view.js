@@ -26,12 +26,6 @@ XO('View',function($,C){
             this.animation = this.animation||(this.el.getAttribute[C.ATTR.ANIMATION]||XO.App.opts.defaultAnimation);
             XO.Event.trigger(this,XO.EVENT.View.Inited,[this]);
             this.onRender&&this.onRender.call(this);
-            //初始化插件
-            var self = this;
-            setTimeout(function(){
-                XO.plugin.applyToView(self);
-            },0)
-            
         },
         initFromSrc:function(cbk){
             XO.Event.trigger(XO.EVENT.View.InitFromRemote,[this]);
