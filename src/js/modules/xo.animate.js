@@ -1,3 +1,6 @@
+/**
+ * Animation module
+ */
 XO('Animate',function($,C){
     this.exposeEvent([
         'Start',
@@ -53,46 +56,48 @@ XO('Animate',function($,C){
         $obj.addClass(C.CLASS.UIACTIVE);
     };
 
-    this.run = function($el,aniName,direction,goingBack){
-        var animation = this.get(aniName);
+    this.run = function(view,aniName,direction,goingBack){
+        var animation = this.get(aniName),
+            $el = view.$el;
         animation = animation.name!==C.DEFAULT.ANIMATION_NONE?animation:null;
-        direction = !direction? C.CLASS.ANIMATION_IN:direction;
-
+        direction = direction!==C.CLASS.ANIMATION_OUT ? C.CLASS.ANIMATION_IN:C.CLASS.ANIMATION_OUT;
         goingBack = goingBack || false;
 
-        var isHiding = direction==C.CLASS.ANIMATION_OUT,
+        var isHiding = direction===C.CLASS.ANIMATION_OUT,
             finalAnimationName,
-            clOut;
+            clOut,
+            eventData = { "direction": direction, back: goingBack,animation:animation,isHiding:isHiding };
 
         // Error check for target page
         if ($el === undefined || $el.length === 0) {
             this.unselect();
-            XO.warn('Target element is missing.');
+            XO.warn('XO.Animate.run:Target element is missing.');
             return false;
         }
 
         // Error check for $from === $to
         if (!isHiding && $el.hasClass(C.CLASS.ACTIVE)) {
             this.unselect();
-            XO.warn('You are already on the page you are trying to navigate to.');
+            XO.warn('XO.Animate.run:You are already on the page you are trying to navigate to.');
             return false;
         }
 
         if(isHiding && !$el.hasClass(C.CLASS.ACTIVE)){
             this.unselect();
-            XO.warn('element already hidden!');
+            XO.warn('XO.Animate.run:Element already hidden!');
             return false;
         }
 
         // Collapse the keyboard
         $(':focus').trigger('blur');
 
-        $el.trigger(XO.EVENT.Animate.Start, { "direction": direction, back: goingBack });
+        XO.Event.trigger(view,XO.EVENT.Animate.Start,eventData);
+        view.onAnimating&&view.onAnimating.call(view,eventData);
 
         if (XO.support.animationEvents && animation && XO.App.opts.useAnimations) {
             // Fail over to 2d animation if need be
             if (!XO.support.transform3d && animation.is3d) {
-                XO.warn('Did not detect support for 3d animations, falling back to ' + XO.App.opts.defaultAnimation + '.');
+                XO.warn('XO.Animate.run:Did not detect support for 3d animations, falling back to ' + XO.App.opts.defaultAnimation + '.');
                 animation.name = XO.App.opts.defaultAnimation;
             }
 
@@ -104,7 +109,7 @@ XO('Animate',function($,C){
                 finalAnimationName = finalAnimationName.replace(/left|right|up|down|in|out/, this.getReverseAnimation);
             }
 
-            XO.warn('finalAnimationName is ' + finalAnimationName + '.');
+            XO.warn('XO.Animate.run:finalAnimationName is ' + finalAnimationName + '.');
 
             // Bind internal 'cleanup' callback
             $el.bind('webkitAnimationEnd', animateEndHandler);
@@ -159,59 +164,67 @@ XO('Animate',function($,C){
             }, bufferTime);
 
             // Trigger custom events
-            $el.trigger(XO.EVENT.Animate.End, {
-                "direction":direction,
-                animation: animation,
-                back: goingBack
-            });
+            XO.Event.trigger(view,XO.EVENT.Animate.End, eventData);
+            //onAnimated callback detect
+            view.onAnimated&&view.onAnimated.call(view,eventData);
         }
 
     };
 
     //switch Pages or Sections
-    this.switch = function($from, $to, aniName, goingBack) {
+    this.switch = function(from, to, aniName, goingBack) {
 
-        var animation = this.get(aniName);
+        var animation = this.get(aniName),
+            $from = from.$el,
+            $to = to.$el;
+
         animation = animation.name!==C.DEFAULT.ANIMATION_NONE?animation:null;
-
         goingBack = goingBack || false;
+
+        var finalAnimationName,
+            is3d,
+            eventDataFrom = { direction: C.CLASS.ANIMATION_OUT, back: goingBack ,animation:animation,isHiding:true},
+            eventDataTo = { direction: C.CLASS.ANIMATION_IN, back: goingBack ,animation:animation,isHiding:false};
 
         // Error check for target page
         if ($to === undefined || $to.length === 0) {
             this.unselect();
-            XO.warn('Target element is missing.');
+            XO.warn('XO.Animate.switch:Target element is missing.');
             return false;
         }
 
         // Error check for $from === $to
         if ($to.hasClass(C.CLASS.ACTIVE)) {
             this.unselect();
-            XO.warn('You are already on the page you are trying to navigate to.');
+            XO.warn('XO.Animate.switch:You are already on the page you are trying to navigate to.');
             return false;
         }
 
         // Collapse the keyboard
         $(':focus').trigger('blur');
 
-        $from.trigger(XO.EVENT.Animate.Start, { direction: C.CLASS.ANIMATION_OUT, back: goingBack });
-        $to.trigger(XO.EVENT.Animate.Start, { direction: C.CLASS.ANIMATION_IN, back: goingBack });
+        XO.Event.trigger(from,XO.EVENT.Animate.Start, eventDataFrom);
+        XO.Event.trigger(to,XO.EVENT.Animate.Start, eventDataTo);
+
+        from.onAnimating&&from.onAnimating.call(from,eventDataFrom);
+        to.onAnimating&&to.onAnimating.call(from,eventDataFrom);
 
         if (XO.support.animationEvents && animation && XO.App.opts.useAnimations) {
             // Fail over to 2d animation if need be
             if (!XO.support.transform3d && animation.is3d) {
-                XO.warn('Did not detect support for 3d animations, falling back to ' + XO.App.opts.defaultAnimation + '.');
+                XO.warn('XO.Animate.switch:Did not detect support for 3d animations, falling back to ' + XO.App.opts.defaultAnimation + '.');
                 animation.name = XO.App.opts.defaultAnimation;
             }
 
             // Reverse animation if need be
-            var finalAnimationName = animation.name,
-                is3d = animation.is3d ? (' '+C.CLASS.ANIMATION_3D) : '';
+            finalAnimationName = animation.name;
+            is3d = animation.is3d ? (' '+C.CLASS.ANIMATION_3D) : '';
 
             if (goingBack) {
                 finalAnimationName = finalAnimationName.replace(/left|right|up|down|in|out/, this.getReverseAnimation);
             }
 
-            XO.warn('finalAnimationName is ' + finalAnimationName + '.');
+            XO.warn('XO.Animate.switch: finalAnimationName is ' + finalAnimationName + '.');
 
             // Bind internal 'cleanup' callback
             $from.bind('webkitAnimationEnd', navigationEndHandler);
@@ -300,16 +313,11 @@ XO('Animate',function($,C){
             XO.Animate.unselect($from);
 
             // Trigger custom events
-            $to.trigger(XO.EVENT.Animate.End, {
-                direction:C.CLASS.ANIMATION_IN,
-                animation: animation,
-                back: goingBack
-            });
-            $from.trigger(XO.EVENT.Animate.End, {
-                direction:C.CLASS.ANIMATION_OUT,
-                animation: animation,
-                back: goingBack
-            });
+            XO.Event.trigger(to,XO.EVENT.Animate.End, eventDataTo);
+            XO.Event.trigger(from,XO.EVENT.Animate.End, eventDataFrom);
+
+            from.onAnimated&&from.onAnimated.call(from,eventDataFrom);
+            to.onAnimated&&to.onAnimated.call(from,eventDataFrom);
         }
 
         return true;

@@ -11,6 +11,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
     <title>xo.js</title>
     <link rel="stylesheet" href="src/css/xo.css?v=20131209" />
+    <link rel="stylesheet" href="src/css/xo.bootstrap.css" />
     <link rel="stylesheet" href="demo/css/style.css" />
 	<link rel="stylesheet" href="demo/css/menu.css" />
 
@@ -64,11 +65,14 @@
     <script src="demo/js/controllers/mall.js"></script>
     <script src="demo/js/views/mall/index.js"></script>
 
+    <script src="demo/js/controllers/about.js"></script>
+    <script src="demo/js/views/about/index.js"></script>
+
     <script>
         $(document).ready(function(){
 
             XO.App.init({
-                debug:false
+                debug:true
             });
 
             //applicationCache.addEventListener('cached', function(){ init(); });

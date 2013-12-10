@@ -27,7 +27,8 @@ XO.CONST = {
         TEMPLATE_SUFFIX:'/',
         VIEW:'index',
         PAGE:'home',
-        VIEW_ID_PREFIX:'xoview'
+        VIEW_ID_PREFIX:'xoview',
+        DEFAULT_ACTION_PREFIX:'_'
     },
     ACTION:{
         PAGE:'page',
