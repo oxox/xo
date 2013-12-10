@@ -103,7 +103,6 @@ XO('View',function($,C){
             }
 
             XO.View.switch($curView,this.$el,animation,aniObj.back,this.pid);
-            
         }
     };
     /**

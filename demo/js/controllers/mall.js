@@ -16,10 +16,19 @@ XO.Controller.define('mall',{
             }else{
                 view.animate(param);
             }
-            var diyige = XO.plugin.get('diyige');
+            
             XO.warn('controller.mall.Index',view);
         });
-
+        setTimeout(function(){
+            var page = XO.plugin.get('pager-1');
+            page.bind('loaded', function(){
+                 $.get('demo/html/pages/mall/loaded_1.html', function(tpl){
+                    var html = XO.toHtml(tpl, {});
+                    page.append(html);
+                });
+            })
+        }, 25)
+        
 
     }
 
