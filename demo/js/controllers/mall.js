@@ -8,6 +8,11 @@ XO.Controller.define('mall',{
                 XO.warn('controller.mall.Index:'+err);
                 return;
             }
+
+            XO.Event.on(view,XO.EVENT.Animate.End,function(e,d){
+                XO.Controller.mall.onAnimated();
+            });
+
             //TODO:load remote data
             var data = {};
             if(!view.isRendered){
@@ -18,18 +23,20 @@ XO.Controller.define('mall',{
             }
             
             XO.warn('controller.mall.Index',view);
-        });
-        setTimeout(function(){
-            var page = XO.plugin.get('pager-1');
-            page.bind('loaded', function(){
-                 $.get('demo/html/pages/mall/loaded_1.html', function(tpl){
-                    var html = XO.toHtml(tpl, {});
-                    page.append(html);
-                });
-            })
-        }, 25)
-        
 
+
+
+        });
+
+    },
+    onAnimated:function(){
+        var page = XO.plugin.get('pager-1');
+        page.bind('loaded', function(){
+             $.get('demo/html/pages/mall/loaded_1.html', function(tpl){
+                var html = XO.toHtml(tpl, {});
+                page.append(html);
+            });
+        })
     }
 
 });

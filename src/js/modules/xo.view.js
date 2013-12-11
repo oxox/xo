@@ -25,13 +25,7 @@ XO('View',function($,C){
             this.$el = $(this.el);
             this.animation = this.animation||(this.el.getAttribute[C.ATTR.ANIMATION]||XO.App.opts.defaultAnimation);
             XO.Event.trigger(this,XO.EVENT.View.Inited,[this]);
-            //初始化插件
-            //TODO:
-            var self = this;
-            setTimeout(function(){
-                XO.plugin.applyToView(self);
-            },0)
-            
+            this.onRender&&this.onRender.call(this);
         },
         initFromSrc:function(cbk){
             XO.Event.trigger(XO.EVENT.View.InitFromRemote,[this]);
@@ -94,15 +88,24 @@ XO('View',function($,C){
             aniObj = aniObj||{};
 
             //TODO:如何view的类型是section，则为页面内的切换，获取当前view时要加上pageId
-            var $curView = XO.View.getCurView(/*this.pid*/),
+            var curView = XO.View.getCurView(/*this.pid*/),
                 animation = aniObj.animation||this.animation;
-            if(!$curView || $curView[0].id===this.id){//无前一个View或者前一个View和当前View是同一个
-                XO.Animate.run(this.$el,animation,aniObj.direction,aniObj.back);
-                XO.View.setCurView(this.$el,this.pid);
+            if(!curView || curView.id===this.id){//无前一个View或者前一个View和当前View是同一个
+                XO.Animate.run(this,animation,aniObj.direction,aniObj.back);
+                XO.View.setCurView(this,this.pid);
                 return;
             }
 
-            XO.View.switch($curView,this.$el,animation,aniObj.back,this.pid);
+            XO.View.switch(curView,this,animation,aniObj.back,this.pid);
+            
+        },
+        //显示视图
+        animateIn:function(aniObj){
+            //TODO：XO.Animate.animateIn(this,aniObj);
+        },
+        //隐藏视图
+        animateOut:function(aniObj){
+            //TODO:XO.Animate.animateOut(this,aniObj);
         }
     };
     /**
@@ -146,6 +149,10 @@ XO('View',function($,C){
         if(tempView.alias){
             (!this[tempView.alias]) && (this[tempView.alias]=tempView);
         }
+
+        //generate default action
+        XO.Controller.defineDefaultAction(tempView.pid,tempView.vid);
+
         return tempView;
     };
 
@@ -180,31 +187,66 @@ XO('View',function($,C){
     this.getId = function(pid,vid){
         return [C.DEFAULT.VIEW_ID_PREFIX,pid,vid].join('-');
     };
-    this.setCurView = function($view,pageId){
+    this.setCurView = function(view,pageId){
         if(pageId){
-            this.curViews[pageId].$curView = $view;
+            this.curViews[pageId].curView = view;
         };
-        this.curViews['$curView'] = $view;
+        this.curViews['curView'] = view;
     };
     this.getCurView = function(pageId){
         if(pageId){
-            return this.curViews[pageId].$curView;
+            return this.curViews[pageId].curView;
         }
-        return this.curViews.$curView;
+        return this.curViews.curView;
     };
     //switch Pages or Sections
-    this.switch = function($from, $to, aniName, goingBack,pageId) {
+    this.switch = function(from, to, aniName, goingBack,pageId) {
 
         goingBack = goingBack || false;
 
-        if(!XO.Animate.switch($from,$to,aniName,goingBack)){
+        if(!XO.Animate.switch(from,to,aniName,goingBack)){
             return false;
         }
 
-        XO.View.setCurView($to,pageId);
+        XO.View.setCurView(to,pageId);
 
         return true;
     };//switch
+    //TODO:
+    this.switchTo = function(pid,vid,aniObj,cbk,forceRefresh){
+        return;
+        var curView = this.getCurView();
+        //移出当前view
+        if(curView){
+            curView.animateOut(aniObj);
+        }
+        //加载目标视图
+        this.get(pid,vid,function(err,view){
+            if(err){
+                //TODO:用浮层组件显示错误
+                XO.warn('XO.View.switchTo:'+err);
+                cbk(err);
+                return;
+            }
+            if(view.isRendered&&!forceRefresh){
+                view.animateIn(aniObj);
+                return;
+            }
+            //获取数据，渲染视图
+            XO.uiLoader.show();
+            cbk(null,view,function(err1,data1){
+                XO.uiLoader.hide();
+                if(err1){
+                    //获取数据出错
+                    XO.warn('XO.View.switchTo:'+err1);
+                    return;
+                }
+                //渲染视图
+                view.render(data1);
+                view.animateIn({animation:'none'});
+            });
+        });
+    };
 
     this.init = function(){
         //初始化所有未初始化的视图

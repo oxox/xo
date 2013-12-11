@@ -56,7 +56,7 @@ XO('Router',function($,C){
                         cssHost:C.SELECTOR.PAGE_WRAPPER
                     };
                 viewObj.params = param;
-                XO.Controller[pageId][viewId](viewObj);
+                XO.Controller.invoke(pageId,viewId,viewObj);
                 this.isGoback = false;
                 this.linkClicked = false;
             },

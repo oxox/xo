@@ -11,6 +11,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
     <title>xo.js</title>
     <link rel="stylesheet" href="src/css/xo.css?v=20131209" />
+    <link rel="stylesheet" href="src/css/xo.bootstrap.css" />
     <link rel="stylesheet" href="demo/css/style.css" />
 	<link rel="stylesheet" href="demo/css/menu.css" />
     <link rel="stylesheet" href="demo/css/loadmore.css" />
@@ -26,7 +27,7 @@
     <!--E 遮罩-->
 
     <!--S loader-->
-    <div id="xoview-common-loader" class="xo_loader hide"><div class="xo_loader_animate"><span></span><span></span><span></span></div></div>
+    <div id="xoview-common-loader" class="xo_loader"><div class="xo_loader_animate"><span></span><span></span><span></span></div></div>
     <!--E loader-->
 
     <!--<script src="http://weinre.qq.com/target/target-script-min.js#levinhuang"></script>-->
@@ -68,11 +69,14 @@
     <script src="demo/js/controllers/mall.js"></script>
     <script src="demo/js/views/mall/index.js"></script>
 
+    <script src="demo/js/controllers/about.js"></script>
+    <script src="demo/js/views/about/index.js"></script>
+
     <script>
         $(document).ready(function(){
 
             XO.App.init({
-                debug:false
+                debug:true
             });
 
             //applicationCache.addEventListener('cached', function(){ init(); });

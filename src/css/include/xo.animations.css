@@ -4,7 +4,7 @@
     -webkit-animation-timing-function: ease-in-out;
 }
 .in,.back-out {
-    z-index: 10;        
+    z-index: 10;
 }
 .out {
     z-index: 0 !important;
@@ -405,14 +405,10 @@
 /* Unfortunately, to acheive a proper cube effect,
 // we need the page width. Assuming 320px here.
 */
-
-.cubeleft, .cuberight {
-    &.in, &.out {
-        -webkit-animation-duration: .6s;
-        -webkit-transform: perspective(800);
-    }
+.cubeleft.in,.cubeleft.out,.cuberight.in,.cuberight.out{
+    -webkit-animation-duration: .6s;
+    -webkit-transform: perspective(800);
 }
-
 .cubeleft.in {
     -webkit-transform-origin: 0% 50%;
     -webkit-animation-name: cubeLeftIn;
@@ -486,20 +482,16 @@
 }
 
 
-.xo_ani_slide{-webkit-transform-origin:transform-origin:100% 100%;}
-.xo_ani_slide.in{-webkit-animation-name:phoneSlideIn;animation-name:phoneSlideIn}
-.xo_ani_slide.out{-webkit-animation-name:phoneSlideOut;animation-name:phoneSlideOut}
-.xo_ani_slide.back-in{-webkit-animation-name:phoneSlideBackIn;animation-name:phoneSlideBackIn}
-.xo_ani_slide.back-out{-webkit-animation-name:phoneSlideBackOut;animation-name:phoneSlideBackOut}
-.xo_ani_cover{-webkit-transform-origin:50% 100%;transform-origin:50% 100%;}
-.xo_ani_cover.in{-webkit-animation-name:phoneCoverIn;animation-name:phoneCoverIn}
-.xo_ani_cover.out{-webkit-animation-name:phoneCoverOut;animation-name:phoneCoverOut}
-.xo_ani_cover.back-in{-webkit-animation-name:phoneCoverBackIn;animation-name:phoneCoverBackIn}
-.xo_ani_cover.back-out{-webkit-animation-name:phoneCoverOutBack;animation-name:phoneCoverOutBack}
-.xo_ani_fade.in{-webkit-animation-name:phoneFadeIn;animation-name:phoneFadeIn}
-.xo_ani_fade.out{-webkit-animation-name:phoneFadeOut;animation-name:phoneFadeOut}
-.xo_ani_fade.back-in{-webkit-animation-name:phoneFadeIn;animation-name:phoneFadeIn}
-.xo_ani_fade.back-out{-webkit-animation-name:phoneFadeOut;animation-name:phoneFadeOut}
+.xo_ani_slideleft,.xo_ani_slideright{-webkit-transform-origin:transform-origin:100% 100%;}
+.xo_ani_slideleft.in{-webkit-animation-name:phoneSlideIn;animation-name:phoneSlideIn}
+.xo_ani_slideleft.out{-webkit-animation-name:phoneSlideOut;animation-name:phoneSlideOut}
+.xo_ani_slideright.in{-webkit-animation-name:phoneSlideBackIn;animation-name:phoneSlideBackIn}
+.xo_ani_slideright.out{-webkit-animation-name:phoneSlideBackOut;animation-name:phoneSlideBackOut}
+.xo_ani_coverup,.xo_ani_coverdown{-webkit-transform-origin:50% 100%;transform-origin:50% 100%;}
+.xo_ani_coverdown.in{-webkit-animation-name:phoneCoverIn;animation-name:phoneCoverIn}
+.xo_ani_coverdown.out{-webkit-animation-name:phoneCoverOut;animation-name:phoneCoverOut}
+.xo_ani_coverup.in{-webkit-animation-name:phoneCoverBackIn;animation-name:phoneCoverBackIn}
+.xo_ani_coverup.out{-webkit-animation-name:phoneCoverOutBack;animation-name:phoneCoverOutBack}
 @-webkit-keyframes phoneSlideOut{
     0%{-webkit-transform:translateZ(0);}
     100%{-webkit-transform:rotateY(-15deg);opacity:.25;}
@@ -563,20 +555,4 @@
 @keyframes phoneCoverBackIn{
     0%{transform:rotateX(15deg);opacity:.25;}
     100%{transform:translateZ(0);}
-}
-@-webkit-keyframes phoneFadeOut{
-    0%{opacity:1}
-    100%{opacity:0}
-}
-@keyframes phoneFadeOut{
-    0%{opacity:1}
-    100%{opacity:0}
-}
-@-webkit-keyframes phoneFadeIn{
-    0%{opacity:0}
-    100%{opacity:1}
-}
-@keyframes phoneFadeIn{
-    0%{opacity:0}
-    100%{opacity:1}
 }

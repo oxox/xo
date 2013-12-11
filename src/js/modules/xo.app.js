@@ -20,6 +20,7 @@ XO('App',function($,C){
             debug:false,
             defaultPage:C.DEFAULT.PAGE,
             defaultView:C.DEFAULT.VIEW,
+            defaultControllerAction:null,
             viewDir:XO.$body[0].getAttribute('data-viewdir')||'assets/html/pages/'
         },opts||{});
         //delete self's init method
