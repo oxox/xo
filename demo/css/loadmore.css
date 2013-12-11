@@ -12,5 +12,5 @@
 	.mod_more{box-shadow:0 -2px 2px rgba(0,0,0,0.2); background-color:#FFF; text-align:center; position: absolute; bottom:-40px; width: 100%;}
 		.mod_more a{display:block; line-height:40px;}
 		.loading a{ display: none;}
-		.loading {text-align: center;}
+		.loading {text-align: center; bottom:0px;}
 		.loading i{background: url(../img/mall/loading.gif) center center no-repeat; height: 40px; width: 40px; display: inline-block; background-size: 200%;}

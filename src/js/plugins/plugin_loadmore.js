@@ -25,13 +25,15 @@
 		},
 		initEvent: function(){
 			var self = this;
-			$(this._pageScroll.wrapper).on('touchend mouseup', function(){
+
+			$(this._pageScroll.wrapper).on('touchend mouseup', function(e){
 	            if(!self._isInActive){
 	            	if( self._pageScroll.maxScrollY - self._pageScroll.y > 50){
 	            		self.trigger('loaded');
 	            	}
 	            }
 	        });
+
 			this.$el.on('beforeloaded', function(){
 				self.$el.find('.mod_more').addClass('loading');
 			});
@@ -45,13 +47,16 @@
 		},
 		trigger: function(type){
 			this.$el.trigger('beforeloaded');
-			setTimeout(function(){
-				this.$el.trigger(type);
-				this.$el.trigger('afterloaded');
-			},1000);			
+			this.$el.trigger(type);		
 		},
 		append: function(html){
 			this.$el.find('.pager').append(html);
+			this._pageScroll.refresh();
+		},
+		refresh: function(html){
+			if(html){
+				this.$el.find('.pager').html(html);
+			}			
 			this._pageScroll.refresh();
 		},
 		destroy: function(){

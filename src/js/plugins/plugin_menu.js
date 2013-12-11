@@ -83,6 +83,19 @@
 	            var t = e.target;
 	            var idx = $(t).index();
 	            self.scroll_to(idx);
+	            var dataset = t.dataset;
+	            dataset['idx'] = idx;
+	            self.$el.trigger('active', dataset);
+	        });
+
+	        this.$el.on('swapRight', function(e){
+	        	var idx = self.get_idx();
+	        	self.scroll_to(idx + 1);
+	        });
+
+	        this.$el.on('swapLeft', function(e){
+	        	var idx = self.get_idx();
+	        	self.scroll_to(idx - 1);
 	        });
 		},
 		destroy: function(){
