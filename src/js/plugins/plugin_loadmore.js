@@ -2,8 +2,12 @@
 	
 	XO.plugin.define('loadmore',{
 		init: function(){
-			this.initUi();
-			this.initEvent();
+			var self = this;
+			setTimeout(function(){
+				self.initUi();
+			}, 25)
+				
+
 		},
 		initUi: function(){
 			var $el = this.$el,
@@ -11,12 +15,13 @@
 				$el.height($(window).height() - 70);
 			this._isInActive = false;
 	        this._pageScroll = new IScroll($el[0], {
-	            scrollX: true,
+	            scrollX: false,
 	            scrollY: true,
 	            momentum: true,
-	            snap: true,
+	            snap: false,
 	            bounce :true
 	        });
+	        this.initEvent();
 		},
 		initEvent: function(){
 			var self = this;
