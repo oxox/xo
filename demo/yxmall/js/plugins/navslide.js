@@ -45,8 +45,12 @@
 			this.viewPos.x = this.container.offset().left;
 			this.viewPos.y = this.viewPos.x + this.container.outerWidth();
 			this.index = 0;
+			var me = this;
+			window.setTimeout(function(){
+				me.setCurrent( (idx===null?this.options.index:idx) );
+			}, 300)
 
-			this.setCurrent( (idx===null?this.options.index:idx) );
+			
 			this._bindEvent();
 		},
 
@@ -67,24 +71,24 @@
 				touchstart = isTouch ? 'touchstart' : 'mousedown',
 				touchmove = isTouch ? 'touchmove' : 'mousemove',
 				touchend = isTouch ? 'touchend' : 'mouseup',
-				self = this;
+				me = this;
 
-			this.items.on('tap', function(e){
-				if ($(this).hasClass(self.options.currentCls)) {
+			this.items.on('click', function(e){
+				if ($(this).hasClass(me.options.currentCls)) {
 					return ;
 				}
 				var index = $(this).index(this.items);
-				self.setCurrent(index);
+				me.setCurrent(index);
 			});
 			if (this.options.swipe) {
 				this.nav.bind(touchstart, function(e){
-					self._touchstart(e);
+					me._touchstart(e);
 				});
 				this.nav.bind(touchmove, function(e){
-					self._touchmove(e);
+					me._touchmove(e);
 				});
 				this.nav.bind(touchend, function(e){
-					self._touchend(e);
+					me._touchend(e);
 				});
 			}
 		},
@@ -211,7 +215,7 @@
 		index: 0,
 		useAnimation: true,
 		duration: 300, //ms
-		swipe: false
+		swipe: true
 	}
 
 
