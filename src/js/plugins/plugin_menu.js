@@ -27,6 +27,9 @@
 	        });
 	        this._navScroll.scrollTo(getX(this._idx), 0 , 0);
 		},
+		bootup: function(){
+
+		},
 		get_idx: function(x){
 	        if ('undefined' != typeof x){
 	            var idx = Math.round(-x / 80);
@@ -66,6 +69,30 @@
 	            return;
 	        }
 	        this.scroll_to(idx);
+
+	        var t = this.$_item[idx];
+	        var dataset = t.dataset;
+	        dataset['idx'] = idx;
+	        this.trigger('active', dataset);
+		},
+		bootup: function(data){
+			var swiper = XO.plugin.get(data['swiperId']);
+			this.on('active', function(dataset){
+				swiper.active_page(dataset['idx'], function(dataset){
+	                activePage = XO.plugin.get(dataset['id']);
+	                //activePage.trigger('beforePageLoad');
+	                XO.View.uiLoader.show();
+	                $.get('demo/html/pages/mall/page.html', function(tpl){
+	                    var html = XO.toHtml(tpl, {});
+	                    setTimeout(function(){
+	                        activePage.refresh(html);
+	                        //activePage.trigger('afterPageLoad');
+	                        XO.View.uiLoader.hide();
+	                    },1000);
+	                });
+	            });
+			});
+
 		},
 		initEvent: function(){
 			var self = this;
@@ -85,15 +112,15 @@
 	            self.scroll_to(idx);
 	            var dataset = t.dataset;
 	            dataset['idx'] = idx;
-	            self.$el.trigger('active', dataset);
+	            self.trigger('active', dataset);
 	        });
 
-	        this.bind('swapRight', function(e){
+	        this.on('swapRight', function(e){
 	        	var idx = self.get_idx();
 	        	self.scroll_to(idx + 1);
 	        });
 
-	        this.bind('swapLeft', function(e){
+	        this.on('swapLeft', function(e){
 	        	var idx = self.get_idx();
 	        	self.scroll_to(idx - 1);
 	        });

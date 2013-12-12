@@ -47,9 +47,9 @@
 	            }
 	            dis = self._w * self._idx + (eX - sX);
 
-	            if( Math.abs(eY - sY) - Math.abs(eX - sX) > 5){
+	            if( Math.abs(eY - sY) - Math.abs(eX - sX) > 0){
 	            	isStopEvent = true;
-	            }else if(Math.abs(eX - sX) - Math.abs(eY - sY) > 5){
+	            }else if(Math.abs(eX - sX) - Math.abs(eY - sY) > 0){
 	            	self.$el.css({'-webkit-transform': 'translate(' + dis + 'px, 0px) translateZ(0px)'});
 	            }else{
 	            }	            
@@ -89,7 +89,28 @@
 	            }
 	            self.swap_page(endidx);
 	        });
-
+		},
+		bootup: function(data){
+			var menu = XO.plugin.get(data['menuId']);
+			var url = data['tpl_url'];
+			this.on('active', function(dataset){
+	            activePage = XO.plugin.get(dataset['id']);
+	            var idx = menu.get_idx();
+	            if(dataset['to'] == 1){
+	                menu.trigger('swapRight');
+	            }
+	            if(dataset['to'] == -1){
+	                menu.trigger('swapLeft');
+	            }
+	            XO.View.uiLoader.show();
+	            $.get(url, function(tpl){
+	                var html = XO.toHtml(tpl, {});
+	                setTimeout(function(){
+	                    activePage.refresh(html);
+	                    XO.View.uiLoader.hide();
+	                },1000);
+	            });                 
+	        });
 		},
 		swap_page: function(idx){
 			if(idx >= this._max) idx = +this._max;
