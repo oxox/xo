@@ -10,7 +10,7 @@ XO.Controller.define('mall',{
             }
 
             XO.Event.on(view,XO.EVENT.Animate.End,function(e,d){
-                XO.Controller.mall.onAnimated();
+                XO.Controller.mall.onAnimated(view);
             });
 
             //TODO:load remote data
@@ -29,9 +29,9 @@ XO.Controller.define('mall',{
         });
 
     },
-    onAnimated:function(){
+    onAnimated:function(view){
         //滑动加载更多
-        var page2 = XO.plugin.get('pager-2');
+        /*var page2 = XO.plugin.get('pager-2');
         page2.bind('loaded', function(){
             this.trigger('beforeloaded');
             $.get('demo/html/pages/mall/loaded_1.html', function(tpl){
@@ -89,9 +89,7 @@ XO.Controller.define('mall',{
                     activePage.refresh(html);
                     XO.View.uiLoader.hide();
                 },1000);
-            });
-            
-                      
+            });                 
         });
 
         //点击导航加载数据
@@ -109,7 +107,34 @@ XO.Controller.define('mall',{
                     },1000);
                 });
             });
-        })
+        })*/
+        var plugin_page_1 = {
+            'tpl_url' : 'demo/html/pages/mall/loaded_1.html',
+            'data_url' : {}
+        }
+        var plugin_page_2 = {
+            'tpl_url' : 'demo/html/pages/mall/loaded_1.html',
+            'data_url' : {}
+        }
+        var plugin_page_3 = {
+            'tpl_url' : 'demo/html/pages/mall/loaded_1.html',
+            'data_url' : {}
+        }
+        var plugin_swiper = {
+            'menuId' : 'menu-top',
+            'tpl_url' : 'demo/html/pages/mall/page.html'
+        }
+        var plugin_menu = {
+            'swiperId' : 'swiper'
+        }
+        XO.plugin.bootup(view, {
+            'pager-1': plugin_page_1,
+            'pager-2': plugin_page_2,
+            'pager-3': plugin_page_3,
+            'swiper': plugin_swiper,
+            'menu-top': plugin_menu
+
+        });
     }
 
 });

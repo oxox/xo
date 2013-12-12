@@ -25,7 +25,6 @@
 		},
 		initEvent: function(){
 			var self = this;
-
 			$(this._pageScroll.wrapper).on('touchend mouseup', function(e){
 	            if(!self._isInActive){
 	            	if( self._pageScroll.maxScrollY - self._pageScroll.y > 50){
@@ -33,22 +32,29 @@
 	            	}
 	            }
 	        });
-
-			this.bind('beforeloaded', function(){
+			this.on('beforeloaded', function(){
 				self.$el.find('.mod_more').addClass('loading');
 			});
 
-			this.bind('afterloaded', function(){
+			this.on('afterloaded', function(){
 				self.$el.find('.mod_more').removeClass('loading');
 			});
-
-			this.bind('beforePageLoad', function(){
-				self.$el.find('.mod_more').addClass('pageloading');
-			});
-
-			this.bind('afterPageLoad', function(){
-				self.$el.find('.mod_more').removeClass('pageloading');
-			});
+		},
+		bootup: function(args){
+			var tpl_url = args['tpl_url'];
+			var data = args['data_url'];
+			var self = this;
+			this.on('loaded', function(){
+	            self.trigger('beforeloaded');
+	            $.get(tpl_url, function(tpl){
+	                var html = XO.toHtml(tpl, {});
+	                setTimeout(function(){
+	                    self.trigger('afterloaded');
+	                    self.append(html);
+	                },1000)
+	                
+	            });
+	        });
 		},
 		append: function(html){
 			this.$el.find('.pager').append(html);

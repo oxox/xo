@@ -169,7 +169,7 @@ XO('Animate',function($,C){
             // Trigger custom events
             XO.Event.trigger(view,XO.EVENT.Animate.End, eventData);
             //onAnimated callback detect
-            view.onAnimated&&view.onAnimated.call(view,eventData);
+            view.onAnimated&&view.onAnimated.call(view,eventData, {a:123});
             
         }
 
@@ -320,7 +320,6 @@ XO('Animate',function($,C){
             // 插件初始化
             XO.plugin.applyToView(from);
             XO.plugin.applyToView(to);
-
             // Trigger custom events
             XO.Event.trigger(to,XO.EVENT.Animate.End, eventDataTo);
             XO.Event.trigger(from,XO.EVENT.Animate.End, eventDataFrom);
