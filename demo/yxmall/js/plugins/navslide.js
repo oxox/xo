@@ -1,4 +1,3 @@
-
 (function($) {
 	$.fn.outerWidth = function(){
         var val = this.width();
@@ -21,7 +20,8 @@
 	$.NavSlide = function(container, options) {
 		this.container = $(container);
 		this.nav = this.container.children().eq(0);
-		this.posX = parseFloat(this.nav.css('margin-left').replace('px','')) || 0;
+		console.log(this.nav.offset().left)
+		this.posX = 0;
 		this.items = this.nav.children();
 		this.options = $.extend(true, {}, $.NavSlide.defaults, options);
 		this._init();
@@ -49,8 +49,11 @@
 
 
 		_bindEvent: function(){
+			var isTouch = 'ontouchstart' in window;
+			console.log(isTouch);
+			var touchstart = isTouch ? 'touchstart' : 'click';
 			var self = this;
-			this.items.bind('click', function(e){
+			this.items.bind(touchstart, function(e){
 				if ($(this).hasClass(self.options.currentCls)) {
 					return ;
 				}
@@ -75,14 +78,12 @@
 
 		_adjustPos: function(isNext){
 			var item = this.items.eq(this.index);
+			//var left = (parseFloat(this.css('margin-left').replace('px','')) || 0) + (parseFloat(this.css('left').replace('px','')) || 0);
 			if (this.index == 0) {
-				var x = item.offset().left - this.viewPos.x;
-				if (x < 0) {
-					this.posX -= x;
-					this.nav.css({
-						'-webkit-transform': 'translate3d(' + this.posX + 'px,0,0)',
-					});
-				}
+				this.posX = 0;
+				this.nav.css({
+					'-webkit-transform': 'translate3d(' + this.posX + 'px,0,0)',
+				});
 			} else if(this.index == this.items.length - 1){
 				var x = item.offset().left + item.outerWidth()  - this.viewPos.y;
 				if (x > 0) {
@@ -124,3 +125,9 @@
 
 
 })(Zepto);
+
+
+
+
+
+
