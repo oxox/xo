@@ -10,6 +10,8 @@ XO('plugin',function($,C){
         }
         this.$el = $el;
         this.dataset = dataset;
+        this['plugin'] = dataset['plugin'];
+        this['pluginId'] = dataset['pluginId'];
         this.init($el, dataset);
     }
 
@@ -29,6 +31,17 @@ XO('plugin',function($,C){
 
     }
 
+    base.bind = function(type, fn, scope){
+        var self = this;
+        this.$el.on(type + '-' + this.plugin, function(e, scope){
+            //fn(self.$el, scope);
+            fn.call(self, scope);
+        })
+    }
+
+    base.trigger = function(type, args){
+        this.$el.trigger(type + '-' + this.plugin, args);   
+    }
 
     var _plugins={};
     var _idx = 0;
@@ -48,6 +61,7 @@ XO('plugin',function($,C){
             var dataset = this.dataset;
             p_name = dataset['plugin'];
             p = new XO.plugin[p_name](this, dataset);
+            p['name'] = p_name;
             if(dataset['pluginId']){
                 _plugins[dataset['pluginId']] = p;
             }else{

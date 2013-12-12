@@ -14,3 +14,7 @@
 		.loading a{ display: none;}
 		.loading {text-align: center; bottom:0px;}
 		.loading i{background: url(../img/mall/loading.gif) center center no-repeat; height: 40px; width: 40px; display: inline-block; background-size: 200%;}
+		.pageloading a{ display: none;}
+		.pageloading {position: absolute; top: 0; left: 0; width: 100%; height: 100%;}
+		.pageloading i{background: url(../img/mall/loading.gif) center center no-repeat; height: 40px; width: 40px;position:absolute; left: 50%; top: 50%; background-size: 200%;}
+		

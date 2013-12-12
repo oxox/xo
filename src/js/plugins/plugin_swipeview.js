@@ -101,7 +101,8 @@
 			var activePage, arrow;
 			this.$el.animate({'translate3d': cX + 'px, 0, 0'}, 300, 'ease-out', function(){
 				if(self._idx > idx ){
-					self.$el.append(sections[0]);					
+					self.$el.append(sections[0]);
+					$(sections[0]).find('.pager').html('');					
 					$(sections[1]).css({'left': (-idx - 1) * 100 + '%'});
 					$(sections[2]).css({'left': -idx * 100 + '%'});
 					$(sections[0]).css({'left': (-idx + 1) * 100 + '%'});
@@ -109,6 +110,7 @@
 					arrow = 1;
 				}else if(self._idx < idx){
 					self.$el.prepend(sections[2]);
+					$(sections[2]).find('.pager').html('');
 					$(sections[2]).css({'left': (-idx - 1) * 100 + '%'});
 					$(sections[0]).css({'left': -idx * 100 + '%'});
 					$(sections[1]).css({'left': (-idx + 1) * 100 + '%'});
@@ -118,7 +120,7 @@
 					return;
 				}
 				self._idx = idx;
-				self.$el.trigger('active', {'id': activePage.data('plugin-id'), 'to': arrow});
+				self.trigger('active', {'id': activePage.data('plugin-id'), 'to': arrow});
 			});
 
 		},
@@ -134,7 +136,7 @@
 			});
 			self._idx = _idx;
 			if(typeof fn == 'function') 
-				fn($(sections[1]));
+				fn({'id': $(sections[1]).data('plugin-id')});
 		},
 		destroy: function(){
 			this.super.destroy.call(this);

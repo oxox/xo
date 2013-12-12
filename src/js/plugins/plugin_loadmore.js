@@ -34,20 +34,21 @@
 	            }
 	        });
 
-			this.$el.on('beforeloaded', function(){
+			this.bind('beforeloaded', function(){
 				self.$el.find('.mod_more').addClass('loading');
 			});
-			this.$el.on('afterloaded', function(){
+
+			this.bind('afterloaded', function(){
 				self.$el.find('.mod_more').removeClass('loading');
 			});
-		},
-		bind: function(type, fn){
-			if (!fn) fn = function(){};
-			this.$el.on(type, fn);
-		},
-		trigger: function(type){
-			this.$el.trigger('beforeloaded');
-			this.$el.trigger(type);		
+
+			this.bind('beforePageLoad', function(){
+				self.$el.find('.mod_more').addClass('pageloading');
+			});
+
+			this.bind('afterPageLoad', function(){
+				self.$el.find('.mod_more').removeClass('pageloading');
+			});
 		},
 		append: function(html){
 			this.$el.find('.pager').append(html);

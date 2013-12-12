@@ -88,12 +88,12 @@
 	            self.$el.trigger('active', dataset);
 	        });
 
-	        this.$el.on('swapRight', function(e){
+	        this.bind('swapRight', function(e){
 	        	var idx = self.get_idx();
 	        	self.scroll_to(idx + 1);
 	        });
 
-	        this.$el.on('swapLeft', function(e){
+	        this.bind('swapLeft', function(e){
 	        	var idx = self.get_idx();
 	        	self.scroll_to(idx - 1);
 	        });
