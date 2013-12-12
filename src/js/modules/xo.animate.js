@@ -47,6 +47,7 @@ XO('Animate',function($,C){
     this.unselect = function($obj){
         if($obj){
             $obj.removeClass(C.CLASS.UIACTIVE);
+            $obj.find('.'+C.CLASS.UIACTIVE).removeClass(C.CLASS.UIACTIVE);
             return;
         }
         $('.'+C.CLASS.UIACTIVE).removeClass(C.CLASS.UIACTIVE);
@@ -56,167 +57,50 @@ XO('Animate',function($,C){
         $obj.addClass(C.CLASS.UIACTIVE);
     };
 
-    this.run = function(view,aniName,direction,goingBack){
-        var animation = this.get(aniName),
+    /**
+     * animate in a view
+     */
+    this.animateIn = function(view,aniObj,cfg){
+        var aniName = aniObj.animation,
+            animation = this.get(aniName),
+            goingBack = aniObj.isBack||false,
             $el = view.$el;
-        animation = animation.name!==C.DEFAULT.ANIMATION_NONE?animation:null;
-        direction = direction!==C.CLASS.ANIMATION_OUT ? C.CLASS.ANIMATION_IN:C.CLASS.ANIMATION_OUT;
-        goingBack = goingBack || false;
 
-        var isHiding = direction===C.CLASS.ANIMATION_OUT,
-            finalAnimationName,
-            clOut,
-            eventData = { "direction": direction, back: goingBack,animation:animation,isHiding:isHiding };
+        cfg = cfg||{};
+
+        animation = animation.name!==C.DEFAULT.ANIMATION_NONE?animation:null;
+
+        var finalAnimationName,
+            is3d,
+            eventData = { direction: C.CLASS.ANIMATION_IN, back: goingBack ,animation:animation,isHiding:false};
 
         // Error check for target page
         if ($el === undefined || $el.length === 0) {
             this.unselect();
-            XO.warn('XO.Animate.run:Target element is missing.');
+            XO.warn('XO.Animate.animateIn:Target element is missing.');
             return false;
         }
 
         // Error check for $from === $to
-        if (!isHiding && $el.hasClass(C.CLASS.ACTIVE)) {
+        if ($el.hasClass(C.CLASS.ACTIVE)) {
             this.unselect();
-            XO.warn('XO.Animate.run:You are already on the page you are trying to navigate to.');
-            return false;
-        }
-
-        if(isHiding && !$el.hasClass(C.CLASS.ACTIVE)){
-            this.unselect();
-            XO.warn('XO.Animate.run:Element already hidden!');
+            XO.warn('XO.Animate.animateIn:You are already on the page you are trying to navigate to.');
             return false;
         }
 
         // Collapse the keyboard
         $(':focus').trigger('blur');
 
-        XO.Event.trigger(view,XO.EVENT.Animate.Start,eventData);
+        XO.Event.trigger(view,XO.EVENT.Animate.Start, eventData);
+        //user callback
         view.onAnimating&&view.onAnimating.call(view,eventData);
+        //framework callback
+        cfg.onStart&&cfg.onStart.call(view);
 
         if (XO.support.animationEvents && animation && XO.App.opts.useAnimations) {
             // Fail over to 2d animation if need be
             if (!XO.support.transform3d && animation.is3d) {
-                XO.warn('XO.Animate.run:Did not detect support for 3d animations, falling back to ' + XO.App.opts.defaultAnimation + '.');
-                animation.name = XO.App.opts.defaultAnimation;
-            }
-
-            // Reverse animation if need be
-            finalAnimationName = animation.name,
-                is3d = animation.is3d ? (' '+C.CLASS.ANIMATION_3D) : '';
-
-            if (goingBack) {
-                finalAnimationName = finalAnimationName.replace(/left|right|up|down|in|out/, this.getReverseAnimation);
-            }
-
-            XO.warn('XO.Animate.run:finalAnimationName is ' + finalAnimationName + '.');
-
-            // Bind internal 'cleanup' callback
-            $el.bind('webkitAnimationEnd', animateEndHandler);
-
-            // Trigger animations
-            XO.$body.addClass(C.CLASS.ANIMATING + is3d);
-
-            clOut = [finalAnimationName,C.CLASS.ANIMATION_OUT, C.CLASS.ANIMATION_INMOTION].join(' ');
-
-            if(!isHiding){
-                $el.addClass([finalAnimationName,direction,C.CLASS.ACTIVE].join(' '));
-            }else{
-                $el.removeClass(C.CLASS.ACTIVE).addClass(clOut);
-            }
-
-
-        } else {
-            if(!isHiding){
-                $el.addClass([C.CLASS.ACTIVE,direction].join(' '));
-            }else{
-                $el.remvoeClass(C.CLASS.ACTIVE);
-            }
-            animateEndHandler();
-        }
-
-        // Private navigationEnd callback
-        function animateEndHandler(event) {
-            var bufferTime = XO.App.opts.tapBuffer;
-
-            $el.unbind('webkitAnimationEnd', animateEndHandler);
-
-            if (finalAnimationName) {
-                $el.removeClass(finalAnimationName);
-            }
-            if(isHiding){
-                $el.removeClass(clOut);
-            }
-
-            if (XO.support.animationEvents && animation && XO.App.opts.useAnimations) {
-                XO.$body.removeClass(C.CLASS.ANIMATING +' '+C.CLASS.ANIMATION_3D);
-            } else {
-                bufferTime += 260;
-            }
-
-            // 'in' class is intentionally delayed,
-            // as it is our ghost click hack
-            setTimeout(function() {
-                if(!isHiding){
-                    $el.removeClass(direction);
-                    window.scroll(0,0);
-                }
-            }, bufferTime);
-
-            // 插件初始化
-            XO.plugin.applyToView(view);
-
-            // Trigger custom events
-            XO.Event.trigger(view,XO.EVENT.Animate.End, eventData);
-            //onAnimated callback detect
-            view.onAnimated&&view.onAnimated.call(view,eventData);
-            
-        }
-
-    };
-
-    //switch Pages or Sections
-    this.switch = function(from, to, aniName, goingBack) {
-
-        var animation = this.get(aniName),
-            $from = from.$el,
-            $to = to.$el;
-
-        animation = animation.name!==C.DEFAULT.ANIMATION_NONE?animation:null;
-        goingBack = goingBack || false;
-
-        var finalAnimationName,
-            is3d,
-            eventDataFrom = { direction: C.CLASS.ANIMATION_OUT, back: goingBack ,animation:animation,isHiding:true},
-            eventDataTo = { direction: C.CLASS.ANIMATION_IN, back: goingBack ,animation:animation,isHiding:false};
-
-        // Error check for target page
-        if ($to === undefined || $to.length === 0) {
-            this.unselect();
-            XO.warn('XO.Animate.switch:Target element is missing.');
-            return false;
-        }
-
-        // Error check for $from === $to
-        if ($to.hasClass(C.CLASS.ACTIVE)) {
-            this.unselect();
-            XO.warn('XO.Animate.switch:You are already on the page you are trying to navigate to.');
-            return false;
-        }
-
-        // Collapse the keyboard
-        $(':focus').trigger('blur');
-
-        XO.Event.trigger(from,XO.EVENT.Animate.Start, eventDataFrom);
-        XO.Event.trigger(to,XO.EVENT.Animate.Start, eventDataTo);
-
-        from.onAnimating&&from.onAnimating.call(from,eventDataFrom);
-        to.onAnimating&&to.onAnimating.call(from,eventDataFrom);
-
-        if (XO.support.animationEvents && animation && XO.App.opts.useAnimations) {
-            // Fail over to 2d animation if need be
-            if (!XO.support.transform3d && animation.is3d) {
-                XO.warn('XO.Animate.switch:Did not detect support for 3d animations, falling back to ' + XO.App.opts.defaultAnimation + '.');
+                XO.warn('XO.Animate.animateIn:Did not detect support for 3d animations, falling back to ' + XO.App.opts.defaultAnimation + '.');
                 animation.name = XO.App.opts.defaultAnimation;
             }
 
@@ -228,10 +112,10 @@ XO('Animate',function($,C){
                 finalAnimationName = finalAnimationName.replace(/left|right|up|down|in|out/, this.getReverseAnimation);
             }
 
-            XO.warn('XO.Animate.switch: finalAnimationName is ' + finalAnimationName + '.');
+            XO.warn('XO.Animate.animateIn: finalAnimationName is ' + finalAnimationName + '.');
 
             // Bind internal 'cleanup' callback
-            $from.bind('webkitAnimationEnd', navigationEndHandler);
+            $el.on('webkitAnimationEnd', animateEndHandler);
 
             // Trigger animations
             XO.$body.addClass(C.CLASS.ANIMATING + is3d);
@@ -246,9 +130,7 @@ XO('Animate',function($,C){
             }
             */
 
-            $to.addClass([finalAnimationName,C.CLASS.ANIMATION_IN,C.CLASS.ACTIVE].join(' '));
-            $from.removeClass(C.CLASS.ACTIVE).addClass([finalAnimationName,C.CLASS.ANIMATION_OUT, C.CLASS.ANIMATION_INMOTION].join(' '));
-
+            $el.removeClass(C.CLASS.HIDE).addClass([finalAnimationName,C.CLASS.ANIMATION_IN,C.CLASS.ACTIVE].join(' '));
             /*
             if (XO.App.opts.trackScrollPositions === true) {
                 $from.data('lastScroll', lastScroll);
@@ -258,9 +140,8 @@ XO('Animate',function($,C){
             }
             */
         } else {
-            $to.addClass([C.CLASS.ACTIVE,C.CLASS.ANIMATION_IN].join(' '));
-            $from.removeClass(C.CLASS.ACTIVE);
-            navigationEndHandler();
+            $el.addClass([C.CLASS.ACTIVE,C.CLASS.ANIMATION_IN].join(' '));
+            animateEndHandler();
         }
 
         /*
@@ -273,15 +154,13 @@ XO('Animate',function($,C){
         */
 
         // Private navigationEnd callback
-        function navigationEndHandler(event) {
-            var bufferTime = XO.App.opts.tapBuffer,
-                clOut = [finalAnimationName,C.CLASS.ANIMATION_OUT,C.CLASS.ANIMATION_INMOTION].join(' ');
+        function animateEndHandler(evt) {
+            var bufferTime = XO.App.opts.tapBuffer;
 
             if (XO.support.animationEvents && animation && XO.App.opts.useAnimations) {
-                $from.unbind('webkitAnimationEnd', navigationEndHandler);
-                $from.removeClass(clOut);
+                $el.unbind('webkitAnimationEnd', animateEndHandler);
                 if (finalAnimationName) {
-                    $to.removeClass(finalAnimationName);
+                    $el.removeClass(finalAnimationName);
                 }
                 XO.$body.removeClass(C.CLASS.ANIMATING +' '+C.CLASS.ANIMATION_3D);
                 /*
@@ -300,9 +179,8 @@ XO('Animate',function($,C){
                 }
                 */
             } else {
-                $from.removeClass(clOut);
                 if (finalAnimationName) {
-                    $to.removeClass(finalAnimationName);
+                    $el.removeClass(finalAnimationName);
                 }
                 bufferTime += 260;
             }
@@ -310,25 +188,148 @@ XO('Animate',function($,C){
             // 'in' class is intentionally delayed,
             // as it is our ghost click hack
             setTimeout(function() {
-                $to.removeClass(C.CLASS.ANIMATION_IN);
+                $el.removeClass(C.CLASS.ANIMATION_IN);
                 window.scroll(0,0);
             }, bufferTime);
-
-            XO.Animate.unselect($from);
-
-
             // 插件初始化
-            XO.plugin.applyToView(from);
-            XO.plugin.applyToView(to);
+            XO.plugin.applyToView(view);
 
             // Trigger custom events
-            XO.Event.trigger(to,XO.EVENT.Animate.End, eventDataTo);
-            XO.Event.trigger(from,XO.EVENT.Animate.End, eventDataFrom);
+            XO.Event.trigger(view,XO.EVENT.Animate.End, eventData);
+            // user callback
+            view.onAnimated&&view.onAnimated.call(view,eventData);
+            //framework callback
+            cfg.onEnd&&cfg.onEnd.call(view);
+        }
+        return true;
+    };
+    /**
+     * animate out a view
+     */
+    this.animateOut = function(view,aniObj,cfg){
+        var aniName = aniObj.animation,
+            animation = this.get(aniName),
+            $el = view.$el,
+            goingBack = aniObj.isBack||false;
 
-            from.onAnimated&&from.onAnimated.call(from,eventDataFrom);
-            to.onAnimated&&to.onAnimated.call(from,eventDataFrom);
+        cfg = cfg||{};
+
+        animation = animation.name!==C.DEFAULT.ANIMATION_NONE?animation:null;
+
+        var finalAnimationName,
+            is3d,
+            eventData = { direction: C.CLASS.ANIMATION_OUT, back: goingBack ,animation:animation,isHiding:true};
+        // Error check for target page
+        if ($el === undefined || $el.length === 0) {
+            XO.warn('XO.Animate.animateOut:Target element is missing.');
+            return false;
+        }
+        // Collapse the keyboard
+        //$(':focus').trigger('blur');
+
+        XO.Event.trigger(view,XO.EVENT.Animate.Start, eventData);
+        //user's custom view callback
+        view.onAnimating&&view.onAnimating.call(view,eventData);
+        //framework's internal view callback
+        cfg.onStart&&cfg.onStart.call(view);
+
+        if (XO.support.animationEvents && animation && XO.App.opts.useAnimations) {
+            // Fail over to 2d animation if need be
+            if (!XO.support.transform3d && animation.is3d) {
+                XO.warn('XO.Animate.animateOut:Did not detect support for 3d animations, falling back to ' + XO.App.opts.defaultAnimation + '.');
+                animation.name = XO.App.opts.defaultAnimation;
+            }
+
+            // Reverse animation if need be
+            finalAnimationName = animation.name;
+            is3d = animation.is3d ? (' '+C.CLASS.ANIMATION_3D) : '';
+
+            if (goingBack) {
+                finalAnimationName = finalAnimationName.replace(/left|right|up|down|in|out/, this.getReverseAnimation);
+            }
+
+            XO.warn('XO.Animate.animateOut: finalAnimationName is ' + finalAnimationName + '.');
+
+            // Bind internal 'cleanup' callback
+            $el.bind('webkitAnimationEnd', animateEndHandler);
+
+            // Trigger animations
+            XO.$body.addClass(C.CLASS.ANIMATING + is3d);
+
+            /*
+            var lastScroll = window.pageYOffset;
+
+            // Position the incoming page so toolbar is at top of
+            // viewport regardless of scroll position on from page
+            if (XO.App.opts.trackScrollPositions === true) {
+                $to.css('top', window.pageYOffset - ($to.data('lastScroll') || 0));
+            }
+            */
+
+            $el.removeClass(C.CLASS.ACTIVE).addClass([finalAnimationName,C.CLASS.ANIMATION_OUT, C.CLASS.ANIMATION_INMOTION].join(' '));
+
+            /*
+            if (XO.App.opts.trackScrollPositions === true) {
+                $from.data('lastScroll', lastScroll);
+                $('.scroll', $from).each(function() {
+                    $(this).data('lastScroll', this.scrollTop);
+                });
+            }
+            */
+        } else {
+            $el.removeClass(C.CLASS.ACTIVE);
+            animateEndHandler();
         }
 
+        /*
+        if (goingBack) {
+            history.shift();
+        } else {
+            addPageToHistory(XO.View.$curView, animation);
+        }
+        setHash(XO.View.$curView.attr('id'));
+        */
+
+        // Private navigationEnd callback
+        function animateEndHandler(event) {
+            var clOut = [finalAnimationName,C.CLASS.ANIMATION_OUT,C.CLASS.ANIMATION_INMOTION].join(' ');
+
+            if (XO.support.animationEvents && animation && XO.App.opts.useAnimations) {
+                $el.unbind('webkitAnimationEnd', animateEndHandler);
+                $el.removeClass(clOut);
+                XO.$body.removeClass(C.CLASS.ANIMATING +' '+C.CLASS.ANIMATION_3D);
+                /*
+                if (XO.App.opts.trackScrollPositions === true) {
+                    $to.css('top', -$to.data('lastScroll'));
+
+                    // Have to make sure the scroll/style resets
+                    // are outside the flow of this function.
+                    setTimeout(function() {
+                        $to.css('top', 0);
+                        window.scroll(0, $to.data('lastScroll'));
+                        $('.scroll', $to).each(function() {
+                            this.scrollTop = - $(this).data('lastScroll');
+                        });
+                    }, 0);
+                }
+                */
+            } else {
+                $el.removeClass(clOut);
+            }
+
+            XO.Animate.unselect($el);
+
+
+            // 视图隐藏，插件销毁
+            XO.plugin.destroyInView(view);
+
+            // Trigger custom events
+            XO.Event.trigger(view,XO.EVENT.Animate.End, eventData);
+            // user's custom callback
+            view.onAnimated&&view.onAnimated.call(view,eventData);
+            // framework's callback
+            cfg.onEnd&&cfg.onEnd.call(view);
+        }
         return true;
-    };//switch
+    };
 });

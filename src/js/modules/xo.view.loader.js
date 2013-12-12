@@ -11,7 +11,7 @@ XO.View.define({
         this.$el.removeClass(XO.CONST.CLASS.HIDE);
     },
     hide:function(){
-        this.$el.addClass(XO.CONST.CLASS.HIDE);
+        this.$el.addClass(XO.CONST.CLASS.HIDE).removeClass(XO.CONST.CLASS.ACTIVE);
         this.isLoading = false;
     }
 });

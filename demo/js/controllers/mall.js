@@ -2,30 +2,18 @@ XO.Controller.define('mall',{
 
     index:function(param){
         
-        XO.View.get(param.pid,param.vid,function(err,view){
-            
-            if(err){
-                XO.warn('controller.mall.Index:'+err);
-                return;
+        this.renderView('index',{
+            param:param,
+            onRendered:function(err,view){
+                XO.Event.on(view,XO.EVENT.Animate.End,function(e,d){
+                    XO.Controller.mall.onAnimated();
+                });
+            },
+            data:function(params,cbk){
+                //TODO:load remote data
+                var jsonData = {hi:1};
+                cbk(null,jsonData);
             }
-
-            XO.Event.on(view,XO.EVENT.Animate.End,function(e,d){
-                XO.Controller.mall.onAnimated();
-            });
-
-            //TODO:load remote data
-            var data = {};
-            if(!view.isRendered){
-                view.render(data);
-                view.animate({animation:'fade'});
-            }else{
-                view.animate(param);
-            }
-            
-            XO.warn('controller.mall.Index',view);
-
-
-
         });
 
     },
