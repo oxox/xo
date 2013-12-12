@@ -108,6 +108,7 @@ XO.Controller.define('mall',{
                 });
             });
         })*/
+        //console.dir(view);
         var plugin_page_1 = {
             'tpl_url' : 'demo/html/pages/mall/loaded_1.html',
             'data_url' : {}

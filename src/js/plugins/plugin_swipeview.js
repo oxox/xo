@@ -21,7 +21,7 @@
 			var isDrag = false,
 				startTime, endTime, sX, sY, eX, eY, touch, dis, endis, isStopEvent = false, endidx;
 			var self = this;
-			this.$el.on('touchstart mousedown', function(e){
+			$(document).on('touchstart mousedown', function(e){
 	            isDrag = true;
 	            if (e.touches){
 	                touch = e.touches[0]
@@ -32,9 +32,10 @@
 	                sY = e.pageY;
 	            }
 	            startTime = Date.parse(new Date());
+	            e.preventdefault();e.stoppropagation();
 	        });
 
-			this.$el.on('touchmove mousemove', function(e){
+			$(document).on('touchmove mousemove', function(e){
 	            if(!isDrag) return;
 	            if(isStopEvent) return;
 	            if (e.touches) {
@@ -46,16 +47,18 @@
 	                eY = e.pageY;
 	            }
 	            dis = self._w * self._idx + (eX - sX);
-
-	            if( Math.abs(eY - sY) - Math.abs(eX - sX) > 0){
-	            	isStopEvent = true;
+	            $('.navbar').html(dis);
+	            /*if( Math.abs(eY - sY) - Math.abs(eX - sX) > 0){
+	            	//isStopEvent = true;
 	            }else if(Math.abs(eX - sX) - Math.abs(eY - sY) > 0){
 	            	self.$el.css({'-webkit-transform': 'translate(' + dis + 'px, 0px) translateZ(0px)'});
 	            }else{
-	            }	            
+	            }*/
+	            //alert(Math.abs(eX - sX) - Math.abs(eY - sY));
+	            //e.stoppropagation(); e.preventdefault();
 	        });
 
-	        this.$el.on('touchend mouseup', function(e){
+	        $(document).on('touchend mouseup', function(e){
 	            if(!isDrag) return;
 	            isDrag = false;
 	            if(isStopEvent){
@@ -88,6 +91,7 @@
 		            }
 	            }
 	            self.swap_page(endidx);
+	            //e.preventdefault();e.stoppropagation();
 	        });
 		},
 		bootup: function(data){
