@@ -21,10 +21,11 @@
 			var isDrag = false,
 				startTime, endTime, sX, sY, eX, eY, touch, dis, endis, isStopEvent = false, endidx;
 			var self = this;
-			$(document).on('touchstart mousedown', function(e){
+
+			this.$el.on('touchstart mousedown', function(e){
 	            isDrag = true;
 	            if (e.touches){
-	                touch = e.touches[0]
+	                touch = e.touches[0];
 	                sX = touch.pageX;
 	                sY = touch.pageY;
 	            }else{
@@ -32,12 +33,13 @@
 	                sY = e.pageY;
 	            }
 	            startTime = Date.parse(new Date());
-	            e.preventdefault();e.stoppropagation();
 	        });
 
-			$(document).on('touchmove mousemove', function(e){
+			this.$el.on('touchmove mousemove', function(e){
 	            if(!isDrag) return;
-	            if(isStopEvent) return;
+	            if(isStopEvent) {
+	            	return;
+	            }
 	            if (e.touches) {
 	                touch = e.touches[0];
 	                eX = touch.pageX;
@@ -47,18 +49,16 @@
 	                eY = e.pageY;
 	            }
 	            dis = self._w * self._idx + (eX - sX);
-	            $('.navbar').html(dis);
-	            /*if( Math.abs(eY - sY) - Math.abs(eX - sX) > 0){
-	            	//isStopEvent = true;
+
+	            if( Math.abs(eY - sY) - Math.abs(eX - sX) > 0){
+	            	isStopEvent = true;
 	            }else if(Math.abs(eX - sX) - Math.abs(eY - sY) > 0){
 	            	self.$el.css({'-webkit-transform': 'translate(' + dis + 'px, 0px) translateZ(0px)'});
-	            }else{
-	            }*/
-	            //alert(Math.abs(eX - sX) - Math.abs(eY - sY));
-	            //e.stoppropagation(); e.preventdefault();
+	            	e.preventDefault();
+	            }else{}
 	        });
 
-	        $(document).on('touchend mouseup', function(e){
+	        this.$el.on('touchend mouseup', function(e){
 	            if(!isDrag) return;
 	            isDrag = false;
 	            if(isStopEvent){
@@ -91,7 +91,6 @@
 		            }
 	            }
 	            self.swap_page(endidx);
-	            //e.preventdefault();e.stoppropagation();
 	        });
 		},
 		bootup: function(data){
@@ -124,7 +123,7 @@
 			var self = this;
 			var sections = self.$el.find('.xo_section');
 			var activePage, arrow;
-			this.$el.animate({'translate3d': cX + 'px, 0, 0'}, 300, 'ease-out', function(){
+			this.$el.animate({'translate3d': cX + 'px, 0, 0'}, 200, 'ease-out', function(){
 				if(self._idx > idx ){
 					self.$el.append(sections[0]);
 					$(sections[0]).find('.pager').html('');

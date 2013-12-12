@@ -8,27 +8,16 @@
 			this.initEvent();
 		},
 		initUi: function(){
-			var $el = this.$el,
-				_w = $el.width();
+			var $el = this.$el;
+			this._w = $el.width();
 
 			this._isInActive = false;
 			this._idx = 2;
 			this.$_inner = $($el.find('.mod_nav_inner'));
-        	this.$_inner.css({'padding':'0 ' + (_w / 2 - 40) + 'px'});
+			this._ow = this.$_inner.width();
         	this.$_item = $el.find('a');
         	this._maxIdx = this.$_item.length - 1;
         	this._minIdx = 0;
-	        this._navScroll = new IScroll($el[0], {
-	            scrollX: true,
-	            scrollY: false,
-	            momentum: false,
-	            snap: false,
-	            bounce :false
-	        });
-	        this._navScroll.scrollTo(getX(this._idx), 0 , 0);
-		},
-		bootup: function(){
-
 		},
 		get_idx: function(x){
 	        if ('undefined' != typeof x){
@@ -48,13 +37,27 @@
 	           
 	    },
 	    active: function(idx){
+	    	var self = this;
 	        this.$_item.removeClass('on');
 	        $(this.$_item[idx]).addClass('on');
+
+	        var left = idx * 80 + 80;
+
+	        if(left + this.cdis >= this._w){
+	        	this.$_inner.animate({'translate3d': this.cdis - 40 + 'px, 0, 0'}, 300, 'ease-out', function(){
+            		self.cdis = self.cdis - 40;
+            	});
+	        }
+
+	        if(left - 80  <= -this.cdis){
+	        	this.$_inner.animate({'translate3d': this.cdis + 40 + 'px, 0, 0'}, 300, 'ease-out', function(){
+            		self.cdis = self.cdis + 40;
+            	});
+	        }
 	    },
 	    scroll_to: function(idx){
 	    	if(idx <= this._maxIdx && idx >= this._minIdx){
 	            this._isInActive = true;
-	            this._navScroll.scrollTo(getX(idx), 0, 300);
 	            this.active(idx);
 	            this._idx = idx;
 	            var self = this;
@@ -96,12 +99,6 @@
 		},
 		initEvent: function(){
 			var self = this;
-			$(this._navScroll.wrapper).on('touchend mouseup', function(){
-	            if(!self._isInActive){
-	                var x = self._navScroll.absStartX + self._navScroll.distX;
-	                self.activeTab(x);
-	            }
-	        });
 	        this.$el.on('tap click', function(e){
 	        	if (self._isInActive) return;
 	        	if (e.touches){
@@ -124,6 +121,62 @@
 	        	var idx = self.get_idx();
 	        	self.scroll_to(idx - 1);
 	        });
+			
+			var isDrag = false,
+				startTime, endTime, sX, sY, eX, eY, touch, dis, endis, isStopEvent = false, endidx; this.cdis = 0;
+			var self = this;
+			this.$_inner.on('touchstart mousedown', function(e){
+	            isDrag = true;
+	            if (e.touches){
+	                touch = e.touches[0];
+	                sX = touch.pageX;
+	                sY = touch.pageY;
+	            }else{
+	                sX = e.pageX;
+	                sY = e.pageY;
+	            }
+	            startTime = Date.parse(new Date());
+	        });
+
+			this.$_inner.on('touchmove mousemove', function(e){
+	            if(!isDrag) return;
+	            if (e.touches) {
+	                touch = e.touches[0];
+	                eX = touch.pageX;
+	                eY = touch.pageY;
+	            }else{
+	                eX = e.pageX;
+	                eY = e.pageY;
+	            }
+	            dis = eX - sX + self.cdis;
+	            $(this).css({'-webkit-transform': 'translate(' + dis + 'px, 0px) translateZ(0px)'});  
+	        });
+
+	        this.$_inner.on('touchend mouseup', function(e){
+	            if(!isDrag) return;
+	            if (e.changedTouches) {
+	                touch = e.changedTouches[0];
+	                eX = touch.pageX;
+	                eY = touch.pageY;
+	            }else{
+	                eX = e.pageX;
+	                eY = e.pageY;
+	            }
+	            isDrag = false;
+	            self.cdis = self.cdis + eX - sX;
+	            if(self._ow + self.cdis < self._w ){  
+	            	self.$_inner.animate({'translate3d': -1 * (self._ow - self._w) + 'px, 0, 0'}, 300, 'ease-out', function(){
+	            		self.cdis = -1 * (self._ow - self._w);
+	            	});
+	            }
+	            if(self.cdis > 0){
+	            	self.$_inner.animate({'translate3d': '0, 0, 0'}, 300, 'ease-out', function(){
+	            		self.cdis = 0;
+	            	});
+	            }
+	        });
+
+
 		},
 		destroy: function(){
 			this.super.destroy.call(this);

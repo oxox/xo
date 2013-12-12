@@ -25,13 +25,7 @@
 		},
 		initEvent: function(){
 			var self = this;
-			/*$(this._pageScroll.wrapper).on('touchend mouseup', function(e){
-	            if(!self._isInActive){
-	            	if( self._pageScroll.maxScrollY - self._pageScroll.y > 50){
-	            		self.trigger('loaded');
-	            	}
-	            }
-	        });*/
+
 			this.$el.on('scroll' ,function(e){
 				if(this.scrollTop + this.clientHeight >= this.scrollHeight)
             		self.trigger('loaded');

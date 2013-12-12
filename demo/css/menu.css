@@ -26,7 +26,7 @@
 				border-style:dashed dashed solid dashed;
 				font-size:0;
 			}
-			.mod_nav_inner{float:left; width:401px;}
+			.mod_nav_inner{float:left; width:800px}
 			.mod_nav_inner a{float:left; position:relative; width:80px; height:44px; font-weight:bold; line-height:44px; color:#9DA0A5; text-align:center; -webkit-transition:font-size 200ms ease-in-out;}
 			.mod_nav_inner a.on{
 				font-size:18px;
@@ -35,3 +35,16 @@
 
 			.mod_nav_inner a.on:after{display:none;}
 /*====== e - menu =======*/
+
+.demo{width: 100%;margin:20px auto;}
+.demo_hd{margin-bottom: 10px;color: #333;padding-bottom: 5px;font-size: 48px;font-weight: 500;border-bottom: 4px solid #e3e3e3;}
+.demo_bd{padding: 10px 0;}
+.demo_item{margin-bottom: 40px;}
+.demo_item_hd{font-size: 24px;height: 30px;line-height: 30px;margin-bottom: 5px;padding: 0 10px;}
+.demo_item_bd{padding: 0 10px;}
+.demo_item_bd .row{margin-bottom: 10px;}
+.demo_item_bd .row h3{font-size: 14px;margin-bottom: 5px;}
+.mod_topbar,.mod_bar,.mod_nav{position: relative;}
+.test{display: block;height: 28px;background: #f6f6f6;font-size: 16px;line-height: 28px;border:1px solid #ccc;}
+.test:hover{background: #f00;}
+.demo_item_bd .current span{display: inline-block;}
