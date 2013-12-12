@@ -141,7 +141,7 @@ XO('Animate',function($,C){
             }
             */
         } else {
-            $el.addClass([C.CLASS.ACTIVE,C.CLASS.ANIMATION_IN].join(' '));
+            $el.removeClass(C.CLASS.HIDE).addClass([C.CLASS.ACTIVE,C.CLASS.ANIMATION_IN].join(' '));
             animateEndHandler();
         }
 
