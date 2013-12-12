@@ -9,10 +9,13 @@ XO.View.define({
             XO.View.uiSearch.toggle();
             return false;
         });
-        $('#J_mod_search_ipt').on('blur',function(e){
+        this.$ipt = $('#J_mod_search_ipt').on('blur',function(e){
             XO.View.uiSearch.hide(function(){
                 XO.history.navigate('page/search', true);
             });
+        });
+        $('#J_mod_search_bg').on('click',function(e){
+            XO.View.uiSearch.hide();
         });
     },
     toggle:function(){
@@ -40,6 +43,6 @@ XO.View.define({
             XO.View.uiSearch.isLoading = false;
             cbk&&cbk();
         }).removeClass(XO.CONST.CLASS.UIACTIVE);
-        
+        this.$ipt.val('');
     }
 });

@@ -16,5 +16,18 @@ XO.View.define({
     //动画结束
     onAnimated:function(eventData){
         XO.warn(XO.View.getId(this.pid,this.vid)+':View onAnimated',eventData);
+        if(!this.swipPager){
+            this.$el.swipePager({
+                onPrev:function(){
+                    var $item = window['J_navslide_obj'].goPrev().getCurrentItem().find('a');
+                    XO.history.navigate($item[0].getAttribute('href').replace('#',''),true);
+                },
+                onNext:function(){
+                    var $item = window['J_navslide_obj'].goNext().getCurrentItem().find('a');
+                    XO.history.navigate($item[0].getAttribute('href').replace('#',''),true);
+                }
+            });
+            this.swipePager = true;
+        }
     }
 });

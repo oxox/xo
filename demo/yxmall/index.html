@@ -12,7 +12,7 @@
     <title>易迅商城</title>
     <link rel="stylesheet" href="../../src/css/xo.css?v=20131209" />
     <link rel="stylesheet" href="css/gb.css" />
-	<link rel="stylesheet" href="css/act_demo.css" />
+	<link rel="stylesheet" href="css/act_demo.css?v=20131212" />
     <link rel="stylesheet" href="css/daily.css" />
 
 </head>
@@ -24,7 +24,7 @@
     <!-- 注：当前导航加类名 current mod_nav_inner需js计算宽度-->
         <ul class="mod_nav_inner" data-control="slideTab">
             <li><a href="#page/home/daily"><strong>一日一品</strong></a></li>
-            <li class="current"><a href="#page/home"><strong>精选商品</strong></a></li>
+            <li class="current"><a href="#page/home/index"><strong>精选商品</strong></a></li>
             <li><a href="#page/home/baby"><strong>妈妈宝贝</strong></a></li>
             <li><a href="#page/home/guang"><strong>逛逛</strong></a></li>
             <li><a href="#page/home/faxian"><strong>发现发现</strong></a></li>
@@ -45,11 +45,15 @@
     <!--E 遮罩-->
 
     <!--S loader-->
-    <div id="xoview-common-loader" class="xo_loader"><div class="xo_loader_animate"><span></span><span></span><span></span></div></div>
+    <div id="xoview-common-loader" class="xo_loader">
+        <div class="mod_loading">
+            <div class="mod_loading_gif"></div>
+        </div>
+    </div>
     <!--E loader-->
 
     <div id="xoview-common-search" class="mod_search hide">
-        <div class="mod_search_bg"></div>
+        <div id="J_mod_search_bg" class="mod_search_bg"></div>
         <div class="mod_search_bd">
             <div class="mod_search_iptwrap">
                 <i class="mod_search_ico"></i>
@@ -98,7 +102,8 @@
     <script src="js/views/search/index.js"></script>
 
     <script src="js/views/common/search.js"></script>
-    <script src="js/plugins/navslide.js"></script>
+    <script src="js/plugins/navslide.js?v=20131213"></script>
+    <script src="js/plugins/swipepager.js"></script>
 
     <script>
         $(document).ready(function(){
