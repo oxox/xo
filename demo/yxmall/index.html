@@ -1,0 +1,118 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="description" content="A lightweight webapp framework developed by [TENCENT ECC_UX_OS Team](http://ecd.tencent.com)" />
+    <meta name="keywords" content="webapp,xo,xo.js" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no" />
+    <meta name="apple-touch-fullscreen" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <title>易迅商城</title>
+    <link rel="stylesheet" href="../../src/css/xo.css?v=20131209" />
+    <link rel="stylesheet" href="css/gb.css" />
+	<link rel="stylesheet" href="css/act_demo.css" />
+    <link rel="stylesheet" href="css/daily.css" />
+
+</head>
+<body data-viewdir="html/pages/">
+
+
+    <!--S header-->
+    <div class="mod_nav nav_home" id="J_navslide">
+    <!-- 注：当前导航加类名 current mod_nav_inner需js计算宽度-->
+        <ul class="mod_nav_inner" data-control="slideTab">
+            <li><a href="#page/home/daily"><strong>一日一品</strong></a></li>
+            <li class="current"><a href="#page/home"><strong>精选商品</strong></a></li>
+            <li><a href="#page/home/baby"><strong>妈妈宝贝</strong></a></li>
+            <li><a href="#page/home/guang"><strong>逛逛</strong></a></li>
+            <li><a href="#page/home/faxian"><strong>发现发现</strong></a></li>
+            <li><a href="#page/home/pinpai"><strong>品牌特卖</strong></a></li>
+        </ul>
+    </div>
+    <div class="mod_nav_sub">
+        <ul class="clearfix">
+            <li ><a id="J_mod_nav_search" class="mod_nav_search" href="javascript:;">搜索</a></li>
+            <li ><a class="mod_nav_user" href="javascript:;">我的</a></li>
+        </ul>       
+    </div>
+    <!--E header-->
+
+    <!--S 遮罩-->
+    <!--页面切换过程中遮罩用于屏蔽用户操作-->
+    <div id="xoview-common-mask" class="xo_mask hide"></div>
+    <!--E 遮罩-->
+
+    <!--S loader-->
+    <div id="xoview-common-loader" class="xo_loader"><div class="xo_loader_animate"><span></span><span></span><span></span></div></div>
+    <!--E loader-->
+
+    <div id="xoview-common-search" class="mod_search hide">
+        <div class="mod_search_bg"></div>
+        <div class="mod_search_bd">
+            <div class="mod_search_iptwrap">
+                <i class="mod_search_ico"></i>
+                <input id="J_mod_search_ipt" type="text" class="mod_search_ipt" placeholder="品类 品牌 关键字"/>
+            </div>
+        </div>
+    </div>
+
+    <!--<script src="http://weinre.qq.com/target/target-script-min.js#levinhuang"></script>-->
+    <!--3party libs-->
+    <script src="../../src/js/libs/fastclick.js"></script>
+    <script src="../../src/js/libs/iscroll.js"></script>
+    <script src="../../src/js/libs/zepto.min.js"></script>
+    <script src="../../src/js/libs/underscore-min.js"></script>
+    <script src="../../src/js/libs/backbone-min.js"></script>
+    <script src="../../src/js/libs/hogan-2.0.0.js"></script>
+
+    <!--XO framework-->
+    <script src="../../src/js/xo.js"></script>
+    <script src="../../src/js/modules/xo.constants.js"></script>
+    <script src="../../src/js/modules/xo.media.js"></script>
+    <script src="../../src/js/modules/xo.support.js"></script>
+    <script src="../../src/js/modules/xo.event.js"></script>
+    <script src="../../src/js/modules/xo.plugin.js"></script>
+    <script src="../../src/js/plugins/plugin_menu.js"></script>
+    <script src="../../src/js/plugins/plugin_loadmore.js"></script>
+    <script src="../../src/js/plugins/plugin_swipeview.js"></script>
+    <script src="../../src/js/modules/xo.controller.js"></script>
+    <script src="../../src/js/modules/xo.view.js"></script>
+    <script src="../../src/js/modules/xo.view.mask.js"></script>
+    <script src="../../src/js/modules/xo.view.loader.js"></script>
+    <script src="../../src/js/modules/xo.router.js"></script>
+    <script src="../../src/js/modules/xo.animate.js"></script>
+    <script src="../../src/js/modules/xo.app.js"></script>
+    
+    <!--app biz code-->
+    <script src="js/controllers/home.js"></script>
+    <script src="js/views/home/index.js"></script>
+    <script src="js/views/home/baby.js"></script>
+    <script src="js/views/home/daily.js"></script>
+    <script src="js/views/home/faxian.js"></script>
+    <script src="js/views/home/guang.js"></script>
+    <script src="js/views/home/pinpai.js"></script>
+
+    <script src="js/controllers/search.js"></script>
+    <script src="js/views/search/index.js"></script>
+
+    <script src="js/views/common/search.js"></script>
+    <script src="js/plugins/navslide.js"></script>
+
+    <script>
+        $(document).ready(function(){
+            XO.App.init({
+                debug:true,
+                defaultAnimation:'none'
+            });
+            $('#J_navslide').navSlide({
+                index:1
+            });
+        });
+        document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
+            //WeixinJSBridge.call('hideToolbar');
+        });
+    </script>
+</body>
+</html>
