@@ -27,7 +27,7 @@ XO('View',function($,C){
             XO.Event.trigger(this,XO.EVENT.View.Inited,[this]);
             this.onRender&&this.onRender.call(this);
         },
-        initFromSrc:function(cbk){
+        initFromRemote:function(cbk){
             XO.Event.trigger(XO.EVENT.View.InitFromRemote,[this]);
             //load from local storage
             var lsKey = XO.View.getLSKey(this.id),
@@ -79,33 +79,32 @@ XO('View',function($,C){
             this.isRendered = true;
             this.initFromDom();
         },
-        animate:function(aniObj){
-            if(!this.isRendered){
-                XO.warn('animate view ['+this.id+'] error:Not Rendered!');
-                return;
-            }
+        /**
+         * 显示视图
+         * @param {Object} aniObj animation object
+         * @param {Object} cfg config object
+         *                 cfg.onStart 动画开始回调
+         *                 cfg.onEnd 动画结束回调
+         * @param {Boolean} noReplaceCurrentView 是否覆盖当前view，对于loader这些公共视图，不应该覆盖当前view
+         */
+        animateIn:function(aniObj,cfg,noReplaceCurrentView){
 
-            aniObj = aniObj||{};
+            //隐藏Loading
+            XO.View.uiLoader.hide();
 
-            //TODO:如何view的类型是section，则为页面内的切换，获取当前view时要加上pageId
-            var curView = XO.View.getCurView(/*this.pid*/),
-                animation = aniObj.animation||this.animation;
-            if(!curView || curView.id===this.id){//无前一个View或者前一个View和当前View是同一个
-                XO.Animate.run(this,animation,aniObj.direction,aniObj.back);
+            if(XO.Animate.animateIn(this,aniObj,cfg)&&!noReplaceCurrentView){
                 XO.View.setCurView(this,this.pid);
-                return;
             }
-
-            XO.View.switch(curView,this,animation,aniObj.back,this.pid);
-            
         },
-        //显示视图
-        animateIn:function(aniObj){
-            //TODO：XO.Animate.animateIn(this,aniObj);
-        },
-        //隐藏视图
-        animateOut:function(aniObj){
-            //TODO:XO.Animate.animateOut(this,aniObj);
+        /**
+         * 隐藏视图
+         * @param {Object} aniObj animation object
+         * @param {Object} cfg config object
+         *                 cfg.onStart 动画开始回调
+         *                 cfg.onEnd 动画结束回调
+         */
+        animateOut:function(aniObj,cfg ){
+            XO.Animate.animateOut(this,aniObj,cfg);
         }
     };
     /**
@@ -161,8 +160,10 @@ XO('View',function($,C){
      * @param {String} pid page id
      * @param {String} vid view id
      * @param {Function} cbk callback
+     * @param {Function} onPreloadFromRemote 从远程url获取模板时的回调
      */
-    this.get = function(pid,vid,cbk){
+    this.get = function(pid,vid,cbk,onPreloadFromRemote){
+
         var id = this.getId(pid,vid),
             view = this.caches[id];
         
@@ -175,10 +176,13 @@ XO('View',function($,C){
             cbk(null,view);
             return;
         }
-        XO.View.uiLoader.show();
-        view.initFromSrc(function(err,view1){
-            XO.View.uiLoader.hide();
-            cbk(err,view1);
+        //从远程获取视图模板
+        if (!onPreloadFromRemote) {
+            view.initFromRemote(cbk);
+            return;
+        };
+        onPreloadFromRemote.call(view,function(){
+            view.initFromRemote(cbk);
         });
     };
     /**
@@ -187,12 +191,20 @@ XO('View',function($,C){
     this.getId = function(pid,vid){
         return [C.DEFAULT.VIEW_ID_PREFIX,pid,vid].join('-');
     };
+    /**
+     * 设置当前视图
+     * @param {Object} view XO.View object
+     * @param {String} pageId view's page id
+     */
     this.setCurView = function(view,pageId){
         if(pageId){
             this.curViews[pageId].curView = view;
         };
         this.curViews['curView'] = view;
     };
+    /**
+     * 获取当前视图
+     */
     this.getCurView = function(pageId){
         if(pageId){
             return this.curViews[pageId].curView;
@@ -212,40 +224,46 @@ XO('View',function($,C){
 
         return true;
     };//switch
-    //TODO:
+    /**
+     * switch Pages or Sections
+     * @param {Function} cbk cbb(err,view,onGetViewData)
+     */
     this.switchTo = function(pid,vid,aniObj,cbk,forceRefresh){
-        return;
-        var curView = this.getCurView();
+        var curView = this.getCurView(),
+            onViewGot = function(err,view){
+                if(err){
+                    XO.warn('XO.View.switchTo:'+err);
+                    cbk(err);
+                    return;
+                }
+                if(view.isRendered&&!forceRefresh){
+                    view.animateIn(aniObj);
+                    return;
+                }
+                cbk(null,view,function(err1,data1){
+                    if(err1){
+                        //获取数据出错
+                        XO.warn('XO.View.switchTo:'+err1);
+                        return;
+                    }
+                    //渲染视图
+                    view.render(data1);
+                    view.animateIn({animation:'none'});
+                });
+            },
+            onPreloadFromRemote = function(loadFromRemote){
+                //切进loading
+                XO.View.uiLoader.animateIn(aniObj,{
+                    onEnd:loadFromRemote
+                },true);
+            };
+
         //移出当前view
         if(curView){
             curView.animateOut(aniObj);
         }
         //加载目标视图
-        this.get(pid,vid,function(err,view){
-            if(err){
-                //TODO:用浮层组件显示错误
-                XO.warn('XO.View.switchTo:'+err);
-                cbk(err);
-                return;
-            }
-            if(view.isRendered&&!forceRefresh){
-                view.animateIn(aniObj);
-                return;
-            }
-            //获取数据，渲染视图
-            XO.uiLoader.show();
-            cbk(null,view,function(err1,data1){
-                XO.uiLoader.hide();
-                if(err1){
-                    //获取数据出错
-                    XO.warn('XO.View.switchTo:'+err1);
-                    return;
-                }
-                //渲染视图
-                view.render(data1);
-                view.animateIn({animation:'none'});
-            });
-        });
+        this.get(pid,vid,onViewGot,onPreloadFromRemote);
     };
 
     this.init = function(){

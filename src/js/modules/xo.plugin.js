@@ -78,6 +78,13 @@ XO('plugin',function($,C){
         });
     };
 
+    /**
+     * 销毁视图内的插件。该方法在视图隐藏后自动调用
+     */
+    this.destroyInView = function(view){
+        //TODO
+    };
+
     this.bootup = function(view, args){
         for(var i in args){
            plugin = this.get(i);
