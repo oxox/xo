@@ -12,7 +12,7 @@
     <title>易迅商城</title>
     <link rel="stylesheet" href="../../src/css/xo.css?v=20131209" />
     <link rel="stylesheet" href="css/gb.css" />
-	<link rel="stylesheet" href="css/act.css" />
+	<link rel="stylesheet" href="css/act_demo.css" />
     <link rel="stylesheet" href="css/daily.css" />
 
 </head>
@@ -20,9 +20,9 @@
 
 
     <!--S header-->
-    <div class="mod_nav">
+    <div class="mod_nav nav_home" id="J_navslide">
     <!-- 注：当前导航加类名 current mod_nav_inner需js计算宽度-->
-        <ul class="mod_nav_inner">
+        <ul class="mod_nav_inner" data-control="slideTab">
             <li><a href="#page/home/daily"><strong>一日一品</strong></a></li>
             <li class="current"><a href="#page/home"><strong>精选商品</strong></a></li>
             <li><a href="#page/home/baby"><strong>妈妈宝贝</strong></a></li>
@@ -30,6 +30,12 @@
             <li><a href="#page/home/faxian"><strong>发现发现</strong></a></li>
             <li><a href="#page/home/pinpai"><strong>品牌特卖</strong></a></li>
         </ul>
+    </div>
+    <div class="mod_nav_sub">
+        <ul class="clearfix">
+            <li ><a id="J_mod_nav_search" class="mod_nav_search" href="javascript:;">搜索</a></li>
+            <li ><a class="mod_nav_user" href="javascript:;">我的</a></li>
+        </ul>       
     </div>
     <!--E header-->
 
@@ -42,12 +48,21 @@
     <div id="xoview-common-loader" class="xo_loader"><div class="xo_loader_animate"><span></span><span></span><span></span></div></div>
     <!--E loader-->
 
+    <div id="xoview-common-search" class="mod_search hide">
+        <div class="mod_search_bg"></div>
+        <div class="mod_search_bd">
+            <div class="mod_search_iptwrap">
+                <i class="mod_search_ico"></i>
+                <input id="J_mod_search_ipt" type="text" class="mod_search_ipt" placeholder="品类 品牌 关键字"/>
+            </div>
+        </div>
+    </div>
+
     <!--<script src="http://weinre.qq.com/target/target-script-min.js#levinhuang"></script>-->
     <!--3party libs-->
     <script src="../../src/js/libs/fastclick.js"></script>
     <script src="../../src/js/libs/iscroll.js"></script>
     <script src="../../src/js/libs/zepto.min.js"></script>
-    <script src="../../src/js/libs/zepto.fx.js"></script>
     <script src="../../src/js/libs/underscore-min.js"></script>
     <script src="../../src/js/libs/backbone-min.js"></script>
     <script src="../../src/js/libs/hogan-2.0.0.js"></script>
@@ -82,14 +97,21 @@
     <script src="js/controllers/search.js"></script>
     <script src="js/views/search/index.js"></script>
 
+    <script src="js/views/common/search.js"></script>
+    <script src="js/plugins/navslide.js"></script>
+
     <script>
         $(document).ready(function(){
             XO.App.init({
-                debug:true
+                debug:true,
+                defaultAnimation:'none'
+            });
+            $('#J_navslide').navSlide({
+                index:1
             });
         });
         document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
-            WeixinJSBridge.call('hideToolbar');
+            //WeixinJSBridge.call('hideToolbar');
         });
     </script>
 </body>

@@ -21,6 +21,7 @@ XO('Animate',function($,C){
         'slideright':{name:'slideright'},
         'slideup':{name:'slideup'},
         'slideleft':{name:'slideleft'},
+        'xo_ani_slideleft':{name:'xo_ani_slideleft',is3d:true},
         'none':{name:'none'}
     };
 
