@@ -211,7 +211,7 @@
 		index: 0,
 		useAnimation: true,
 		duration: 300, //ms
-		swipe: true
+		swipe: false
 	}
 
 
