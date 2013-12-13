@@ -50,6 +50,10 @@
 .page_search .search_result_page{padding-top:0!important;height:auto;}
 .page_search .xo_section{top:45px;}
 
+.page_pinpai .mod_page{position:relative;padding-top:0;height:100%;}
+.page_pinpai .mod_page_inner{position:absolute;top:55px;left:0;bottom:0;}
+.page_pinpai iframe{border:0;width:100%;height:100%;}
+
 /* 弹出搜索样式 */
 .mod_search { position: absolute; z-index: 12; top: 45px; left: 0; right: 0; bottom: 0; }
 .mod_search_bg { position: absolute; z-index: 1; top: 0; left: 0; width: 100%; height: 100%; background-color: #000; opacity: .5; }
