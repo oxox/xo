@@ -27,12 +27,12 @@
     <div class="mod_nav nav_home" id="J_navslide">
     <!-- 注：当前导航加类名 current mod_nav_inner需js计算宽度-->
         <ul class="mod_nav_inner" data-control="slideTab">
-            <li><a href="#page/home/daily"><strong>一日一品</strong></a></li>
             <li class="current"><a href="#page/home/index"><strong>精选商品</strong></a></li>
+            <li><a href="#page/home/pinpai"><strong>品牌特卖</strong></a></li>
+            <li><a href="#page/home/daily"><strong>一日一品</strong></a></li>
             <li><a href="#page/home/baby"><strong>妈妈宝贝</strong></a></li>
             <li><a href="#page/home/guang"><strong>逛逛</strong></a></li>
             <li><a href="#page/home/faxian"><strong>发现发现</strong></a></li>
-            <!--<li><a href="#page/home/pinpai"><strong>品牌特卖</strong></a></li>-->
         </ul>
     </div>
     <div class="mod_nav_sub">
@@ -122,7 +122,7 @@
             defaultAnimation:'fade'
         });
         $('#J_navslide').navSlide({
-            index:1
+            index:0
         });
         document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
             //WeixinJSBridge.call('hideToolbar');
