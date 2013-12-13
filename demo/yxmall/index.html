@@ -10,10 +10,14 @@
     <meta name="format-detection" content="telephone=no" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
     <title>易迅商城</title>
+    <!--
     <link rel="stylesheet" href="../../src/css/xo.css?v=20131209" />
     <link rel="stylesheet" href="css/gb.css" />
 	<link rel="stylesheet" href="css/act_demo.css?v=20131212" />
     <link rel="stylesheet" href="css/daily.css" />
+    -->
+    <link rel="stylesheet" href="../../dist/css/xo.min.css" />
+    <link rel="stylesheet" href="css/yxmall.min.css" />
 
 </head>
 <body data-viewdir="html/pages/">
@@ -64,23 +68,21 @@
 
     <!--<script src="http://weinre.qq.com/target/target-script-min.js#levinhuang"></script>-->
     <!--3party libs-->
+    <!--
     <script src="../../src/js/libs/fastclick.js"></script>
-    <script src="../../src/js/libs/iscroll.js"></script>
     <script src="../../src/js/libs/zepto.min.js"></script>
     <script src="../../src/js/libs/underscore-min.js"></script>
     <script src="../../src/js/libs/backbone-min.js"></script>
     <script src="../../src/js/libs/hogan-2.0.0.js"></script>
-
+    
     <!--XO framework-->
+    <!--
     <script src="../../src/js/xo.js"></script>
     <script src="../../src/js/modules/xo.constants.js"></script>
     <script src="../../src/js/modules/xo.media.js"></script>
     <script src="../../src/js/modules/xo.support.js"></script>
     <script src="../../src/js/modules/xo.event.js"></script>
     <script src="../../src/js/modules/xo.plugin.js"></script>
-    <script src="../../src/js/plugins/plugin_menu.js"></script>
-    <script src="../../src/js/plugins/plugin_loadmore.js"></script>
-    <script src="../../src/js/plugins/plugin_swipeview.js"></script>
     <script src="../../src/js/modules/xo.controller.js"></script>
     <script src="../../src/js/modules/xo.view.js"></script>
     <script src="../../src/js/modules/xo.view.mask.js"></script>
@@ -89,7 +91,9 @@
     <script src="../../src/js/modules/xo.animate.js"></script>
     <script src="../../src/js/modules/xo.app.js"></script>
     
+    
     <!--app biz code-->
+    <!--
     <script src="js/controllers/home.js"></script>
     <script src="js/views/home/index.js"></script>
     <script src="js/views/home/baby.js"></script>
@@ -104,16 +108,21 @@
     <script src="js/views/common/search.js"></script>
     <script src="js/plugins/navslide.js?v=20131213"></script>
     <script src="js/plugins/swipepager.js"></script>
+    -->
+
+    <script src="../../src/js/libs/zepto.min.js"></script>
+    <script src="../../src/js/libs/underscore-min.js"></script>
+    <script src="../../src/js/libs/backbone-min.js"></script>
+    <script src="../../dist/js/xo.min.js"></script>
+    <script src="js/yxmall.min.js"></script>
 
     <script>
-        $(document).ready(function(){
-            XO.App.init({
-                debug:true,
-                defaultAnimation:'slideleft'
-            });
-            $('#J_navslide').navSlide({
-                index:1
-            });
+        XO.App.init({
+            debug:true,
+            defaultAnimation:'fade'
+        });
+        $('#J_navslide').navSlide({
+            index:1
         });
         document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
             //WeixinJSBridge.call('hideToolbar');

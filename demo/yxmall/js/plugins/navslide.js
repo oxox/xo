@@ -45,11 +45,15 @@
 			this.viewPos.x = this.container.offset().left;
 			this.viewPos.y = this.viewPos.x + this.container.outerWidth();
 			this.index = 0;
+
+			/* 页面onload后，因为渲染时间差，如果ul不舍宽度，会导致内部li的offset left值不准确
 			var me = this;
 			window.setTimeout(function(){
 				me.setCurrent( (idx===null?this.options.index:idx) );
 			}, 300)
-
+			*/
+			
+			this.setCurrent( (idx===null?this.options.index:idx) );
 			
 			this._bindEvent();
 		},
