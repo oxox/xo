@@ -35,6 +35,7 @@ XO.View.define({
         }
         setTimeout(function(){
             XO.View.uiSearch.$elbd.addClass(XO.CONST.CLASS.UIACTIVE);
+            $('#J_mod_search_ipt').focus();
         },0);
     },
     hide:function(cbk){

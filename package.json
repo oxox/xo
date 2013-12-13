@@ -15,7 +15,15 @@
     "name": "oxox.io",
     "site": "http://oxox.io"
   },
+  "license": [{"type": "MIT"}],
   "devDependencies": {
-    "connect": "*"
+    "connect": "*",
+    "grunt-contrib-uglify":"*",
+    "grunt-contrib-jshint":"*",
+    "grunt-contrib-qunit":"*",
+    "grunt-contrib-watch":"*",
+    "grunt-contrib-concat":"*",
+    "grunt-concat-css":"*",
+    "grunt-css":"*"
   }
 }
