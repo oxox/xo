@@ -4,9 +4,9 @@ XO.Controller.define('mall',{
         
         this.renderView('index',{
             param:param,
-            onRendered:function(err,view){
+            onRender:function(err,view){
                 XO.Event.on(view,XO.EVENT.Animate.End,function(e,d){
-                    XO.Controller.mall.onAnimated(view);
+                    //XO.Controller.mall.onAnimated(view);
                 });
             },
             data:function(params,cbk){

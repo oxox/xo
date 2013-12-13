@@ -1,0 +1,51 @@
+/* 卖场品牌信息模块 */
+.mall_mod_brand{height:70px;background-color:#fff;padding-left:70px;position:relative;margin-bottom:10px;}
+	.mall_mod_brand_logo{position:absolute;top:0px;left:0px;width:70px;height:70px;background-color:#fff;-webkit-background-size:70px 70px;background-size:70px 70px;background-repeat:no-repeat;}
+		.mall_mod_brand_name,
+		.mall_mod_brand_ename{display:none;}
+	.mall_mod_brand_info{position:relative;padding:15px 15% 15px;height:40px;}
+		.mall_mod_brand_txt{font-size:16px;height:40px;line-height:20px;overflow: hidden}
+		.mall_mod_brand_ldquo{position:absolute;top:10px;left:0px;font-size:36px;color:#8C8C8C;font-weight:bold;display:block;width:15%;height: 18px;overflow:hidden;text-align:center;font-family:"Helvetica"}
+		.mall_mod_brand_rdquo{position:absolute;bottom:10px;right:0px;font-size:36px;color:#8C8C8C;font-weight:bold;display:block;width:15%;height: 18px;overflow:hidden;text-align:center;font-family:"Helvetica"}
+
+.mall_mod_brand_geek .mall_mod_brand_logo{background-image:url('http://static.gtimg.com/icson/img/wx/mall/act_tit_geek.png');}
+.mall_mod_brand_geek .mall_mod_brand_info{background-color:#DBEFFD;}
+.mall_mod_brand_geek .mall_mod_brand_info,
+.mall_mod_brand_geek .mall_mod_brand_ldquo,
+.mall_mod_brand_geek .mall_mod_brand_rdquo{color:#28A2F3;}
+
+.mall_mod_brand_guang .mall_mod_brand_logo{background-image:url('http://static.gtimg.com/icson/img/wx/mall/act_tit_guang.png');}
+.mall_mod_brand_guang .mall_mod_brand_info{background-color:#FEE9D6;}
+.mall_mod_brand_guang .mall_mod_brand_info,
+.mall_mod_brand_guang .mall_mod_brand_ldquo,
+.mall_mod_brand_guang .mall_mod_brand_rdquo{color:#FF7B00;}
+
+.mall_mod_brand_editor .mall_mod_brand_logo{background-image:url('http://static.gtimg.com/icson/img/wx/mall/act_tit_editor.png');}
+.mall_mod_brand_editor .mall_mod_brand_info{background-color:#F8DAD8;}
+.mall_mod_brand_editor .mall_mod_brand_info,
+.mall_mod_brand_editor .mall_mod_brand_ldquo,
+.mall_mod_brand_editor .mall_mod_brand_rdquo{color:#D7160A;}
+
+.mall_mod_brand_today .mall_mod_brand_logo{background-image:url('http://static.gtimg.com/icson/img/wx/mall/act_tit_today.png');}
+.mall_mod_brand_today .mall_mod_brand_info{background-color:#F2E3D9;}
+.mall_mod_brand_today .mall_mod_brand_info,
+.mall_mod_brand_today .mall_mod_brand_ldquo,
+.mall_mod_brand_today .mall_mod_brand_rdquo{color:#B85207;}
+
+.mall_mod_brand_food .mall_mod_brand_logo{background-image:url('http://static.gtimg.com/icson/img/wx/mall/act_tit_food.png');}
+.mall_mod_brand_food .mall_mod_brand_info{background-color:#FEF0DB;}
+.mall_mod_brand_food .mall_mod_brand_info,
+.mall_mod_brand_food .mall_mod_brand_ldquo,
+.mall_mod_brand_food .mall_mod_brand_rdquo{color:#FBAD22;}
+
+.mall_mod_brand_home .mall_mod_brand_logo{background-image:url('http://static.gtimg.com/icson/img/wx/mall/act_tit_home.png');}
+.mall_mod_brand_home .mall_mod_brand_info{background-color:#F6EFDE;}
+.mall_mod_brand_home .mall_mod_brand_info,
+.mall_mod_brand_home .mall_mod_brand_ldquo,
+.mall_mod_brand_home .mall_mod_brand_rdquo{color:#CD9725;}
+
+.mall_mod_brand_mummy .mall_mod_brand_logo{background-image:url('http://static.gtimg.com/icson/img/wx/mall/act_tit_mummy.png');}
+.mall_mod_brand_mummy .mall_mod_brand_info{background-color:#FFE9E5;}
+.mall_mod_brand_mummy .mall_mod_brand_info,
+.mall_mod_brand_mummy .mall_mod_brand_ldquo,
+.mall_mod_brand_mummy .mall_mod_brand_rdquo{color:#FC8363;}

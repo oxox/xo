@@ -21,11 +21,10 @@
 			var isDrag = false,
 				startTime, endTime, sX, sY, eX, eY, touch, dis, endis, isStopEvent = false, endidx;
 			var self = this;
-
 			this.$el.on('touchstart mousedown', function(e){
 	            isDrag = true;
 	            if (e.touches){
-	                touch = e.touches[0];
+	                touch = e.touches[0]
 	                sX = touch.pageX;
 	                sY = touch.pageY;
 	            }else{
@@ -37,9 +36,7 @@
 
 			this.$el.on('touchmove mousemove', function(e){
 	            if(!isDrag) return;
-	            if(isStopEvent) {
-	            	return;
-	            }
+	            if(isStopEvent) return;
 	            if (e.touches) {
 	                touch = e.touches[0];
 	                eX = touch.pageX;
@@ -54,8 +51,8 @@
 	            	isStopEvent = true;
 	            }else if(Math.abs(eX - sX) - Math.abs(eY - sY) > 0){
 	            	self.$el.css({'-webkit-transform': 'translate(' + dis + 'px, 0px) translateZ(0px)'});
-	            	e.preventDefault();
-	            }else{}
+	            }else{
+	            }	            
 	        });
 
 	        this.$el.on('touchend mouseup', function(e){
@@ -101,16 +98,12 @@
 	            var idx = menu.get_idx();
 	            if(dataset['to'] == 1){
 	                menu.trigger('swapRight');
-	                idx++;
 	            }
 	            if(dataset['to'] == -1){
 	                menu.trigger('swapLeft');
-	                idx--;
 	            }
 	            XO.View.uiLoader.show();
-	            var tab = menu._getEl(idx);
-	            var tpl = tab[0].dataset['tpl'];
-	            $.get('html/pages/home/' + tpl + '.html', function(tpl){
+	            $.get(url, function(tpl){
 	                var html = XO.toHtml(tpl, {});
 	                setTimeout(function(){
 	                    activePage.refresh(html);
@@ -127,7 +120,7 @@
 			var self = this;
 			var sections = self.$el.find('.xo_section');
 			var activePage, arrow;
-			this.$el.animate({'translate3d': cX + 'px, 0, 0'}, 200, 'ease-out', function(){
+			this.$el.animate({'translate3d': cX + 'px, 0, 0'}, 300, 'ease-out', function(){
 				if(self._idx > idx ){
 					self.$el.append(sections[0]);
 					$(sections[0]).find('.pager').html('');

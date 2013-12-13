@@ -12,10 +12,11 @@
 			this._w = $el.width();
 
 			this._isInActive = false;
-			this._idx = 2;
+			this._idx = 1;
 			this.$_inner = $($el.find('.mod_nav_inner'));
-			this._ow = this.$_inner.width();
-        	this.$_item = $el.find('a');
+			this.$_item = $el.find('li');
+			this.$_inner.width((this.$_item.length + 1) * 72);
+			this._ow = this.$_inner.width();       	
         	this._maxIdx = this.$_item.length - 1;
         	this._minIdx = 0;
 		},
@@ -38,20 +39,20 @@
 	    },
 	    active: function(idx){
 	    	var self = this;
-	        this.$_item.removeClass('on');
-	        $(this.$_item[idx]).addClass('on');
+	        this.$_item.removeClass('current');
+	        $(this.$_item[idx]).addClass('current');
 
-	        var left = idx * 80 + 80;
+	        var left = idx * 72 + 72;
 
-	        if(left + this.cdis >= this._w){
-	        	this.$_inner.animate({'translate3d': this.cdis - 40 + 'px, 0, 0'}, 300, 'ease-out', function(){
-            		self.cdis = self.cdis - 40;
+	        if(left + this.cdis + 45 >= this._w){
+	        	this.$_inner.animate({'translate3d': this.cdis - 60 + 'px, 0, 0'}, 300, 'ease-out', function(){
+            		self.cdis = self.cdis - 60;
             	});
 	        }
 
-	        if(left - 80  <= -this.cdis){
-	        	this.$_inner.animate({'translate3d': this.cdis + 40 + 'px, 0, 0'}, 300, 'ease-out', function(){
-            		self.cdis = self.cdis + 40;
+	        if(left - 52  <= -this.cdis){
+	        	this.$_inner.animate({'translate3d': this.cdis + 60 + 'px, 0, 0'}, 300, 'ease-out', function(){
+            		self.cdis = self.cdis + 60;
             	});
 	        }
 	    },
@@ -81,11 +82,12 @@
 		bootup: function(data){
 			var swiper = XO.plugin.get(data['swiperId']);
 			this.on('active', function(dataset){
+				var data = dataset;
 				swiper.active_page(dataset['idx'], function(dataset){
 	                activePage = XO.plugin.get(dataset['id']);
 	                //activePage.trigger('beforePageLoad');
 	                XO.View.uiLoader.show();
-	                $.get('demo/html/pages/mall/page.html', function(tpl){
+	                $.get('html/pages/home/' + data['tpl'] + '.html', function(tpl){
 	                    var html = XO.toHtml(tpl, {});
 	                    setTimeout(function(){
 	                        activePage.refresh(html);
@@ -104,10 +106,10 @@
 	        	if (e.touches){
 	                e = e.touches[0];
 	            }
-	            var t = e.target;
-	            var idx = $(t).index();
+	            var $t = $(e.target).parents('li');
+	            var idx = $t.index();
 	            self.scroll_to(idx);
-	            var dataset = t.dataset;
+	            var dataset = $t[0].dataset;
 	            dataset['idx'] = idx;
 	            self.trigger('active', dataset);
 	        });
@@ -136,6 +138,7 @@
 	                sY = e.pageY;
 	            }
 	            startTime = Date.parse(new Date());
+	            e.preventdefault();e.stoppropagation();
 	        });
 
 			this.$_inner.on('touchmove mousemove', function(e){
@@ -149,7 +152,8 @@
 	                eY = e.pageY;
 	            }
 	            dis = eX - sX + self.cdis;
-	            $(this).css({'-webkit-transform': 'translate(' + dis + 'px, 0px) translateZ(0px)'});  
+	            $(this).css({'-webkit-transform': 'translate(' + dis + 'px, 0px) translateZ(0px)'});
+	            e.preventdefault();e.stoppropagation();
 	        });
 
 	        this.$_inner.on('touchend mouseup', function(e){
@@ -174,6 +178,7 @@
 	            		self.cdis = 0;
 	            	});
 	            }
+	            e.preventdefault();e.stoppropagation();
 	        });
 
 

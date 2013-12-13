@@ -36,6 +36,8 @@ XO('App',function($,C){
 
         this.hideAddressBar();
         
+        //插件初始化
+        XO.plugin.applyToElement(XO.$body);
 
         //hashchange
         XO.history.start();

@@ -1,0 +1,34 @@
+/*===== 按钮 =====*/
+	.mod_btn{display:inline-block;height: 40px;padding: 0 15px;line-height: 38px;color:#fff;text-align: center;font-size:16px;background:#f19325;border:1px solid #f19325; border-radius:3px;box-sizing:border-box;-webkit-box-sizing:border-box;}
+
+	/*===== 按钮颜色 =====*/
+		/* 橙色按钮 */
+			.mod_btn_bg{background:#f19325;}
+
+		/* 蓝色按钮 */
+			.mod_btn_bg1{border:1px solid #1C6DC8; background:#2A7EDE;}
+
+		/* 绿色按钮 */
+			.mod_btn_bg2{border:1px solid #656a66;background:#179f21;}
+
+		/* 灰色按钮 */
+			.mod_btn_bg3{color:#444;border:1px solid #ddd;background:#f6f6f6;}
+
+		/* 白色按钮 */
+			.mod_btn_bg4{color:#444;border:1px solid #fff;-webkit-box-shadow: 0 1px 1px rgba(0,0,0,.2);box-shadow: 0 1px 1px rgba(0,0,0,.2);background:#fff;}
+
+		/* 失效按钮 */
+			.mod_btn_bg5{color:#bbb;cursor:default;border:1px solid #ccc;background:#e7e7e7;}
+
+		/* 头部通栏按钮 */
+			/* 一般按钮 */
+				.mod_btn_bg6{-webkit-box-shadow: 0 1px 1px #74a6ef inset,1px -1px 0 #4480d9 inset;box-shadow: 0 1px 1px #74a6ef inset,1px -1px 0 #4480d9 inset;background:#277ddf;background: -webkit-gradient(linear, 0 0, 0 100%, from(#3083e2), to(#1f76da));border: 1px solid #1c61af;height: 30px;line-height: 27px;font-size: 14px;}
+			/* 返回按钮 */
+				.mod_btn_back{border-radius: 0;border-left: 0;position: relative;margin-left: 13px;padding-left: 5px;}
+				.mod_btn_back:before{content:'';height: 30px;position: absolute;left:-12px;top:-1px;width: 13px;}
+
+
+	/*===== 按钮尺寸 =====*/
+		.mod_btn_large{height: 50px;line-height: 48px;font-size:18px;}
+		.mod_btn_small{height: 28px;line-height: 26px;font-size:14px;}
+		.mod_btn_block{display: block;}

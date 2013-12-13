@@ -1,0 +1,22 @@
+/*===== reset =====*/
+	*{margin:0; padding:0;vertical-align: baseline}
+	fieldset,img{border:0 none;}
+	i,em{font-style: normal;}
+	ol,ul{list-style: none;}
+	input,img{vertical-align:middle}
+	input,select{font: inherit;font-size: 100%;}
+	table{border-collapse: collapse;border-spacing: 0;}
+	a{text-decoration:none; color:#333;}
+	html,body{height: 100%;}
+	body{margin:0 auto;min-width:320px;max-width:1024px;font-size:14px;line-height: 1;color:#444;-webkit-text-size-adjust:100%;background: #d9d9d9;font-family:"\5fae\8f6f\96c5\9ed1","Microsoft YaHei", Helvetica,Arial, Verdana, sans-serif;}
+
+/*===== 快捷样式类名 =====*/
+	.hide{display:none;}
+	/*===== 清除浮动 =====*/
+	.clearfix{zoom:1;}
+	.clearfix:after{content:' ';display:block;clear:both;height:0;visibility:hidden;}
+	/*===== 文本色 =====*/
+		.c_tx0{color:#4F89DA;}/* 蓝色 */
+		.c_tx1{color:#C73D00;}/* 红色 */
+		.c_tx2{color:#666666;}/* 灰色 */
+		.c_tx3{color:#999999;}/* 弱化文本色 */

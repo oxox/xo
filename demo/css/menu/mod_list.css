@@ -1,0 +1,21 @@
+/*=====  内容列表  =====*/
+	.mod_list{background-color: #FFFFFF;border: 1px solid #BCBAB6;border-radius: 5px;margin-bottom: 10px;}
+		.mod_list_item{padding: 10px;border-bottom: 1px solid #BCBAB6;overflow: hidden;position: relative;}
+		.mod_list_item .ico_arrow{position: absolute;top: 50%;right:10px;margin: -6px 0 0;}
+		.mod_list_item:last-child{border-bottom: none;}
+		.mod_list_item>a{display: block;padding: 10px 50px 10px 10px;margin: -10px;}
+		.mod_list_item a:active{background: #D9D9D9;}
+		.mod_list_ico{display: inline-block;width: 24px;height: 24px;overflow: hidden;vertical-align: middle;margin-right: 5px;}
+
+	/* 
+		* 占满的列表 
+	*/
+		.mod_list_full{border-radius: 0;border-width: 1px 0;}
+	
+
+	/* 表单列表 */
+		.mod_form_label{float: left;width: 30%;margin-right: 10px;line-height: 28px;}
+		.mod_form_con{overflow: hidden;}
+		.mod_form_input{height: 28px;width: 90%;padding:5px;line-height: 18px;-webkit-appearance: none;box-sizing:border-box;border: none;font-size: 14px;}
+		.mod_form_select{height: 28px;width: 90%;box-sizing:border-box;font-size: 14px;}
+		.mod_form_required{color: #d70000;font-size: 14px;font-family: \5b8b\4f53;}

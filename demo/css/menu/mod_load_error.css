@@ -1,0 +1,5 @@
+/* 加载页面失败 */
+	.load_error{text-align: center;background: #F6F6F6;padding:40px 10px;}
+	.load_error img{display: block;margin: auto;}
+	.load_error p{margin: 10px 0;}
+	.load_error .mod_btn{width: 100%;}

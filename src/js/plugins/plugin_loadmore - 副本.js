@@ -12,25 +12,26 @@
 		initUi: function(){
 			var $el = this.$el,
 				_w = $el.width();
-				//$el.height($(window).height() - 70);
+				$el.height($(window).height() - 70);
 			this._isInActive = false;
-	        /*this._pageScroll = new IScroll($el[0], {
+	        this._pageScroll = new IScroll($el[0], {
 	            scrollX: false,
 	            scrollY: true,
 	            momentum: true,
 	            snap: false,
 	            bounce :true
-	        });*/
+	        });
 	        this.initEvent();
 		},
 		initEvent: function(){
 			var self = this;
-
-			this.$el.on('scroll' ,function(e){
-				if(this.scrollTop + this.clientHeight >= this.scrollHeight)
-            		self.trigger('loaded');
-            });
-
+			$(this._pageScroll.wrapper).on('touchend mouseup', function(e){
+	            if(!self._isInActive){
+	            	if( self._pageScroll.maxScrollY - self._pageScroll.y > 50){
+	            		self.trigger('loaded');
+	            	}
+	            }
+	        });
 			this.on('beforeloaded', function(){
 				self.$el.find('.mod_more').addClass('loading');
 			});
@@ -57,13 +58,13 @@
 		},
 		append: function(html){
 			this.$el.find('.pager').append(html);
-			//this._pageScroll.refresh();
+			this._pageScroll.refresh();
 		},
 		refresh: function(html){
 			if(html){
 				this.$el.find('.pager').html(html);
 			}			
-			//this._pageScroll.refresh();
+			this._pageScroll.refresh();
 		},
 		destroy: function(){
 			this.super.destroy.call(this);

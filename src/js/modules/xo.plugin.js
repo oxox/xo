@@ -62,6 +62,7 @@ XO('plugin',function($,C){
     }
 
     this.applyToView = function(view){
+        /*
         var $el = view.$el,
             plugin, dataset, p; 
         $el.find('[data-plugin]').each(function(){
@@ -76,8 +77,25 @@ XO('plugin',function($,C){
                 _idx++;
             }
         });
+        */
+        this.applyToElement(view.$el);
     };
 
+    this.applyToElement = function($el){
+        var plugin, dataset, p; 
+        $el.find('[data-plugin]').each(function(){
+            var dataset = this.dataset;
+            p_name = dataset['plugin'];
+            p = new XO.plugin[p_name](this, dataset);
+            p['name'] = p_name;
+            if(dataset['pluginId']){
+                _plugins[dataset['pluginId']] = p;
+            }else{
+                _plugins['p_' + _idx] = p;
+                _idx++;
+            }
+        });
+    };
     /**
      * 销毁视图内的插件。该方法在视图隐藏后自动调用
      */
