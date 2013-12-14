@@ -118,9 +118,27 @@ module.exports = function(grunt) {
       }
     },
     watch: {
-      files: ['<=resources.js%>','<%=resources.css%>'],
-      tasks: ['concat','concat_css',"cssmin", 'uglify']
+      scripts_xo:{
+        files:['<%=resources.js%>'],
+        tasks:['concat:js','uglify']
+      },
+      scripts_yxmall:{
+        files:['<%=resources.js_yxmall%>'],
+        tasks:['concat:js_yxmall','uglify']
+      },
+      css_xo:{
+        files:['<%=resources.css%>'],
+        tasks:['concat_css:xo_core','cssmin:xo_core']
+      },
+      css_yxmall:{
+        files:['<%=resources.css_yxmall%>'],
+        tasks:['concat_css:yxmall','cssmin:yxmall']
+      }
     }
+  });
+
+  grunt.event.on('watch', function(action, filepath, target) {
+    grunt.log.writeln(target + ': ' + filepath + ' has ' + action);
   });
 
   grunt.loadNpmTasks('grunt-contrib-uglify');

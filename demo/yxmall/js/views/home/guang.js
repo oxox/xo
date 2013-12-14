@@ -19,11 +19,11 @@ XO.View.define({
         if(!this.swipPager){
             this.$el.swipePager({
                 onPrev:function(){
-                    var $item = window['J_navslide_obj'].goPrev().getCurrentItem().find('a');
+                    var $item = $.NavSlide.cache['J_navslide'].goPrev().getCurrentItem().find('a');
                     XO.history.navigate($item[0].getAttribute('href').replace('#',''),true);
                 },
                 onNext:function(){
-                    var $item = window['J_navslide_obj'].goNext().getCurrentItem().find('a');
+                    var $item = $.NavSlide.cache['J_navslide'].goNext().getCurrentItem().find('a');
                     XO.history.navigate($item[0].getAttribute('href').replace('#',''),true);
                 }
             });
