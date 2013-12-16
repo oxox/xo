@@ -135,7 +135,7 @@
 
         _touchstart: function(e){
             var point = this.isTouch ? e.touches[0] : e;
-            this.started = true;
+            this.isScrolling = false;
             this.startX = point.pageX;
             this.startY = point.pageY;
         },
@@ -144,24 +144,28 @@
             if ( e.touches && e.touches.length > 1 || e.scale && e.scale !== 1) {
                 return ;
             }
-            if (!this.started) {
+            if (this.isScrolling) {
                 return ;
             }
             var point = this.isTouch ? e.touches[0] : e;
             this.isScrolling = Math.abs(point.pageX - this.startX) < Math.abs(point.pageY - this.startY);
             if (this.isScrolling) {
-                this.started = false;
                 return ;
             }
             e.preventDefault();
         },
 
         _touchend: function(e){
-            if (!this.started) { 
+            if (this.isScrolling) { 
                 return ; 
             }
-            var point = this.isTouch ? e.changedTouches[0] : e;
-            var deltaX = point.pageX - this.startX;
+            var point = this.isTouch ? e.changedTouches[0] : e,
+                deltaX = point.pageX - this.startX;
+            
+            if(Math.abs(deltaX)<this.opts.swipeThreshold){
+                return;
+            }
+
             if (deltaX > 0) {
                 if(this.opts.swipeToNav){
                     this.goPrev();
@@ -221,6 +225,8 @@
 
             if(xVal===null) return;
 
+            this.posX = xVal;
+
             var cssKey1 = this.opts.useCss3?'-webkit-transform':'left',
                 cssValueTpl1 = (!this.opts.useCss3) ? '$px':(this.opts.use3d?'translate3d($px,0,0)':'translateX($px)'),
                 css = {};
@@ -234,16 +240,16 @@
 
             //第一个TAB
             if (this.index == 0) {
-                adjustX = this.posX = 0;
+                adjustX = 0;
             }else if(this.index == this.cnt - 1){
                 //最后一个TAB
-                adjustX = this.posX = this.innerDim.maxSlidableDistance > 0? (-this.innerDim.maxSlidableDistance):0;
+                adjustX = this.innerDim.maxSlidableDistance > 0? (-this.innerDim.maxSlidableDistance):0;
             }else if (isNext) {
                 //多显示下一个菜单
                 $item = this.$items.eq(this.index+1);
                 adjustX = $item.offset().left + this.itemOuterWidths[this.index+1]  - this.outerDim.maxWidth;
                 if(adjustX>0){
-                    adjustX = (this.posX-=adjustX);
+                    adjustX = this.posX-adjustX;
                 }else{
                     adjustX = null;
                 }
@@ -252,7 +258,7 @@
                 $item = this.$items.eq(this.index-1);
                 adjustX = $item.offset().left  - this.outerDim.offsetLeft;
                 if (adjustX < 0) {
-                    this.posX -= adjustX;
+                    adjustX = this.posX - adjustX;
                 }else{
                     adjustX = null;
                 }
@@ -269,10 +275,11 @@
         attrPluginData:'data-plugin_navslide_data',
         index: 0,
         useAnimation: true,
-        duration: 300, //ms
+        duration: 250, //ms
         swipe: true,
         use3d:true,
         useCss3:true,
+        swipeThreshold:5,
         swipeToNav:false //swipe to navigation 
     };
     $.NavSlide.cache = {};
