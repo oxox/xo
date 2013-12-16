@@ -336,6 +336,7 @@ XO.View.define({
  * navslide plugin
  */
 (function($) {
+
     $.fn.outerWidth = function(){
         var val = this.width();
         val+=parseFloat(this.css('margin-left').replace('px',''))||0;
@@ -370,28 +371,33 @@ XO.View.define({
             var width = 0, opts = this.opts,
                 idx = this._getItemIndexByHash(),
                 tempItemWidth = 0,
+                $tempItem = null,
                 me = this;
 
-            this.itemOuterWidths = [];
+            this.index = 0;
 
-            $.each(this.$items, function(i,o){
-                tempItemWidth = me.$items.eq(i).outerWidth();
-                me.itemOuterWidths.push(tempItemWidth);
-                width += tempItemWidth;
-            });
-
-            this.$nav.width(width);
-            
             if (opts.useAnimation) {
                 this.$nav.css({
                     '-webkit-transition-duration': opts.duration + 'ms'
                 });
             }
-            this.isTouch = 'ontouchstart' in window;;
-            this.viewPos = {};
-            this.viewPos.x = this.$container.offset().left;
-            this.viewPos.y = this.viewPos.x + this.$container.outerWidth();
-            this.index = 0;
+            this.isTouch = 'ontouchstart' in window;
+
+            this.itemOuterWidths = [];
+
+            $.each(this.$items, function(i,o){
+                $tempItem = me.$items.eq(i);
+                tempItemWidth = $tempItem.outerWidth();
+                me.itemOuterWidths.push(tempItemWidth);
+                width += tempItemWidth;
+            });
+            $tempItem = null;
+
+            this.$nav.width(width);
+            this.navWidth = width;
+            
+            this._initDimension();
+            
 
             /* 页面onload后，因为渲染时间差，如果ul不舍宽度，会导致内部li的offset left值不准确
             var me = this;
@@ -403,6 +409,23 @@ XO.View.define({
             this.setCurrent( (idx===null?this.opts.index:idx) );
             
             this._bindEvent();
+        },
+
+        _initDimension:function(){
+            //外层容器
+            this.outerDim = {};
+
+            this.outerDim.offsetLeft = this.$container.offset().left;
+            this.outerDim.width = this.$container.outerWidth();
+            this.outerDim.maxWidth = this.outerDim.offsetLeft + this.outerDim.width;
+            //内层tab容器
+            this.innerDim = {};
+            this.innerDim.offsetLeft = this.$nav.offset().left;
+            this.innerDim.width = this.navWidth;
+            this.innerDim.maxWidth = this.navWidth+this.innerDim.offsetLeft;
+
+            this.innerDim.maxSlidableDistance = this.innerDim.maxWidth - this.outerDim.maxWidth;
+
         },
 
         _getItemIndexByHash:function(){
@@ -477,14 +500,14 @@ XO.View.define({
                 if(this.opts.swipeToNav){
                     this.goPrev();
                 }else{
-                    //TODO:调整导航位置
+                    this.adjustPosByPX(deltaX);
                 }
                 
             } else if (deltaX < 0) {
                 if(this.opts.swipeToNav){
                     this.goNext();
                 }else{
-                    //TODO:
+                    this.adjustPosByPX(deltaX);
                 }
             }
         },
@@ -513,53 +536,62 @@ XO.View.define({
                 return ;
             }
             if (index < 0 || index > this.cnt - 1) {
-                index = 0;
+                return;
             }
             var currentCls = this.opts.currentCls,
                 isNext = this.index < index;
-            this.$items.removeClass(currentCls).eq(index).addClass(currentCls);
+            this.$curItem = this.$items.removeClass(currentCls).eq(index).addClass(currentCls);
             this.index = index;
-            this._adjustPos(isNext);
+            this.adjustPosTo(index,isNext);
         },
 
-        _adjustPos: function(isNext){
-            var $item = this.$items.eq(this.index),
-                translateTpl = this.opts.use3d?'translate3d($px,0,0)':'translateX($px)';
-            //var left = (parseFloat(this.css('margin-left').replace('px','')) || 0) + (parseFloat(this.css('left').replace('px','')) || 0);
+        adjustPosByPX:function(pxVal){
+            pxVal = this.posX + pxVal;
+            pxVal = pxVal>0?0:pxVal;
+            pxVal = ( pxVal< (-this.innerDim.maxSlidableDistance) ) ? (-this.innerDim.maxSlidableDistance):pxVal;
+            this.animateTo(pxVal);
+        },
+        animateTo:function(xVal){
+
+            if(xVal===null) return;
+
+            var cssKey1 = this.opts.useCss3?'-webkit-transform':'left',
+                cssValueTpl1 = (!this.opts.useCss3) ? '$px':(this.opts.use3d?'translate3d($px,0,0)':'translateX($px)'),
+                css = {};
+
+            css[cssKey1] = cssValueTpl1.replace('$',xVal);
+            this.$nav.css(css);
+        },
+        adjustPosTo: function(index,isNext){
+            var $item = this.$curItem,
+                adjustX = null;
+
+            //第一个TAB
             if (this.index == 0) {
-                this.posX = 0;
-                this.$nav.css({
-                    '-webkit-transform': translateTpl.replace('$',this.posX),
-                });
-            } else if(this.index == this.cnt - 1){
-                var x = $item.offset().left + this.itemOuterWidths[this.index]  - this.viewPos.y;
-                if (x > 0) {
-                    this.posX -= x;
-                    this.$nav.css({
-                        '-webkit-transform': translateTpl.replace('$',this.posX),
-                    });
-                }   
-            } else {
-                if (isNext) {
-                    $item = $item.next();
-                    var x = $item.offset().left + $item.outerWidth()  - this.viewPos.y;
-                    if (x > 0) {
-                        this.posX -= x;
-                        this.$nav.css({
-                            '-webkit-transform': translateTpl.replace('$',this.posX),
-                        });
-                    }
-                } else {
-                    $item = $item.prev();
-                    var x = $item.offset().left  - this.viewPos.x;
-                    if (x < 0) {
-                        this.posX -= x;
-                        this.$nav.css({
-                            '-webkit-transform': translateTpl.replace('$',this.posX),
-                        });
-                    }
+                adjustX = this.posX = 0;
+            }else if(this.index == this.cnt - 1){
+                //最后一个TAB
+                adjustX = this.posX = this.innerDim.maxSlidableDistance > 0? (-this.innerDim.maxSlidableDistance):0;
+            }else if (isNext) {
+                //多显示下一个菜单
+                $item = this.$items.eq(this.index+1);
+                adjustX = $item.offset().left + this.itemOuterWidths[this.index+1]  - this.outerDim.maxWidth;
+                if(adjustX>0){
+                    adjustX = (this.posX-=adjustX);
+                }else{
+                    adjustX = null;
                 }
-            }
+            }else{
+                //多显示上一个菜单
+                $item = this.$items.eq(this.index-1);
+                adjustX = $item.offset().left  - this.outerDim.offsetLeft;
+                if (adjustX < 0) {
+                    this.posX -= adjustX;
+                }else{
+                    adjustX = null;
+                }
+            }//if
+            this.animateTo(adjustX);
         }
     }
 
@@ -574,7 +606,8 @@ XO.View.define({
         duration: 300, //ms
         swipe: true,
         use3d:true,
-        swipeToNav:true //swipe to navigation 
+        useCss3:true,
+        swipeToNav:false //swipe to navigation 
     };
     $.NavSlide.cache = {};
 

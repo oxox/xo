@@ -7,9 +7,6 @@ XO('App',function($,C){
 
     this.init = function(opts){
 
-        //fastclick https://github.com/ftlabs/fastclick
-        FastClick.attach(document.body);
-
         this.opts = $.extend({
             useFastTouch:true,
             useAnimations:true,
@@ -23,6 +20,12 @@ XO('App',function($,C){
             defaultControllerAction:null,
             viewDir:XO.$body[0].getAttribute('data-viewdir')||'assets/html/pages/'
         },opts||{});
+
+        if(this.opts.useFastTouch){
+            //fastclick https://github.com/ftlabs/fastclick
+            FastClick.attach(document.body);
+        }
+
         //delete self's init method
         delete this.init;
         //init all modules

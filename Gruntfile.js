@@ -118,11 +118,11 @@ module.exports = function(grunt) {
       }
     },
     watch: {
-      scripts_xo:{
+      js_xo:{
         files:['<%=resources.js%>'],
         tasks:['concat:js','uglify']
       },
-      scripts_yxmall:{
+      js_yxmall:{
         files:['<%=resources.js_yxmall%>'],
         tasks:['concat:js_yxmall','uglify']
       },
