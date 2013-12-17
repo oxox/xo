@@ -1,4 +1,4 @@
-(function($,T,B){
+(function($){
     //module define function
     window['XO'] = function(id,fn){
         if(XO[id]){
@@ -17,11 +17,13 @@
     };
     //extensions
     $.extend(XO,{
+        $:$,
         version:'1.0.0',
         author:'http://oxox.io',
         $body:$(document.body),
         $win:$(window),
-        EVENT:{},
+        EVENT:{},//EVENT namespace
+        Base:{},//Base namespace
         LS:localStorage,
         toHtml:function(tpl,obj,ext){
             tpl = T.compile(tpl);
