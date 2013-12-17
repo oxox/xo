@@ -445,7 +445,7 @@ XO.View.define({
                 touchstart = isTouch ? 'touchstart' : 'mousedown',
                 touchmove = isTouch ? 'touchmove' : 'mousemove',
                 touchend = isTouch ? 'touchend' : 'mouseup',
-                click = isTouch?'tap':'click',
+                click = 'click',
                 me = this;
 
             this.$items.on(click, function(e){
