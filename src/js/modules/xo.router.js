@@ -2,15 +2,15 @@ XO('Router',function($,C){
 
     this.init = function(opts){
         var customRoutes = opts.routes||{
-            'page/:page': 'showPage',
-            'page/:page/:view':'showPage',
-            'page/:page/:view/:data': 'showPage',
-            'page/:page/section/:section':'showSection',
-            'page/:page/section/:section/:param':'showSection',
-            'page/:page/aside/:aside':'showAside',
-            'page/:page/aside/:aside/:param':'showAside',
-            'page/:page/popup/:popup':'showPopup',
-            'page/:page/popup/:popup/:param':'showPopup',
+            ':page': 'showPage',
+            ':page/:view':'showPage',
+            ':page/:view/:data': 'showPage',
+            ':page/section/:section':'showSection',
+            ':page/section/:section/:param':'showSection',
+            ':page/aside/:aside':'showAside',
+            ':page/aside/:aside/:param':'showAside',
+            ':page/popup/:popup':'showPopup',
+            ':page/popup/:popup/:param':'showPopup',
             "*actions": "defaultRoute"
         };
 

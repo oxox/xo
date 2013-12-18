@@ -35,7 +35,7 @@
         nativeBind         = FuncProto.bind;
 
     var idCounter = 0,
-        _={}；
+        _={};
     
     _.uniqueId = function(prefix) {
         var id = ++idCounter + '';

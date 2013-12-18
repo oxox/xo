@@ -1,28 +1,28 @@
 XO
 ==
 
-A lightweight webapp framework developed by [TENCENT ECC_UX_OS Team](http://ecd.tencent.com)
+A lightweight MVC webapp framework developed by [TENCENT ECC_UX_OS Team](http://ecd.tencent.com)
 
 Basic architecture
 ===
 
     |-- hashchange
-    |    |-- Backbone.history
+    |    |-- XO.Base.history
     |    |
     |---Router （路由器）
-    |    |-- Backbone.Router -- | ox.router
+    |    |-- XO.Base.Router -- | xo.router
     |    |
     |--- Controller （控制器）
-    |    |-- ox.controller
+    |    |-- xo.controller
     |    |
     |--- View （视图）
-    |    |-- ox.view
+    |    |-- XO.Base.View -- | xo.view
     |    |
 
 Router
 ===
 
-路由器扩展自Backbone.Router。
+XO路由器的实现参考自[Backbone.Router](http://backbonejs.org#Router)。
 
 根据hash，解析出当前url所要渲染的页面，还有该页面拉数据用到的一些查询参数（Querystring），接着调用控制器的方法。
 
@@ -34,7 +34,7 @@ Controller
 View
 ===
 
-视图扩展自Backbone.View。
+XO视图的实现参考自[Backbone.View](http://backbonejs.org#View)。
 
 视图的作用：
 

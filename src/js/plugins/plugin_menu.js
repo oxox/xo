@@ -87,7 +87,7 @@
 	                activePage = XO.plugin.get(dataset['id']);
 	                //activePage.trigger('beforePageLoad');
 	                XO.View.uiLoader.show();
-	                $.get('html/pages/home/' + data['tpl'] + '.html', function(tpl){
+	                $.get('html/home/' + data['tpl'] + '.html', function(tpl){
 	                    var html = XO.toHtml(tpl, {});
 	                    setTimeout(function(){
 	                        activePage.refresh(html);
@@ -107,6 +107,7 @@
 	                e = e.touches[0];
 	            }
 	            var $t = $(e.target).parents('li');
+	            if($t.length==0) return;
 	            var idx = $t.index();
 	            self.scroll_to(idx);
 	            var dataset = $t[0].dataset;
@@ -138,7 +139,7 @@
 	                sY = e.pageY;
 	            }
 	            startTime = Date.parse(new Date());
-	            e.preventdefault();e.stoppropagation();
+	            e.preventDefault();e.stopPropagation();
 	        });
 
 			this.$_inner.on('touchmove mousemove', function(e){
@@ -153,7 +154,7 @@
 	            }
 	            dis = eX - sX + self.cdis;
 	            $(this).css({'-webkit-transform': 'translate(' + dis + 'px, 0px) translateZ(0px)'});
-	            e.preventdefault();e.stoppropagation();
+	            e.preventDefault();e.stopPropagation();
 	        });
 
 	        this.$_inner.on('touchend mouseup', function(e){
@@ -178,7 +179,7 @@
 	            		self.cdis = 0;
 	            	});
 	            }
-	            e.preventdefault();e.stoppropagation();
+	            e.preventDefault();e.stopPropagation();
 	        });
 
 

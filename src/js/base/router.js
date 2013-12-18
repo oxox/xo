@@ -4,7 +4,7 @@
  * Routers map faux-URLs to actions, and fire events when routes are
  * matched. Creating a new one sets its `routes` hash, if not set statically.
  * @namespace XO.Base
- * @dependence XO._, XO.Base.Events, XO.Base.History
+ * @dependence XO._, XO.Base.Events, XO.Base.history
  */
 (function(exports,_){
 
@@ -44,19 +44,19 @@
             }
             if (!callback) callback = this[name];
             var router = this;
-            XO.Base.History.route(route, function(fragment) {
+            XO.Base.history.route(route, function(fragment) {
                 var args = router._extractParameters(route, fragment);
                 callback && callback.apply(router, args);
                 router.trigger.apply(router, ['route:' + name].concat(args));
                 router.trigger('route', name, args);
-                XO.Base.History.trigger('route', router, name, args);
+                XO.Base.history.trigger('route', router, name, args);
             });
             return this;
         },
 
         // Simple proxy to `XO.Base.History` to save a fragment into the history.
         navigate: function(fragment, options) {
-            XO.Base.History.navigate(fragment, options);
+            XO.Base.history.navigate(fragment, options);
             return this;
         },
 

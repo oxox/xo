@@ -12,9 +12,14 @@ module.exports = function(grunt) {
     },
 
     resources: {
-        js: ['src/js/libs/fastclick.js',
-            'src/js/libs/hogan-2.0.0.js',
+        js: [
+            'src/js/libs/fastclick.js',
             'src/js/xo.js',
+            'src/js/base/util.js',
+            'src/js/base/event.js',
+            'src/js/base/history.js',
+            'src/js/base/router.js',
+            'src/js/base/view.js',
             'src/js/modules/xo.constants.js',
             'src/js/modules/xo.media.js',
             'src/js/modules/xo.support.js',
@@ -97,9 +102,13 @@ module.exports = function(grunt) {
         // the banner is inserted at the top of the output
         banner: '<%=meta.banner%>'
       },
-      dist: {
+      dist_xo: {
         files: {
-          'dist/js/<%=meta.file%>.min.js': ['<%= concat.js.dest %>'],
+          'dist/js/<%=meta.file%>.min.js': ['<%= concat.js.dest %>']
+        }
+      },
+      dist_yxmall: {
+        files: {
           'demo/yxmall/js/yxmall.min.js': ['<%= concat.js_yxmall.dest %>']
         }
       }
@@ -120,11 +129,11 @@ module.exports = function(grunt) {
     watch: {
       js_xo:{
         files:['<%=resources.js%>'],
-        tasks:['concat:js','uglify']
+        tasks:['concat:js','uglify:dist_xo']
       },
       js_yxmall:{
         files:['<%=resources.js_yxmall%>'],
-        tasks:['concat:js_yxmall','uglify']
+        tasks:['concat:js_yxmall','uglify:dist_yxmall']
       },
       css_xo:{
         files:['<%=resources.css%>'],

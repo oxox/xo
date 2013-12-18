@@ -787,584 +787,12 @@ if (typeof define !== 'undefined' && define.amd) {
 	window.FastClick = FastClick;
 }
 
-/*
- *  Copyright 2011 Twitter, Inc.
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *
- *  http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+/**
+ * XO - A lightweight MVC webapp framework inspired by Backbone
  */
-
-
-
-var Hogan = {};
-
-(function (Hogan, useArrayBuffer) {
-  Hogan.Template = function (renderFunc, text, compiler, options) {
-    this.r = renderFunc || this.r;
-    this.c = compiler;
-    this.options = options;
-    this.text = text || '';
-    this.buf = (useArrayBuffer) ? [] : '';
-  }
-
-  Hogan.Template.prototype = {
-    // render: replaced by generated code.
-    r: function (context, partials, indent) { return ''; },
-
-    // variable escaping
-    v: hoganEscape,
-
-    // triple stache
-    t: coerceToString,
-
-    render: function render(context, partials, indent) {
-      return this.ri([context], partials || {}, indent);
-    },
-
-    // render internal -- a hook for overrides that catches partials too
-    ri: function (context, partials, indent) {
-      return this.r(context, partials, indent);
-    },
-
-    // tries to find a partial in the curent scope and render it
-    rp: function(name, context, partials, indent) {
-      var partial = partials[name];
-
-      if (!partial) {
-        return '';
-      }
-
-      if (this.c && typeof partial == 'string') {
-        partial = this.c.compile(partial, this.options);
-      }
-
-      return partial.ri(context, partials, indent);
-    },
-
-    // render a section
-    rs: function(context, partials, section) {
-      var tail = context[context.length - 1];
-
-      if (!isArray(tail)) {
-        section(context, partials, this);
-        return;
-      }
-
-      for (var i = 0; i < tail.length; i++) {
-        context.push(tail[i]);
-        section(context, partials, this);
-        context.pop();
-      }
-    },
-
-    // maybe start a section
-    s: function(val, ctx, partials, inverted, start, end, tags) {
-      var pass;
-
-      if (isArray(val) && val.length === 0) {
-        return false;
-      }
-
-      if (typeof val == 'function') {
-        val = this.ls(val, ctx, partials, inverted, start, end, tags);
-      }
-
-      pass = (val === '') || !!val;
-
-      if (!inverted && pass && ctx) {
-        ctx.push((typeof val == 'object') ? val : ctx[ctx.length - 1]);
-      }
-
-      return pass;
-    },
-
-    // find values with dotted names
-    d: function(key, ctx, partials, returnFound) {
-      var names = key.split('.'),
-          val = this.f(names[0], ctx, partials, returnFound),
-          cx = null;
-
-      if (key === '.' && isArray(ctx[ctx.length - 2])) {
-        return ctx[ctx.length - 1];
-      }
-
-      for (var i = 1; i < names.length; i++) {
-        if (val && typeof val == 'object' && names[i] in val) {
-          cx = val;
-          val = val[names[i]];
-        } else {
-          val = '';
-        }
-      }
-
-      if (returnFound && !val) {
-        return false;
-      }
-
-      if (!returnFound && typeof val == 'function') {
-        ctx.push(cx);
-        val = this.lv(val, ctx, partials);
-        ctx.pop();
-      }
-
-      return val;
-    },
-
-    // find values with normal names
-    f: function(key, ctx, partials, returnFound) {
-      var val = false,
-          v = null,
-          found = false;
-
-      for (var i = ctx.length - 1; i >= 0; i--) {
-        v = ctx[i];
-        if (v && typeof v == 'object' && key in v) {
-          val = v[key];
-          found = true;
-          break;
-        }
-      }
-
-      if (!found) {
-        return (returnFound) ? false : "";
-      }
-
-      if (!returnFound && typeof val == 'function') {
-        val = this.lv(val, ctx, partials);
-      }
-
-      return val;
-    },
-
-    // higher order templates
-    ho: function(val, cx, partials, text, tags) {
-      var compiler = this.c;
-      var options = this.options;
-      options.delimiters = tags;
-      var text = val.call(cx, text);
-      text = (text == null) ? String(text) : text.toString();
-      this.b(compiler.compile(text, options).render(cx, partials));
-      return false;
-    },
-
-    // template result buffering
-    b: (useArrayBuffer) ? function(s) { this.buf.push(s); } :
-                          function(s) { this.buf += s; },
-    fl: (useArrayBuffer) ? function() { var r = this.buf.join(''); this.buf = []; return r; } :
-                           function() { var r = this.buf; this.buf = ''; return r; },
-
-    // lambda replace section
-    ls: function(val, ctx, partials, inverted, start, end, tags) {
-      var cx = ctx[ctx.length - 1],
-          t = null;
-
-      if (!inverted && this.c && val.length > 0) {
-        return this.ho(val, cx, partials, this.text.substring(start, end), tags);
-      }
-
-      t = val.call(cx);
-
-      if (typeof t == 'function') {
-        if (inverted) {
-          return true;
-        } else if (this.c) {
-          return this.ho(t, cx, partials, this.text.substring(start, end), tags);
-        }
-      }
-
-      return t;
-    },
-
-    // lambda replace variable
-    lv: function(val, ctx, partials) {
-      var cx = ctx[ctx.length - 1];
-      var result = val.call(cx);
-
-      if (typeof result == 'function') {
-        result = coerceToString(result.call(cx));
-        if (this.c && ~result.indexOf("{\u007B")) {
-          return this.c.compile(result, this.options).render(cx, partials);
-        }
-      }
-
-      return coerceToString(result);
-    }
-
-  };
-
-  var rAmp = /&/g,
-      rLt = /</g,
-      rGt = />/g,
-      rApos =/\'/g,
-      rQuot = /\"/g,
-      hChars =/[&<>\"\']/;
-
-
-  function coerceToString(val) {
-    return String((val === null || val === undefined) ? '' : val);
-  }
-
-  function hoganEscape(str) {
-    str = coerceToString(str);
-    return hChars.test(str) ?
-      str
-        .replace(rAmp,'&amp;')
-        .replace(rLt,'&lt;')
-        .replace(rGt,'&gt;')
-        .replace(rApos,'&#39;')
-        .replace(rQuot, '&quot;') :
-      str;
-  }
-
-  var isArray = Array.isArray || function(a) {
-    return Object.prototype.toString.call(a) === '[object Array]';
-  };
-
-})(typeof exports !== 'undefined' ? exports : Hogan);
-
-
-
-
-(function (Hogan) {
-  // Setup regex  assignments
-  // remove whitespace according to Mustache spec
-  var rIsWhitespace = /\S/,
-      rQuot = /\"/g,
-      rNewline =  /\n/g,
-      rCr = /\r/g,
-      rSlash = /\\/g,
-      tagTypes = {
-        '#': 1, '^': 2, '/': 3,  '!': 4, '>': 5,
-        '<': 6, '=': 7, '_v': 8, '{': 9, '&': 10
-      };
-
-  Hogan.scan = function scan(text, delimiters) {
-    var len = text.length,
-        IN_TEXT = 0,
-        IN_TAG_TYPE = 1,
-        IN_TAG = 2,
-        state = IN_TEXT,
-        tagType = null,
-        tag = null,
-        buf = '',
-        tokens = [],
-        seenTag = false,
-        i = 0,
-        lineStart = 0,
-        otag = '{{',
-        ctag = '}}';
-
-    function addBuf() {
-      if (buf.length > 0) {
-        tokens.push(new String(buf));
-        buf = '';
-      }
-    }
-
-    function lineIsWhitespace() {
-      var isAllWhitespace = true;
-      for (var j = lineStart; j < tokens.length; j++) {
-        isAllWhitespace =
-          (tokens[j].tag && tagTypes[tokens[j].tag] < tagTypes['_v']) ||
-          (!tokens[j].tag && tokens[j].match(rIsWhitespace) === null);
-        if (!isAllWhitespace) {
-          return false;
-        }
-      }
-
-      return isAllWhitespace;
-    }
-
-    function filterLine(haveSeenTag, noNewLine) {
-      addBuf();
-
-      if (haveSeenTag && lineIsWhitespace()) {
-        for (var j = lineStart, next; j < tokens.length; j++) {
-          if (!tokens[j].tag) {
-            if ((next = tokens[j+1]) && next.tag == '>') {
-              // set indent to token value
-              next.indent = tokens[j].toString()
-            }
-            tokens.splice(j, 1);
-          }
-        }
-      } else if (!noNewLine) {
-        tokens.push({tag:'\n'});
-      }
-
-      seenTag = false;
-      lineStart = tokens.length;
-    }
-
-    function changeDelimiters(text, index) {
-      var close = '=' + ctag,
-          closeIndex = text.indexOf(close, index),
-          delimiters = trim(
-            text.substring(text.indexOf('=', index) + 1, closeIndex)
-          ).split(' ');
-
-      otag = delimiters[0];
-      ctag = delimiters[1];
-
-      return closeIndex + close.length - 1;
-    }
-
-    if (delimiters) {
-      delimiters = delimiters.split(' ');
-      otag = delimiters[0];
-      ctag = delimiters[1];
-    }
-
-    for (i = 0; i < len; i++) {
-      if (state == IN_TEXT) {
-        if (tagChange(otag, text, i)) {
-          --i;
-          addBuf();
-          state = IN_TAG_TYPE;
-        } else {
-          if (text.charAt(i) == '\n') {
-            filterLine(seenTag);
-          } else {
-            buf += text.charAt(i);
-          }
-        }
-      } else if (state == IN_TAG_TYPE) {
-        i += otag.length - 1;
-        tag = tagTypes[text.charAt(i + 1)];
-        tagType = tag ? text.charAt(i + 1) : '_v';
-        if (tagType == '=') {
-          i = changeDelimiters(text, i);
-          state = IN_TEXT;
-        } else {
-          if (tag) {
-            i++;
-          }
-          state = IN_TAG;
-        }
-        seenTag = i;
-      } else {
-        if (tagChange(ctag, text, i)) {
-          tokens.push({tag: tagType, n: trim(buf), otag: otag, ctag: ctag,
-                       i: (tagType == '/') ? seenTag - ctag.length : i + otag.length});
-          buf = '';
-          i += ctag.length - 1;
-          state = IN_TEXT;
-          if (tagType == '{') {
-            if (ctag == '}}') {
-              i++;
-            } else {
-              cleanTripleStache(tokens[tokens.length - 1]);
-            }
-          }
-        } else {
-          buf += text.charAt(i);
-        }
-      }
-    }
-
-    filterLine(seenTag, true);
-
-    return tokens;
-  }
-
-  function cleanTripleStache(token) {
-    if (token.n.substr(token.n.length - 1) === '}') {
-      token.n = token.n.substring(0, token.n.length - 1);
-    }
-  }
-
-  function trim(s) {
-    if (s.trim) {
-      return s.trim();
-    }
-
-    return s.replace(/^\s*|\s*$/g, '');
-  }
-
-  function tagChange(tag, text, index) {
-    if (text.charAt(index) != tag.charAt(0)) {
-      return false;
-    }
-
-    for (var i = 1, l = tag.length; i < l; i++) {
-      if (text.charAt(index + i) != tag.charAt(i)) {
-        return false;
-      }
-    }
-
-    return true;
-  }
-
-  function buildTree(tokens, kind, stack, customTags) {
-    var instructions = [],
-        opener = null,
-        token = null;
-
-    while (tokens.length > 0) {
-      token = tokens.shift();
-      if (token.tag == '#' || token.tag == '^' || isOpener(token, customTags)) {
-        stack.push(token);
-        token.nodes = buildTree(tokens, token.tag, stack, customTags);
-        instructions.push(token);
-      } else if (token.tag == '/') {
-        if (stack.length === 0) {
-          throw new Error('Closing tag without opener: /' + token.n);
-        }
-        opener = stack.pop();
-        if (token.n != opener.n && !isCloser(token.n, opener.n, customTags)) {
-          throw new Error('Nesting error: ' + opener.n + ' vs. ' + token.n);
-        }
-        opener.end = token.i;
-        return instructions;
-      } else {
-        instructions.push(token);
-      }
-    }
-
-    if (stack.length > 0) {
-      throw new Error('missing closing tag: ' + stack.pop().n);
-    }
-
-    return instructions;
-  }
-
-  function isOpener(token, tags) {
-    for (var i = 0, l = tags.length; i < l; i++) {
-      if (tags[i].o == token.n) {
-        token.tag = '#';
-        return true;
-      }
-    }
-  }
-
-  function isCloser(close, open, tags) {
-    for (var i = 0, l = tags.length; i < l; i++) {
-      if (tags[i].c == close && tags[i].o == open) {
-        return true;
-      }
-    }
-  }
-
-  Hogan.generate = function (tree, text, options) {
-    var code = 'var _=this;_.b(i=i||"");' + walk(tree) + 'return _.fl();';
-    if (options.asString) {
-      return 'function(c,p,i){' + code + ';}';
-    }
-
-    return new Hogan.Template(new Function('c', 'p', 'i', code), text, Hogan, options);
-  }
-
-  function esc(s) {
-    return s.replace(rSlash, '\\\\')
-            .replace(rQuot, '\\\"')
-            .replace(rNewline, '\\n')
-            .replace(rCr, '\\r');
-  }
-
-  function chooseMethod(s) {
-    return (~s.indexOf('.')) ? 'd' : 'f';
-  }
-
-  function walk(tree) {
-    var code = '';
-    for (var i = 0, l = tree.length; i < l; i++) {
-      var tag = tree[i].tag;
-      if (tag == '#') {
-        code += section(tree[i].nodes, tree[i].n, chooseMethod(tree[i].n),
-                        tree[i].i, tree[i].end, tree[i].otag + " " + tree[i].ctag);
-      } else if (tag == '^') {
-        code += invertedSection(tree[i].nodes, tree[i].n,
-                                chooseMethod(tree[i].n));
-      } else if (tag == '<' || tag == '>') {
-        code += partial(tree[i]);
-      } else if (tag == '{' || tag == '&') {
-        code += tripleStache(tree[i].n, chooseMethod(tree[i].n));
-      } else if (tag == '\n') {
-        code += text('"\\n"' + (tree.length-1 == i ? '' : ' + i'));
-      } else if (tag == '_v') {
-        code += variable(tree[i].n, chooseMethod(tree[i].n));
-      } else if (tag === undefined) {
-        code += text('"' + esc(tree[i]) + '"');
-      }
-    }
-    return code;
-  }
-
-  function section(nodes, id, method, start, end, tags) {
-    return 'if(_.s(_.' + method + '("' + esc(id) + '",c,p,1),' +
-           'c,p,0,' + start + ',' + end + ',"' + tags + '")){' +
-           '_.rs(c,p,' +
-           'function(c,p,_){' +
-           walk(nodes) +
-           '});c.pop();}';
-  }
-
-  function invertedSection(nodes, id, method) {
-    return 'if(!_.s(_.' + method + '("' + esc(id) + '",c,p,1),c,p,1,0,0,"")){' +
-           walk(nodes) +
-           '};';
-  }
-
-  function partial(tok) {
-    return '_.b(_.rp("' +  esc(tok.n) + '",c,p,"' + (tok.indent || '') + '"));';
-  }
-
-  function tripleStache(id, method) {
-    return '_.b(_.t(_.' + method + '("' + esc(id) + '",c,p,0)));';
-  }
-
-  function variable(id, method) {
-    return '_.b(_.v(_.' + method + '("' + esc(id) + '",c,p,0)));';
-  }
-
-  function text(id) {
-    return '_.b(' + id + ');';
-  }
-
-  Hogan.parse = function(tokens, text, options) {
-    options = options || {};
-    return buildTree(tokens, '', [], options.sectionTags || []);
-  },
-
-  Hogan.cache = {};
-
-  Hogan.compile = function(text, options) {
-    // options
-    //
-    // asString: false (default)
-    //
-    // sectionTags: [{o: '_foo', c: 'foo'}]
-    // An array of object with o and c fields that indicate names for custom
-    // section tags. The example above allows parsing of {{_foo}}{{/foo}}.
-    //
-    // delimiters: A string that overrides the default delimiters.
-    // Example: "<% %>"
-    //
-    options = options || {};
-
-    var key = text + '||' + !!options.asString;
-
-    var t = this.cache[key];
-
-    if (t) {
-      return t;
-    }
-
-    t = this.generate(this.parse(this.scan(text, options.delimiters), text, options), text, options);
-    return this.cache[key] = t;
-  };
-})(typeof exports !== 'undefined' ? exports : Hogan);
-
-
-(function($,T,B){
+(function($){
+    if(!$) throw "Zepto or jQuery is required by XO!";
+    
     //module define function
     window['XO'] = function(id,fn){
         if(XO[id]){
@@ -1383,19 +811,18 @@ var Hogan = {};
     };
     //extensions
     $.extend(XO,{
+        $:$,
         version:'1.0.0',
         author:'http://oxox.io',
         $body:$(document.body),
         $win:$(window),
-        EVENT:{},
+        EVENT:{},//EVENT namespace
+        Base:{},//Base namespace
         LS:localStorage,
         toHtml:function(tpl,obj,ext){
-            tpl = T.compile(tpl);
+            tpl = XO.T.compile(tpl);
             return (tpl.render(obj,ext));
         },
-        baseRouter:B.Router,
-        history:B.history,
-        baseView:B.View,
         warn:function(txt,obj){
             txt = 'XO.JS:'+txt;
             if (window.console !== undefined && XO.App.opts.debug === true) {
@@ -1433,8 +860,925 @@ var Hogan = {};
         }
     };
 
-})(Zepto,Hogan,Backbone);
+})(window["Zepto"]||window["jQuery"]);
 
+/**
+ * XO utility methods,a enhanced lite version of underscore.js
+ * @namespace XO._ 
+ */
+(function(exports){
+
+    // Establish the object that gets returned to break out of a loop iteration.
+    var breaker = {};
+
+    // Save bytes in the minified (but not gzipped) version:
+    var ArrayProto = Array.prototype, ObjProto = Object.prototype, FuncProto = Function.prototype;
+
+    // Create quick reference variables for speed access to core prototypes.
+    var
+        push             = ArrayProto.push,
+        slice            = ArrayProto.slice,
+        concat           = ArrayProto.concat,
+        toString         = ObjProto.toString,
+        hasOwnProperty   = ObjProto.hasOwnProperty;
+
+    // All **ECMAScript 5** native function implementations that we hope to use
+    // are declared here.
+    var
+        nativeForEach      = ArrayProto.forEach,
+        nativeMap          = ArrayProto.map,
+        nativeReduce       = ArrayProto.reduce,
+        nativeReduceRight  = ArrayProto.reduceRight,
+        nativeFilter       = ArrayProto.filter,
+        nativeEvery        = ArrayProto.every,
+        nativeSome         = ArrayProto.some,
+        nativeIndexOf      = ArrayProto.indexOf,
+        nativeLastIndexOf  = ArrayProto.lastIndexOf,
+        nativeIsArray      = Array.isArray,
+        nativeKeys         = Object.keys,
+        nativeBind         = FuncProto.bind;
+
+    var idCounter = 0,
+        _={};
+    
+    _.uniqueId = function(prefix) {
+        var id = ++idCounter + '';
+        return prefix ? prefix + id : id;
+    };
+
+    // Keep the identity function around for default iterators.
+    _.identity = function(value) {
+        return value;
+    };
+
+    // Collection Functions
+    // --------------------
+    // The cornerstone, an `each` implementation, aka `forEach`.
+    // Handles objects with the built-in `forEach`, arrays, and raw objects.
+    // Delegates to **ECMAScript 5**'s native `forEach` if available.
+    var each = _.each = _.forEach = function(obj, iterator, context) {
+        if (obj == null) return;
+        if (nativeForEach && obj.forEach === nativeForEach) {
+            obj.forEach(iterator, context);
+        } else if (obj.length === +obj.length) {
+            for (var i = 0, length = obj.length; i < length; i++) {
+                if (iterator.call(context, obj[i], i, obj) === breaker) return;
+            }
+        } else {
+            var keys = _.keys(obj);
+            for (var i = 0, length = keys.length; i < length; i++) {
+                if (iterator.call(context, obj[keys[i]], keys[i], obj) === breaker) return;
+            }
+        }
+    };
+
+    // Determine if at least one element in the object matches a truth test.
+    // Delegates to **ECMAScript 5**'s native `some` if available.
+    // Aliased as `any`.
+    var any = _.some = _.any = function(obj, iterator, context) {
+        iterator || (iterator = _.identity);
+        var result = false;
+        if (obj == null) return result;
+        if (nativeSome && obj.some === nativeSome) return obj.some(iterator, context);
+        each(obj, function(value, index, list) {
+            if (result || (result = iterator.call(context, value, index, list))) return breaker;
+        });
+        return !!result;
+    };
+
+    // Return the results of applying the iterator to each element.
+    // Delegates to **ECMAScript 5**'s native `map` if available.
+    _.map = _.collect = function(obj, iterator, context) {
+        var results = [];
+        if (obj == null) return results;
+        if (nativeMap && obj.map === nativeMap) return obj.map(iterator, context);
+        each(obj, function(value, index, list) {
+            results.push(iterator.call(context, value, index, list));
+        });
+        return results;
+    };
+
+    // If the value of the named `property` is a function then invoke it with the
+    // `object` as context; otherwise, return it.
+    _.result = function(object, property) {
+        if (object == null) return void 0;
+        var value = object[property];
+        return _.isFunction(value) ? value.call(object) : value;
+    };
+
+    // Extend a given object with all the properties in passed-in object(s).
+    _.extend = function(obj) {
+        each(slice.call(arguments, 1), function(source) {
+            if (source) {
+                for (var prop in source) {
+                    obj[prop] = source[prop];
+                }
+            }
+        });
+        return obj;
+    };
+
+    // Set up the prototype chain for subclasses.
+    // Similar to `goog.inherits`, but uses a hash of prototype properties and
+    // class properties to be extended.
+    _.derive = function(protoProps, staticProps) {
+        var parent = this;
+        var child;
+
+        // The constructor function for the new subclass is either defined by you
+        // (the "constructor" property in your `extend` definition), or defaulted
+        // by us to simply call the parent's constructor.
+        if (protoProps && _.has(protoProps, 'constructor')) {
+            child = protoProps.constructor;
+        } else {
+            child = function(){ return parent.apply(this, arguments); };
+        }
+
+        // Add static properties to the constructor function, if supplied.
+        _.extend(child, parent, staticProps);
+
+        // Set the prototype chain to inherit from `parent`, without calling
+        // `parent`'s constructor function.
+        var Surrogate = function(){ this.constructor = child; };
+        Surrogate.prototype = parent.prototype;
+        child.prototype = new Surrogate;
+
+        // Add prototype properties (instance properties) to the subclass,
+        // if supplied.
+        if (protoProps) _.extend(child.prototype, protoProps);
+
+        // Set a convenience property in case the parent's prototype is needed
+        // later.
+        child.__super__ = parent.prototype;
+
+        return child;
+    };
+
+    // Is a given array, string, or object empty?
+    // An "empty" object has no enumerable own-properties.
+    _.isEmpty = function(obj) {
+        if (obj == null) return true;
+        if (_.isArray(obj) || _.isString(obj)) return obj.length === 0;
+        for (var key in obj) if (_.has(obj, key)) return false;
+        return true;
+    };
+
+    // Is a given value an array?
+    // Delegates to ECMA5's native Array.isArray
+    _.isArray = nativeIsArray || function(obj) {
+        return toString.call(obj) == '[object Array]';
+    };
+
+    // Add some isType methods: isArguments, isFunction, isString, isNumber, isDate, isRegExp.
+    each(['Arguments', 'Function', 'String', 'Number', 'Date', 'RegExp'], function(name) {
+        _['is' + name] = function(obj) {
+            return toString.call(obj) == '[object ' + name + ']';
+        };
+    });
+
+    // Optimize `isFunction` if appropriate.
+    if (typeof (/./) !== 'function') {
+        _.isFunction = function(obj) {
+            return typeof obj === 'function';
+        };
+    }
+
+    // Return a copy of the object only containing the whitelisted properties.
+    _.pick = function(obj) {
+        var copy = {};
+        var keys = concat.apply(ArrayProto, slice.call(arguments, 1));
+        each(keys, function(key) {
+          if (key in obj) copy[key] = obj[key];
+        });
+        return copy;
+    };
+
+    // Shortcut function for checking if an object has a given property directly
+    // on itself (in other words, not on a prototype).
+    _.has = function(obj, key) {
+        return hasOwnProperty.call(obj, key);
+    };
+
+    // Returns a function that will be executed at most one time, no matter how
+    // often you call it. Useful for lazy initialization.
+    _.once = function(func) {
+        var ran = false, memo;
+        return function() {
+            if (ran) return memo;
+            ran = true;
+            memo = func.apply(this, arguments);
+            func = null;
+            return memo;
+        };
+    };
+
+    // Object Functions
+    // ----------------
+
+    // Retrieve the names of an object's properties.
+    // Delegates to **ECMAScript 5**'s native `Object.keys`
+    _.keys = nativeKeys || function(obj) {
+        if (obj !== Object(obj)) throw new TypeError('Invalid object');
+        var keys = [];
+        for (var key in obj) if (_.has(obj, key)) keys.push(key);
+        return keys;
+    };
+
+    // Function (ahem) Functions
+    // ------------------
+
+    // Reusable constructor function for prototype setting.
+    var ctor = function(){};
+
+    // Create a function bound to a given object (assigning `this`, and arguments,
+    // optionally). Delegates to **ECMAScript 5**'s native `Function.bind` if
+    // available.
+    _.bind = function(func, context) {
+        var args, bound;
+        if (nativeBind && func.bind === nativeBind) return nativeBind.apply(func, slice.call(arguments, 1));
+        if (!_.isFunction(func)) throw new TypeError;
+        args = slice.call(arguments, 2);
+        return bound = function() {
+            if (!(this instanceof bound)) return func.apply(context, args.concat(slice.call(arguments)));
+            ctor.prototype = func.prototype;
+            var _self = new ctor;
+            ctor.prototype = null;
+            var result = func.apply(_self, args.concat(slice.call(arguments)));
+            if (Object(result) === result) return result;
+            return _self;
+        };
+    };
+
+    // Bind all of an object's methods to that object. Useful for ensuring that
+    // all callbacks defined on an object belong to it.
+    _.bindAll = function(obj) {
+        var funcs = slice.call(arguments, 1);
+        if (funcs.length === 0) throw new Error("bindAll must be passed function names");
+        each(funcs, function(f) { obj[f] = _.bind(obj[f], obj); });
+        return obj;
+    };
+
+    exports._ = _;
+
+})(XO);
+/**
+ * A module that can be mixed in to *any object* in order to provide it with
+ * custom events. You may bind with `on` or remove with `off` callback
+ * functions to an event; `trigger`-ing an event fires all callbacks in
+ * succession.
+ *
+ *     var object = {};
+ *     _.extend(object, XO.Base.Events);
+ *     object.on('expand', function(){ alert('expanded'); });
+ *     object.trigger('expand');
+ *
+ * @namespace XO.Base.Events
+ * @dependence XO._
+ */
+(function(exports,_){
+
+    var Events = {
+
+        // Bind an event to a `callback` function. Passing `"all"` will bind
+        // the callback to all events fired.
+        on: function(name, callback, context) {
+            if (!eventsApi(this, 'on', name, [callback, context]) || !callback) return this;
+            this._events || (this._events = {});
+            var events = this._events[name] || (this._events[name] = []);
+            events.push({callback: callback, context: context, ctx: context || this});
+            return this;
+        },
+
+        // Bind an event to only be triggered a single time. After the first time
+        // the callback is invoked, it will be removed.
+        once: function(name, callback, context) {
+            if (!eventsApi(this, 'once', name, [callback, context]) || !callback) return this;
+            var _self = this;
+            var once = _.once(function() {
+                _self.off(name, once);
+                callback.apply(this, arguments);
+            });
+            once._callback = callback;
+            return this.on(name, once, context);
+        },
+
+        // Remove one or many callbacks. If `context` is null, removes all
+        // callbacks with that function. If `callback` is null, removes all
+        // callbacks for the event. If `name` is null, removes all bound
+        // callbacks for all events.
+        off: function(name, callback, context) {
+            var retain, ev, events, names, i, l, j, k;
+            if (!this._events || !eventsApi(this, 'off', name, [callback, context])) return this;
+            if (!name && !callback && !context) {
+                this._events = {};
+                return this;
+            }
+            names = name ? [name] : _.keys(this._events);
+            for (i = 0, l = names.length; i < l; i++) {
+                name = names[i];
+                if (events = this._events[name]) {
+                    this._events[name] = retain = [];
+                    if (callback || context) {
+                        for (j = 0, k = events.length; j < k; j++) {
+                            ev = events[j];
+                            if ((callback && callback !== ev.callback && callback !== ev.callback._callback) ||
+                                (context && context !== ev.context)) {
+                                retain.push(ev);
+                            }//if
+                        }//for
+                    }//if
+                    if (!retain.length) delete this._events[name];
+               }//if
+            }//for
+            return this;
+        },
+
+        // Trigger one or many events, firing all bound callbacks. Callbacks are
+        // passed the same arguments as `trigger` is, apart from the event name
+        // (unless you're listening on `"all"`, which will cause your callback to
+        // receive the true name of the event as the first argument).
+        trigger: function(name) {
+            if (!this._events) return this;
+            var args = Array.prototype.slice.call(arguments, 1);
+            if (!eventsApi(this, 'trigger', name, args)) return this;
+            var events = this._events[name];
+            var allEvents = this._events.all;
+            if (events) triggerEvents(events, args);
+            if (allEvents) triggerEvents(allEvents, arguments);
+            return this;
+        },
+
+        // Tell this object to stop listening to either specific events ... or
+        // to every object it's currently listening to.
+        stopListening: function(obj, name, callback) {
+            var listeningTo = this._listeningTo;
+            if (!listeningTo) return this;
+            var remove = !name && !callback;
+            if (!callback && typeof name === 'object') callback = this;
+            if (obj) (listeningTo = {})[obj._listenId] = obj;
+            for (var id in listeningTo) {
+                obj = listeningTo[id];
+                obj.off(name, callback, this);
+                if (remove || _.isEmpty(obj._events)) delete this._listeningTo[id];
+            }
+            return this;
+        }
+    };
+
+    // Regular expression used to split event strings.
+    var eventSplitter = /\s+/;
+
+    // Implement fancy features of the Events API such as multiple event
+    // names `"change blur"` and jQuery-style event maps `{change: action}`
+    // in terms of the existing API.
+    var eventsApi = function(obj, action, name, rest) {
+        if (!name) return true;
+
+        // Handle event maps.
+        if (typeof name === 'object') {
+            for (var key in name) {
+                obj[action].apply(obj, [key, name[key]].concat(rest));
+            }
+            return false;
+        }
+
+        // Handle space separated event names.
+        if (eventSplitter.test(name)) {
+            var names = name.split(eventSplitter);
+            for (var i = 0, l = names.length; i < l; i++) {
+                obj[action].apply(obj, [names[i]].concat(rest));
+            }
+            return false;
+        }
+
+        return true;
+    };
+
+    // A difficult-to-believe, but optimized internal dispatch function for
+    // triggering events. Tries to keep the usual cases speedy (most internal
+    // Backbone events have 3 arguments).
+    var triggerEvents = function(events, args) {
+        var ev, i = -1, l = events.length, a1 = args[0], a2 = args[1], a3 = args[2];
+        switch (args.length) {
+            case 0: while (++i < l) (ev = events[i]).callback.call(ev.ctx); return;
+            case 1: while (++i < l) (ev = events[i]).callback.call(ev.ctx, a1); return;
+            case 2: while (++i < l) (ev = events[i]).callback.call(ev.ctx, a1, a2); return;
+            case 3: while (++i < l) (ev = events[i]).callback.call(ev.ctx, a1, a2, a3); return;
+            default: while (++i < l) (ev = events[i]).callback.apply(ev.ctx, args);
+        }
+    };
+
+    var listenMethods = {listenTo: 'on', listenToOnce: 'once'};
+
+    // Inversion-of-control versions of `on` and `once`. Tell *this* object to
+    // listen to an event in another object ... keeping track of what it's
+    // listening to.
+    _.each(listenMethods, function(implementation, method) {
+        Events[method] = function(obj, name, callback) {
+            var listeningTo = this._listeningTo || (this._listeningTo = {});
+            var id = obj._listenId || (obj._listenId = _.uniqueId('evtListen'));
+            listeningTo[id] = obj;
+            if (!callback && typeof name === 'object') callback = this;
+            obj[implementation](name, callback, this);
+            return this;
+        };
+    });
+    
+    exports.Events = Events;
+
+})(XO.Base,XO._);
+/**
+ * XO.Base.History
+ * ----------------
+ *
+ * Handles cross-browser history management, based on either
+ * [pushState](http://diveintohtml5.info/history.html) and real URLs, or
+ * [onhashchange](https://developer.mozilla.org/en-US/docs/DOM/window.onhashchange)
+ * and URL fragments. If the browser supports neither (old IE, natch),
+ * falls back to polling.
+
+ * @namespace XO.Base
+ * @dependencies XO._, XO.Base.Events
+ */
+(function(exports,_){
+
+
+    var History = function() {
+        this.handlers = [];
+        _.bindAll(this, 'checkUrl');
+
+        // Ensure that `History` can be used outside of the browser.
+        if (typeof window !== 'undefined') {
+            this.location = window.location;
+            this.history = window.history;
+        }
+    };
+    var $win = XO.$win;
+    // Cached regex for stripping a leading hash/slash and trailing space.
+    var routeStripper = /^[#\/]|\s+$/g;
+
+    // Cached regex for stripping leading and trailing slashes.
+    var rootStripper = /^\/+|\/+$/g;
+
+    // Cached regex for detecting MSIE.
+    var isExplorer = /msie [\w.]+/;
+
+    // Cached regex for removing a trailing slash.
+    var trailingSlash = /\/$/;
+
+    // Cached regex for stripping urls of hash and query.
+    var pathStripper = /[?#].*$/;
+
+    // Has the history handling already been started?
+    History.started = false;
+
+    // Set up all inheritable **XO.Base.History** properties and methods.
+    _.extend(History.prototype, XO.Base.Events, {
+
+        // The default interval to poll for hash changes, if necessary, is
+        // twenty times a second.
+        interval: 50,
+
+        // Gets the true hash value. Cannot use location.hash directly due to bug
+        // in Firefox where location.hash will always be decoded.
+        getHash: function(window) {
+            var match = (window || this).location.href.match(/#(.*)$/);
+            return match ? match[1] : '';
+        },
+
+        // Get the cross-browser normalized URL fragment, either from the URL,
+        // the hash, or the override.
+        getFragment: function(fragment, forcePushState) {
+            if (fragment == null) {
+                if (this._hasPushState || !this._wantsHashChange || forcePushState) {
+                    fragment = this.location.pathname;
+                    var root = this.root.replace(trailingSlash, '');
+                    if (!fragment.indexOf(root)) fragment = fragment.slice(root.length);
+                } else {
+                    fragment = this.getHash();
+                }
+            }
+            return fragment.replace(routeStripper, '');
+        },
+
+        // Start the hash change handling, returning `true` if the current URL matches
+        // an existing route, and `false` otherwise.
+        start: function(options) {
+            if (History.started) throw new Error("XO.Base.History has already been started");
+            History.started = true;
+
+            // Figure out the initial configuration. Do we need an iframe?
+            // Is pushState desired ... is it available?
+            this.options          = _.extend({root: '/'}, this.options, options);
+            this.root             = this.options.root;
+            this._wantsHashChange = this.options.hashChange !== false;
+            this._wantsPushState  = !!this.options.pushState;
+            this._hasPushState    = !!(this.options.pushState && this.history && this.history.pushState);
+            var fragment          = this.getFragment();
+            var docMode           = document.documentMode;
+            var oldIE             = (isExplorer.exec(navigator.userAgent.toLowerCase()) && (!docMode || docMode <= 7));
+
+            // Normalize root to always include a leading and trailing slash.
+            this.root = ('/' + this.root + '/').replace(rootStripper, '/');
+
+            if (oldIE && this._wantsHashChange) {
+                this.iframe = XO.$('<iframe id="if_XOHistoryHack" src="javascript:0" tabindex="-1" />').hide().appendTo('body')[0].contentWindow;
+                this.navigate(fragment);
+            }
+
+            // Depending on whether we're using pushState or hashes, and whether
+            // 'onhashchange' is supported, determine how we check the URL state.
+            if (this._hasPushState) {
+                $win.on('popstate', this.checkUrl);
+            } else if (this._wantsHashChange && ('onhashchange' in window) && !oldIE) {
+                $win.on('hashchange', this.checkUrl);
+            } else if (this._wantsHashChange) {
+                this._checkUrlInterval = setInterval(this.checkUrl, this.interval);
+            }
+
+            // Determine if we need to change the base url, for a pushState link
+            // opened by a non-pushState browser.
+            this.fragment = fragment;
+            var loc = this.location;
+            var atRoot = loc.pathname.replace(/[^\/]$/, '$&/') === this.root;
+
+            // Transition from hashChange to pushState or vice versa if both are
+            // requested.
+            if (this._wantsHashChange && this._wantsPushState) {
+
+                // If we've started off with a route from a `pushState`-enabled
+                // browser, but we're currently in a browser that doesn't support it...
+                if (!this._hasPushState && !atRoot) {
+                    this.fragment = this.getFragment(null, true);
+                    this.location.replace(this.root + this.location.search + '#' + this.fragment);
+                    // Return immediately as browser will do redirect to new url
+                    return true;
+
+                    // Or if we've started out with a hash-based route, but we're currently
+                    // in a browser where it could be `pushState`-based instead...
+                } else if (this._hasPushState && atRoot && loc.hash) {
+                    this.fragment = this.getHash().replace(routeStripper, '');
+                    this.history.replaceState({}, document.title, this.root + this.fragment + loc.search);
+                }
+
+            }//if
+
+            if (!this.options.silent) return this.loadUrl();
+        },
+
+        // Disable XO.Base.history, perhaps temporarily. Not useful in a real app,
+        // but possibly useful for unit testing Routers.
+        stop: function() {
+            $win.off('popstate', this.checkUrl).off('hashchange', this.checkUrl);
+            clearInterval(this._checkUrlInterval);
+            History.started = false;
+        },
+
+        // Add a route to be tested when the fragment changes. Routes added later
+        // may override previous routes.
+        route: function(route, callback) {
+            this.handlers.unshift({route: route, callback: callback});
+        },
+
+        // Checks the current URL to see if it has changed, and if it has,
+        // calls `loadUrl`, normalizing across the hidden iframe.
+        checkUrl: function(e) {
+            var current = this.getFragment();
+            if (current === this.fragment && this.iframe) {
+                current = this.getFragment(this.getHash(this.iframe));
+            }
+            if (current === this.fragment) return false;
+            if (this.iframe) this.navigate(current);
+            this.loadUrl();
+        },
+
+        // Attempt to load the current URL fragment. If a route succeeds with a
+        // match, returns `true`. If no defined routes matches the fragment,
+        // returns `false`.
+        loadUrl: function(fragment) {
+            fragment = this.fragment = this.getFragment(fragment);
+            return _.any(this.handlers, function(handler) {
+                if (handler.route.test(fragment)) {
+                    handler.callback(fragment);
+                    return true;
+                }//if
+            });
+        },
+
+        // Save a fragment into the hash history, or replace the URL state if the
+        // 'replace' option is passed. You are responsible for properly URL-encoding
+        // the fragment in advance.
+        //
+        // The options object can contain `trigger: true` if you wish to have the
+        // route callback be fired (not usually desirable), or `replace: true`, if
+        // you wish to modify the current URL without adding an entry to the history.
+        navigate: function(fragment, options) {
+            if (!History.started) return false;
+            if (!options || options === true) options = {trigger: !!options};
+
+            var url = this.root + (fragment = this.getFragment(fragment || ''));
+
+            // Strip the fragment of the query and hash for matching.
+            fragment = fragment.replace(pathStripper, '');
+
+            if (this.fragment === fragment) return;
+            this.fragment = fragment;
+
+            // Don't include a trailing slash on the root.
+            if (fragment === '' && url !== '/') url = url.slice(0, -1);
+
+            // If pushState is available, we use it to set the fragment as a real URL.
+            if (this._hasPushState) {
+                this.history[options.replace ? 'replaceState' : 'pushState']({}, document.title, url);
+
+                // If hash changes haven't been explicitly disabled, update the hash
+                // fragment to store history.
+            } else if (this._wantsHashChange) {
+                this._updateHash(this.location, fragment, options.replace);
+                if (this.iframe && (fragment !== this.getFragment(this.getHash(this.iframe)))) {
+                    // Opening and closing the iframe tricks IE7 and earlier to push a
+                    // history entry on hash-tag change.  When replace is true, we don't
+                    // want this.
+                    if(!options.replace) this.iframe.document.open().close();
+                    this._updateHash(this.iframe.location, fragment, options.replace);
+                }
+
+                // If you've told us that you explicitly don't want fallback hashchange-
+                // based history, then `navigate` becomes a page refresh.
+            } else {
+                return this.location.assign(url);
+            }
+            if (options.trigger) return this.loadUrl(fragment);
+        },
+
+        // Update the hash location, either replacing the current entry, or adding
+        // a new one to the browser history.
+        _updateHash: function(location, fragment, replace) {
+            if (replace) {
+                var href = location.href.replace(/(javascript:|#).*$/, '');
+                location.replace(href + '#' + fragment);
+            } else {
+                // Some browsers require that `hash` contains a leading #.
+                location.hash = '#' + fragment;
+            }
+        }
+
+    });
+
+    // Set up inheritance for History
+    History.extend = _.derive;
+    exports.History = History;
+    exports.history = new History;
+
+})(XO.Base,XO._);
+/**
+ * XO.Base.Router, referring to Backbone.Router
+ * ---------------
+ * Routers map faux-URLs to actions, and fire events when routes are
+ * matched. Creating a new one sets its `routes` hash, if not set statically.
+ * @namespace XO.Base
+ * @dependence XO._, XO.Base.Events, XO.Base.history
+ */
+(function(exports,_){
+
+
+    var Router = function(options) {
+        options || (options = {});
+        if (options.routes) this.routes = options.routes;
+        this._bindRoutes();
+        this.initialize.apply(this, arguments);
+    };
+
+    // Cached regular expressions for matching named param parts and splatted
+    // parts of route strings.
+    var optionalParam = /\((.*?)\)/g;
+    var namedParam    = /(\(\?)?:\w+/g;
+    var splatParam    = /\*\w+/g;
+    var escapeRegExp  = /[\-{}\[\]+?.,\\\^$|#\s]/g;
+
+    // Set up all inheritable **XO.Base.Router** properties and methods.
+    _.extend(Router.prototype, XO.Base.Events, {
+
+        // Initialize is an empty function by default. Override it with your own
+        // initialization logic.
+        initialize: function(){},
+
+        // Manually bind a single named route to a callback. For example:
+        //
+        //     this.route('search/:query/p:num', 'search', function(query, num) {
+        //       ...
+        //     });
+        //
+        route: function(route, name, callback) {
+            if (!_.isRegExp(route)) route = this._routeToRegExp(route);
+            if (_.isFunction(name)) {
+                callback = name;
+                name = '';
+            }
+            if (!callback) callback = this[name];
+            var router = this;
+            XO.Base.history.route(route, function(fragment) {
+                var args = router._extractParameters(route, fragment);
+                callback && callback.apply(router, args);
+                router.trigger.apply(router, ['route:' + name].concat(args));
+                router.trigger('route', name, args);
+                XO.Base.history.trigger('route', router, name, args);
+            });
+            return this;
+        },
+
+        // Simple proxy to `XO.Base.History` to save a fragment into the history.
+        navigate: function(fragment, options) {
+            XO.Base.history.navigate(fragment, options);
+            return this;
+        },
+
+        // Bind all defined routes to `XO.Base.History`. We have to reverse the
+        // order of the routes here to support behavior where the most general
+        // routes can be defined at the bottom of the route map.
+        _bindRoutes: function() {
+            if (!this.routes) return;
+            this.routes = _.result(this, 'routes');
+            var route, routes = _.keys(this.routes);
+            while ((route = routes.pop()) != null) {
+                this.route(route, this.routes[route]);
+            }
+        },
+
+        // Convert a route string into a regular expression, suitable for matching
+        // against the current location hash.
+        _routeToRegExp: function(route) {
+            route = route.replace(escapeRegExp, '\\$&')
+                .replace(optionalParam, '(?:$1)?')
+                .replace(namedParam, function(match, optional) {
+                    return optional ? match : '([^\/]+)';
+                })
+                .replace(splatParam, '(.*?)');
+            return new RegExp('^' + route + '$');
+        },
+
+        // Given a route, and a URL fragment that it matches, return the array of
+        // extracted decoded parameters. Empty or unmatched parameters will be
+        // treated as `null` to normalize cross-browser behavior.
+        _extractParameters: function(route, fragment) {
+            var params = route.exec(fragment).slice(1);
+            return _.map(params, function(param) {
+                return param ? decodeURIComponent(param) : null;
+            });
+        }
+
+    });
+
+    // Set up inheritance for view
+    Router.extend = _.derive;
+
+    exports.Router = Router;
+
+
+})(XO.Base,XO._);
+/**
+ * View, referring and thanks to Backbound.View
+ * -------------
+ * XO Views are almost more convention than they are actual code. A View
+ * is simply a JavaScript object that represents a logical chunk of UI in the
+ * DOM. This might be a single item, an entire list, a sidebar or panel, or
+ * even the surrounding frame which wraps your whole app. Defining a chunk of
+ * UI as a **View** allows you to define your DOM events declaratively, without
+ * having to worry about render order ... and makes it easy for the view to
+ * react to specific changes in the state of your models.
+
+ * Creating a XO.Base.View creates its initial element outside of the DOM,
+ * if an existing element is not provided...
+ *
+ * @namespace XO.Base
+ * @dependences XO._, XO.Base.Events
+ */
+(function(exports,_){
+
+    var View = function(options) {
+        this.cid = _.uniqueId('view');
+        options || (options = {});
+        _.extend(this, _.pick(options, viewOptions));
+        this._ensureElement();
+        this.initialize.apply(this, arguments);
+        this.delegateEvents();
+    };
+
+    // Cached regex to split keys for `delegate`.
+    var delegateEventSplitter = /^(\S+)\s*(.*)$/;
+
+    // List of view options to be merged as properties.
+    var viewOptions = ['model', 'collection', 'el', 'id', 'attributes', 'className', 'tagName', 'events'];
+
+    // Set up all inheritable **XO.Base.View** properties and methods.
+    _.extend(View.prototype, XO.Base.Events, {
+
+        // The default `tagName` of a View's element is `"div"`.
+        tagName: 'div',
+
+        // jQuery delegate for element lookup, scoped to DOM elements within the
+        // current view. This should be preferred to global lookups where possible.
+        $: function(selector) {
+            return this.$el.find(selector);
+        },
+
+        // Initialize is an empty function by default. Override it with your own
+        // initialization logic.
+        initialize: function(){},
+
+        // **render** is the core function that your view should override, in order
+        // to populate its element (`this.el`), with the appropriate HTML. The
+        // convention is for **render** to always return `this`.
+        render: function() {
+            return this;
+        },
+
+        // Remove this view by taking the element out of the DOM, and removing any
+        // applicable Backbone.Events listeners.
+        remove: function() {
+            this.$el.remove();
+            this.stopListening();
+            return this;
+        },
+
+        // Change the view's element (`this.el` property), including event
+        // re-delegation.
+        setElement: function(element, delegate) {
+            if (this.$el) this.undelegateEvents();
+            this.$el = element instanceof XO.$ ? element : XO.$(element);
+            this.el = this.$el[0];
+            if (delegate !== false) this.delegateEvents();
+            return this;
+        },
+
+        // Set callbacks, where `this.events` is a hash of
+        //
+        // *{"event selector": "callback"}*
+        //
+        //     {
+        //       'mousedown .title':  'edit',
+        //       'click .button':     'save',
+        //       'click .open':       function(e) { ... }
+        //     }
+        //
+        // pairs. Callbacks will be bound to the view, with `this` set properly.
+        // Uses event delegation for efficiency.
+        // Omitting the selector binds the event to `this.el`.
+        // This only works for delegate-able events: not `focus`, `blur`, and
+        // not `change`, `submit`, and `reset` in Internet Explorer.
+        delegateEvents: function(events) {
+            if (!(events || (events = _.result(this, 'events')))) return this;
+            this.undelegateEvents();
+            for (var key in events) {
+                var method = events[key];
+                if (!_.isFunction(method)) method = this[events[key]];
+                if (!method) continue;
+
+                var match = key.match(delegateEventSplitter);
+                var eventName = match[1], selector = match[2];
+                method = _.bind(method, this);
+                eventName += '.delegateEvents' + this.cid;
+                if (selector === '') {
+                    this.$el.on(eventName, method);
+                } else {
+                    this.$el.on(eventName, selector, method);
+                }
+            }//for
+            return this;
+        },
+
+        // Clears all callbacks previously bound to the view with `delegateEvents`.
+        // You usually don't need to use this, but may wish to if you have multiple
+        // XO views attached to the same DOM element.
+        undelegateEvents: function() {
+          this.$el.off('.delegateEvents' + this.cid);
+          return this;
+        },
+
+        // Ensure that the View has a DOM element to render into.
+        // If `this.el` is a string, pass it through `$()`, take the first
+        // matching element, and re-assign it to `el`. Otherwise, create
+        // an element from the `id`, `className` and `tagName` properties.
+        _ensureElement: function() {
+            if (!this.el) {
+              var attrs = _.extend({}, _.result(this, 'attributes'));
+              if (this.id) attrs.id = _.result(this, 'id');
+              if (this.className) attrs['class'] = _.result(this, 'className');
+              var $el = XO.$('<' + _.result(this, 'tagName') + '>').attr(attrs);
+              this.setElement($el, false);
+            } else {
+              this.setElement(_.result(this, 'el'), false);
+            }
+        }
+
+    });
+
+    // Set up inheritance for view
+    View.extend = _.derive;
+
+    exports.View = View;
+
+})(XO.Base,XO._);
 XO.CONST = {
     CLASS:{
         ACTIVE:'current',
@@ -1679,6 +2023,7 @@ XO('plugin',function($,C){
     }
 
     this.applyToView = function(view){
+        /*
         var $el = view.$el,
             plugin, dataset, p; 
         $el.find('[data-plugin]').each(function(){
@@ -1693,8 +2038,25 @@ XO('plugin',function($,C){
                 _idx++;
             }
         });
+        */
+        this.applyToElement(view.$el);
     };
 
+    this.applyToElement = function($el){
+        var plugin, dataset, p; 
+        $el.find('[data-plugin]').each(function(){
+            var dataset = this.dataset;
+            p_name = dataset['plugin'];
+            p = new XO.plugin[p_name](this, dataset);
+            p['name'] = p_name;
+            if(dataset['pluginId']){
+                _plugins[dataset['pluginId']] = p;
+            }else{
+                _plugins['p_' + _idx] = p;
+                _idx++;
+            }
+        });
+    };
     /**
      * 销毁视图内的插件。该方法在视图隐藏后自动调用
      */
@@ -2157,15 +2519,15 @@ XO('Router',function($,C){
 
     this.init = function(opts){
         var customRoutes = opts.routes||{
-            'page/:page': 'showPage',
-            'page/:page/:view':'showPage',
-            'page/:page/:view/:data': 'showPage',
-            'page/:page/section/:section':'showSection',
-            'page/:page/section/:section/:param':'showSection',
-            'page/:page/aside/:aside':'showAside',
-            'page/:page/aside/:aside/:param':'showAside',
-            'page/:page/popup/:popup':'showPopup',
-            'page/:page/popup/:popup/:param':'showPopup',
+            ':page': 'showPage',
+            ':page/:view':'showPage',
+            ':page/:view/:data': 'showPage',
+            ':page/section/:section':'showSection',
+            ':page/section/:section/:param':'showSection',
+            ':page/aside/:aside':'showAside',
+            ':page/aside/:aside/:param':'showAside',
+            ':page/popup/:popup':'showPopup',
+            ':page/popup/:popup/:param':'showPopup',
             "*actions": "defaultRoute"
         };
 
@@ -2583,10 +2945,22 @@ XO('App',function($,C){
 
     this.init = function(opts){
 
-        //fastclick https://github.com/ftlabs/fastclick
-        FastClick.attach(document.body);
+        var dummyTplEngine = {
+            compile:function(tpl){
+                return ({
+                    tpl:tpl,
+                    render:function(data){
+                        return this.tpl;
+                    }
+                });
+            }
+        };
 
         this.opts = $.extend({
+            T:window['Hogan']||dummyTplEngine,  //custom template engine implementation
+            baseRouter:XO.Base.Router,          //custom router implementation
+            history:XO.Base.history,            //custom history implementation
+            baseView:XO.Base.View,              //custom view implementation
             useFastTouch:true,
             useAnimations:true,
             defaultAnimation:'slideleft',
@@ -2597,8 +2971,20 @@ XO('App',function($,C){
             defaultPage:C.DEFAULT.PAGE,
             defaultView:C.DEFAULT.VIEW,
             defaultControllerAction:null,
-            viewDir:XO.$body[0].getAttribute('data-viewdir')||'assets/html/pages/'
+            viewDir:XO.$body[0].getAttribute('data-viewdir')||'assets/html/'
         },opts||{});
+
+        //shortcuts for T,baseRouter,history,baseView
+        XO["T"] = this.opts.T;
+        XO["baseRouter"] = this.opts.baseRouter;
+        XO["history"] = this.opts.history;
+        XO["baseView"] = this.opts.baseView;
+
+        if(this.opts.useFastTouch){
+            //fastclick https://github.com/ftlabs/fastclick
+            FastClick.attach(document.body);
+        }
+
         //delete self's init method
         delete this.init;
         //init all modules
@@ -2612,6 +2998,8 @@ XO('App',function($,C){
 
         this.hideAddressBar();
         
+        //插件初始化
+        XO.plugin.applyToElement(XO.$body);
 
         //hashchange
         XO.history.start();
@@ -2620,7 +3008,7 @@ XO('App',function($,C){
         //default page and view
         var page = this.opts.defaultPage;
         if(!window.location.hash.substring(1)){
-            XO.Router.instance.navigate('page/'+page, {trigger: true, replace: true});
+            XO.Router.instance.navigate(page, {trigger: true, replace: true});
         }
 
         XO.support.touch && window.addEventListener('touchstart', function(){

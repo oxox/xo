@@ -1,4 +1,9 @@
+/**
+ * XO - A lightweight MVC webapp framework inspired by Backbone
+ */
 (function($){
+    if(!$) throw "Zepto or jQuery is required by XO!";
+    
     //module define function
     window['XO'] = function(id,fn){
         if(XO[id]){
@@ -26,12 +31,9 @@
         Base:{},//Base namespace
         LS:localStorage,
         toHtml:function(tpl,obj,ext){
-            tpl = T.compile(tpl);
+            tpl = XO.T.compile(tpl);
             return (tpl.render(obj,ext));
         },
-        baseRouter:B.Router,
-        history:B.history,
-        baseView:B.View,
         warn:function(txt,obj){
             txt = 'XO.JS:'+txt;
             if (window.console !== undefined && XO.App.opts.debug === true) {
@@ -69,4 +71,4 @@
         }
     };
 
-})(Zepto,Hogan,Backbone);
+})(window["Zepto"]||window["jQuery"]);

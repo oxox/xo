@@ -7,7 +7,22 @@ XO('App',function($,C){
 
     this.init = function(opts){
 
+        var dummyTplEngine = {
+            compile:function(tpl){
+                return ({
+                    tpl:tpl,
+                    render:function(data){
+                        return this.tpl;
+                    }
+                });
+            }
+        };
+
         this.opts = $.extend({
+            T:window['Hogan']||dummyTplEngine,  //custom template engine implementation
+            baseRouter:XO.Base.Router,          //custom router implementation
+            history:XO.Base.history,            //custom history implementation
+            baseView:XO.Base.View,              //custom view implementation
             useFastTouch:true,
             useAnimations:true,
             defaultAnimation:'slideleft',
@@ -18,8 +33,14 @@ XO('App',function($,C){
             defaultPage:C.DEFAULT.PAGE,
             defaultView:C.DEFAULT.VIEW,
             defaultControllerAction:null,
-            viewDir:XO.$body[0].getAttribute('data-viewdir')||'assets/html/pages/'
+            viewDir:XO.$body[0].getAttribute('data-viewdir')||'assets/html/'
         },opts||{});
+
+        //shortcuts for T,baseRouter,history,baseView
+        XO["T"] = this.opts.T;
+        XO["baseRouter"] = this.opts.baseRouter;
+        XO["history"] = this.opts.history;
+        XO["baseView"] = this.opts.baseView;
 
         if(this.opts.useFastTouch){
             //fastclick https://github.com/ftlabs/fastclick
@@ -49,7 +70,7 @@ XO('App',function($,C){
         //default page and view
         var page = this.opts.defaultPage;
         if(!window.location.hash.substring(1)){
-            XO.Router.instance.navigate('page/'+page, {trigger: true, replace: true});
+            XO.Router.instance.navigate(page, {trigger: true, replace: true});
         }
 
         XO.support.touch && window.addEventListener('touchstart', function(){
