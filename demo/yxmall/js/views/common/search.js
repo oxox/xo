@@ -11,7 +11,7 @@ XO.View.define({
         });
         this.$ipt = $('#J_mod_search_ipt').on('blur',function(e){
             XO.View.uiSearch.hide(function(){
-                XO.history.navigate('page/search', true);
+                XO.history.navigate('search', true);
             });
         });
         $('#J_mod_search_bg').on('click',function(e){
