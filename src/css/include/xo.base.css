@@ -6,7 +6,8 @@
     background:transparent;
     vertical-align:baseline;
 }
-
+html{-webkit-text-size-adjust:none;overflow:hidden;}
+html,body{display: block;height:100%;}
 article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block;}
 
 body{
@@ -54,8 +55,6 @@ input, textarea{
     -webkit-user-select: text;
     outline:none;
 }
-html{-webkit-text-size-adjust:none;overflow:hidden;}
-html,body{display: block;height:100%;}
 
 /*===== S 页面框架 =====*/
 .xo_page,.xo_page_inner{

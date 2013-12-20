@@ -50,9 +50,7 @@
 
     <!--S loader-->
     <div id="xoview-common-loader" class="xo_loader">
-        <div class="mod_loading">
-            <div class="mod_loading_gif"></div>
-        </div>
+        <div class="xo_loader_animate"><span></span><span></span><span></span></div>
     </div>
     <!--E loader-->
 
@@ -118,7 +116,7 @@
     <script>
         XO.App.init({
             debug:true,
-            defaultAnimation:'fade'
+            defaultAnimation:'slideleft'
         });
         $('#J_navslide').navSlide({
             index:0

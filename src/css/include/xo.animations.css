@@ -1,7 +1,12 @@
 .in, .out, .inmotion {
+    -webkit-backface-visibility: hidden;
+    -moz-backface-visibility: hidden;
+    -ms-backface-visibility: hidden;
+    -o-backface-visibility: hidden;
+    backface-visibility: hidden;
     -webkit-animation-duration: 250ms;
     -webkit-animation-fill-mode: both;
-    -webkit-animation-timing-function: ease-in-out;
+    -webkit-animation-timing-function: cubic-bezier(.645,.045,.355,1);/*ease-in-out*/;
 }
 .in,.back-out {
     z-index: 10;

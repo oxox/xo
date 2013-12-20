@@ -6,7 +6,8 @@
     background:transparent;
     vertical-align:baseline;
 }
-
+html{-webkit-text-size-adjust:none;overflow:hidden;}
+html,body{display: block;height:100%;}
 article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block;}
 
 body{
@@ -54,8 +55,6 @@ input, textarea{
     -webkit-user-select: text;
     outline:none;
 }
-html{-webkit-text-size-adjust:none;overflow:hidden;}
-html,body{display: block;height:100%;}
 
 /*===== S 页面框架 =====*/
 .xo_page,.xo_page_inner{
@@ -140,7 +139,7 @@ html,body{display: block;height:100%;}
 .hide{
     display: none!important;
 }.supports3d{-webkit-perspective: 1000;}
-.supports3d .ox_page,.supports3d .ox_section,.supports3d .ox_aside,.supports3d .ox_popup,.supports3d .ox_mask{
+.supports3d .xo_page,.supports3d .xo_section,.supports3d .xo_aside,.supports3d .xo_popup,.supports3d .xo_mask{
     -webkit-transform: translate3d(0, 0, 0) rotate(0) scale(1);
 }.xo_loader{
     position:absolute;
@@ -169,6 +168,10 @@ html,body{display: block;height:100%;}
     -webkit-animation: loader 0.9s infinite alternate; 
     animation: loader 0.9s infinite alternate; 
 }
+.xo_loader.hide .xo_loader_animate span{
+    -webkit-animation: none; 
+    animation: none; 
+}
 .xo_loader_animate span:nth-of-type(2) { 
     -webkit-animation-delay: 0.3s; 
     animation-delay: 0.3s; 
@@ -177,6 +180,7 @@ html,body{display: block;height:100%;}
     -webkit-animation-delay: 0.6s; 
     animation-delay: 0.6s; 
 }
+
 @-webkit-keyframes loader {
     0% { 
         width: 10px; 
@@ -205,9 +209,14 @@ html,body{display: block;height:100%;}
         transform: translateY(-21px);
     }
 }.in, .out, .inmotion {
+    -webkit-backface-visibility: hidden;
+    -moz-backface-visibility: hidden;
+    -ms-backface-visibility: hidden;
+    -o-backface-visibility: hidden;
+    backface-visibility: hidden;
     -webkit-animation-duration: 250ms;
     -webkit-animation-fill-mode: both;
-    -webkit-animation-timing-function: ease-in-out;
+    -webkit-animation-timing-function: cubic-bezier(.645,.045,.355,1);/*ease-in-out*/;
 }
 .in,.back-out {
     z-index: 10;
