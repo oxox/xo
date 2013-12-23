@@ -64,7 +64,7 @@ XO('Animate',function($,C){
     this.animateIn = function(view,aniObj,cfg){
         var aniName = aniObj.animation,
             animation = this.get(aniName),
-            goingBack = aniObj.isBack||false,
+            goingBack = aniObj.back||false,
             $el = view.$el;
 
         cfg = cfg||{};
@@ -211,7 +211,7 @@ XO('Animate',function($,C){
         var aniName = aniObj.animation,
             animation = this.get(aniName),
             $el = view.$el,
-            goingBack = aniObj.isBack||false;
+            goingBack = aniObj.back||false;
 
         cfg = cfg||{};
 

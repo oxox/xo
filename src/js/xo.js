@@ -25,6 +25,7 @@
         $:$,
         version:'1.0.0',
         author:'http://oxox.io',
+        $doc:$(document),
         $body:$(document.body),
         $win:$(window),
         EVENT:{},//EVENT namespace

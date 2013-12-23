@@ -814,6 +814,7 @@ if (typeof define !== 'undefined' && define.amd) {
         $:$,
         version:'1.0.0',
         author:'http://oxox.io',
+        $doc:$(document),
         $body:$(document.body),
         $win:$(window),
         EVENT:{},//EVENT namespace
@@ -2517,6 +2518,8 @@ XO.View.define({
 });
 XO('Router',function($,C){
 
+    this.defaultRouteIndex = 1000;
+
     this.init = function(opts){
         var customRoutes = opts.routes||{
             ':page': 'showPage',
@@ -2541,17 +2544,33 @@ XO('Router',function($,C){
                 });
                 // Handling clicks on links, except those with link
                 // remove strings to xo.constants.js
-                $(document).on("click", "a:not([data-notrouter])", function (evt) {
+                // data-ridx 可以用来控制多个链接之间的跳转顺序，从而控制动画是向前还是向后
+                XO.$doc.on("click", "a:not([data-notrouter])", function (evt) {
                     var href = $(this).attr("href"),
-                        protocol = this.protocol + "//";
+                        protocol = this.protocol + "//",
+                        rIdx0 = XO.Router.instance.rIndex,
+                        rIdx = null,
+                        isBack = false;
                         XO.Router.instance.linkClicked = true;
+                        XO.Router.instance.isGoback = false;
                     if (href && href.slice(0, protocol.length) !== protocol && href.indexOf("javascript") !== 0) {
                         evt.preventDefault();
-                        XO.Router.instance.isGoback = this.getAttribute('data-back');
-                        href = XO.Router.instance.isGoback||href;
+                        rIdx = this.getAttribute('data-ridx');
+                        rIdx = rIdx ? (parseInt(rIdx)||0): XO.Router.defaultRouteIndex;
+                        isBack = this.getAttribute('data-back');
+
+                        if (!isBack && rIdx<rIdx0) {
+                            isBack = href;
+                        };
+
+                        href = isBack||href;
+                        XO.Router.instance.isGoback = isBack;
+                        XO.Router.instance.rIndex = rIdx;
                         XO.history.navigate(href, true);
                         return;
                     }
+                    //reset route index
+                    XO.Router.instance.rIndex = XO.Router.defaultRouteIndex;
                 }).on('click','button',function(evt){
                     XO.Router.instance.linkClicked = true;
                     XO.Router.instance.isGoback = this.getAttribute('data-back');
@@ -2586,7 +2605,8 @@ XO('Router',function($,C){
             showPopup:function(pageId,popId,param){
                 console.log('showPopup',{pid:pageId,popId:popId,param:param});
             },
-            isGoback:false,
+            isGoback:false,         //whether is back route
+            rIndex:this.defaultRouteIndex,              //route index
             onRoute:function(actions,param){
                 console.log('onRoute',actions,param);
             },
@@ -2666,7 +2686,7 @@ XO('Animate',function($,C){
     this.animateIn = function(view,aniObj,cfg){
         var aniName = aniObj.animation,
             animation = this.get(aniName),
-            goingBack = aniObj.isBack||false,
+            goingBack = aniObj.back||false,
             $el = view.$el;
 
         cfg = cfg||{};
@@ -2813,7 +2833,7 @@ XO('Animate',function($,C){
         var aniName = aniObj.animation,
             animation = this.get(aniName),
             $el = view.$el,
-            goingBack = aniObj.isBack||false;
+            goingBack = aniObj.back||false;
 
         cfg = cfg||{};
 
