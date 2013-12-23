@@ -2516,6 +2516,28 @@ XO.View.define({
         this.isLoading = false;
     }
 });
+XO.View.define({
+    pid:'common',
+    vid:'logger',
+    alias:'uiLogger',
+    dir:null,//dir为null说明为页面中已经存在的视图
+    init:function(){
+        this.$bd = this.$el.find('.xo_logger_bd');
+    },
+    log:function(txt,key){
+        key = key||'null';
+        this.$bd.append(key+':<div class="xo_logger_txt">'+txt+'</div>');
+        return this;
+    },
+    show:function(){
+        this.$el.removeClass(XO.CONST.CLASS.HIDE);
+        return this;
+    },
+    hide:function(){
+        this.$el.addClass(XO.CONST.CLASS.HIDE);
+        return this;
+    }
+});
 XO('Router',function($,C){
 
     this.defaultRouteIndex = 1000;
@@ -2689,6 +2711,8 @@ XO('Animate',function($,C){
             goingBack = aniObj.back||false,
             $el = view.$el;
 
+        aniObj.animation = animation.name;
+
         cfg = cfg||{};
 
         animation = animation.name!==C.DEFAULT.ANIMATION_NONE?animation:null;
@@ -2710,6 +2734,8 @@ XO('Animate',function($,C){
             XO.warn('XO.Animate.animateIn:You are already on the page you are trying to navigate to.');
             return false;
         }
+
+        XO.View.uiLogger.log('animateIn:'+JSON.stringify(aniObj),view.id);
 
         // Collapse the keyboard
         $(':focus').trigger('blur');
@@ -2835,6 +2861,8 @@ XO('Animate',function($,C){
             $el = view.$el,
             goingBack = aniObj.back||false;
 
+        aniObj.animation = animation.name;
+
         cfg = cfg||{};
 
         animation = animation.name!==C.DEFAULT.ANIMATION_NONE?animation:null;
@@ -2849,6 +2877,8 @@ XO('Animate',function($,C){
         }
         // Collapse the keyboard
         //$(':focus').trigger('blur');
+
+        XO.View.uiLogger.log('animateOut:'+JSON.stringify(aniObj),view.id);
 
         XO.Event.trigger(view,XO.EVENT.Animate.Start, eventData);
         //user's custom view callback

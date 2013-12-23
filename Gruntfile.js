@@ -29,6 +29,7 @@ module.exports = function(grunt) {
             'src/js/modules/xo.view.js',
             'src/js/modules/xo.view.mask.js',
             'src/js/modules/xo.view.loader.js',
+            'src/js/modules/xo.view.logger.js',
             'src/js/modules/xo.router.js',
             'src/js/modules/xo.animate.js',
             'src/js/modules/xo.app.js'
@@ -51,6 +52,7 @@ module.exports = function(grunt) {
           'src/css/include/xo.base.css',
           'src/css/include/xo.3dspec.css',
           'src/css/include/xo.loader.css',
+          'src/css/include/xo.logger.css',
           'src/css/include/xo.animations.css'
         ],
         css_yxmall:[

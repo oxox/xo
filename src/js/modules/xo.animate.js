@@ -67,6 +67,8 @@ XO('Animate',function($,C){
             goingBack = aniObj.back||false,
             $el = view.$el;
 
+        aniObj.animation = animation.name;
+
         cfg = cfg||{};
 
         animation = animation.name!==C.DEFAULT.ANIMATION_NONE?animation:null;
@@ -88,6 +90,8 @@ XO('Animate',function($,C){
             XO.warn('XO.Animate.animateIn:You are already on the page you are trying to navigate to.');
             return false;
         }
+
+        XO.View.uiLogger.log('animateIn:'+JSON.stringify(aniObj),view.id);
 
         // Collapse the keyboard
         $(':focus').trigger('blur');
@@ -213,6 +217,8 @@ XO('Animate',function($,C){
             $el = view.$el,
             goingBack = aniObj.back||false;
 
+        aniObj.animation = animation.name;
+
         cfg = cfg||{};
 
         animation = animation.name!==C.DEFAULT.ANIMATION_NONE?animation:null;
@@ -227,6 +233,8 @@ XO('Animate',function($,C){
         }
         // Collapse the keyboard
         //$(':focus').trigger('blur');
+
+        XO.View.uiLogger.log('animateOut:'+JSON.stringify(aniObj),view.id);
 
         XO.Event.trigger(view,XO.EVENT.Animate.Start, eventData);
         //user's custom view callback
