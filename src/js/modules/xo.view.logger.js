@@ -1,3 +1,6 @@
+/**
+ * 调试模块XO.View.uiLogger.log('xxxx','yyy')
+ */
 XO.View.define({
     pid:'common',
     vid:'logger',

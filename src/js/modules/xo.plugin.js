@@ -62,22 +62,6 @@ XO('plugin',function($,C){
     }
 
     this.applyToView = function(view){
-        /*
-        var $el = view.$el,
-            plugin, dataset, p; 
-        $el.find('[data-plugin]').each(function(){
-            var dataset = this.dataset;
-            p_name = dataset['plugin'];
-            p = new XO.plugin[p_name](this, dataset);
-            p['name'] = p_name;
-            if(dataset['pluginId']){
-                _plugins[dataset['pluginId']] = p;
-            }else{
-                _plugins['p_' + _idx] = p;
-                _idx++;
-            }
-        });
-        */
         this.applyToElement(view.$el);
     };
 
@@ -128,6 +112,19 @@ XO('plugin',function($,C){
             return proto;
         })();
         XO.plugin[name] = constr;
+    };
+
+    this.init = function(){
+        //动画结束
+        XO.Event.on(XO.EVENT.Animate.End,function(e,data){
+            if(data.isHiding){
+                //视图隐藏，销毁插件
+                XO.plugin.destroyInView(data.view);
+            }else{
+                //视图显示，初始化插件
+                XO.plugin.applyToView(data.view);
+            }
+        });
     };
 
 });

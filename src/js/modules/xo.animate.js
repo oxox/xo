@@ -75,7 +75,13 @@ XO('Animate',function($,C){
 
         var finalAnimationName,
             is3d,
-            eventData = { direction: C.CLASS.ANIMATION_IN, back: goingBack ,animation:animation,isHiding:false};
+            eventData = { 
+                "direction": C.CLASS.ANIMATION_IN, 
+                "back": goingBack ,
+                "animation":animation,
+                "view":view,
+                "isHiding":false
+            };
 
         // Error check for target page
         if ($el === undefined || $el.length === 0) {
@@ -91,12 +97,12 @@ XO('Animate',function($,C){
             return false;
         }
 
-        XO.View.uiLogger.log('animateIn:'+JSON.stringify(aniObj),view.id);
+        XO.View.uiLogger&&XO.View.uiLogger.log('animateIn:'+JSON.stringify(aniObj),view.id);
 
         // Collapse the keyboard
         $(':focus').trigger('blur');
 
-        XO.Event.trigger(view,XO.EVENT.Animate.Start, eventData);
+        XO.Event.trigger(view,XO.EVENT.Animate.Start, [eventData]);
         //user callback
         view.onAnimating&&view.onAnimating.call(view,eventData);
         //framework callback
@@ -196,11 +202,10 @@ XO('Animate',function($,C){
                 $el.removeClass(C.CLASS.ANIMATION_IN);
                 window.scroll(0,0);
             }, bufferTime);
-            // 插件初始化
-            XO.plugin.applyToView(view);
 
             // Trigger custom events
-            XO.Event.trigger(view,XO.EVENT.Animate.End, eventData);
+            XO.Event.trigger(view,XO.EVENT.Animate.End, [eventData]);
+            XO.Event.trigger(XO.EVENT.Animate.End,[eventData]);
             // user callback
             view.onAnimated&&view.onAnimated.call(view,eventData);
             //framework callback
@@ -225,7 +230,13 @@ XO('Animate',function($,C){
 
         var finalAnimationName,
             is3d,
-            eventData = { direction: C.CLASS.ANIMATION_OUT, back: goingBack ,animation:animation,isHiding:true};
+            eventData = { 
+                "direction": C.CLASS.ANIMATION_OUT, 
+                "back": goingBack ,
+                "animation":animation,
+                "view":view,
+                "isHiding":true
+            };
         // Error check for target page
         if ($el === undefined || $el.length === 0) {
             XO.warn('XO.Animate.animateOut:Target element is missing.');
@@ -234,9 +245,9 @@ XO('Animate',function($,C){
         // Collapse the keyboard
         //$(':focus').trigger('blur');
 
-        XO.View.uiLogger.log('animateOut:'+JSON.stringify(aniObj),view.id);
+        XO.View.uiLogger&&XO.View.uiLogger.log('animateOut:'+JSON.stringify(aniObj),view.id);
 
-        XO.Event.trigger(view,XO.EVENT.Animate.Start, eventData);
+        XO.Event.trigger(view,XO.EVENT.Animate.Start, [eventData]);
         //user's custom view callback
         view.onAnimating&&view.onAnimating.call(view,eventData);
         //framework's internal view callback
@@ -328,12 +339,9 @@ XO('Animate',function($,C){
 
             XO.Animate.unselect($el);
 
-
-            // 视图隐藏，插件销毁
-            XO.plugin.destroyInView(view);
-
             // Trigger custom events
-            XO.Event.trigger(view,XO.EVENT.Animate.End, eventData);
+            XO.Event.trigger(view,XO.EVENT.Animate.End, [eventData]);
+            XO.Event.trigger(XO.EVENT.Animate.End, [eventData]);
             // user's custom callback
             view.onAnimated&&view.onAnimated.call(view,eventData);
             // framework's callback
