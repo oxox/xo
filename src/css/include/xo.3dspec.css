@@ -1,4 +1,10 @@
 .supports3d{-webkit-perspective: 1000;}
 .supports3d .xo_page,.supports3d .xo_section,.supports3d .xo_aside,.supports3d .xo_popup,.supports3d .xo_mask{
     -webkit-transform: translate3d(0, 0, 0) rotate(0) scale(1);
+    -webkit-backface-visibility: hidden;
+    -moz-backface-visibility: hidden;
+    -ms-backface-visibility: hidden;
+    -o-backface-visibility: hidden;
+    backface-visibility: hidden;
+    -webkit-transform-style: preserve-3d;
 }
