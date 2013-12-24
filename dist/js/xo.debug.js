@@ -2438,7 +2438,9 @@ XO('View',function($,C){
                     return;
                 }
                 if(view.isRendered&&!forceRefresh){
-                    view.animateIn(aniObj);
+                    setTimeout(function(){
+                        view.animateIn(aniObj);
+                    },0);
                     return;
                 }
                 cbk(null,view,function(err1,data1){
@@ -2461,7 +2463,10 @@ XO('View',function($,C){
 
         //移出当前view
         if(curView){
-            curView.animateOut(aniObj);
+            setTimeout(function(){
+                curView.animateOut(aniObj);
+            },0);
+            
         }
         //加载目标视图
         this.get(pid,vid,onViewGot,onPreloadFromRemote);
