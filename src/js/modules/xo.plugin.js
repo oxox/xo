@@ -123,6 +123,7 @@ XO('plugin',function($,C){
             }else{
                 //视图显示，初始化插件
                 XO.plugin.applyToView(data.view);
+                XO.plugin.bootup(data.view,data.view.pluginData);
             }
         });
     };

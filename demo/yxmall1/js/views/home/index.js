@@ -16,34 +16,26 @@ XO.View.define({
     //动画结束
     onAnimated:function(eventData){
         XO.warn(XO.View.getId(this.pid,this.vid)+':View onAnimated',eventData);
-
-        var plugin_page_1 = {
-            'tpl_url' : 'demo/html/pages/mall/loaded_1.html',
-            'data_url' : {}
-        }
-        var plugin_page_2 = {
-            'tpl_url' : 'demo/html/pages/mall/loaded_1.html',
-            'data_url' : {}
-        }
-        var plugin_page_3 = {
-            'tpl_url' : 'demo/html/pages/mall/guang.html',
-            'data_url' : {}
-        }
-        var plugin_swiper = {
+    },
+    pluginData:{
+        'swiper':{
             'menuId' : 'menu-top',
-            'tpl_url' : 'html/pages/home/guang.html'
-        }
-        var plugin_menu = {
+            'tpl_url' : 'html/home/guang.html'
+        },
+        'menu-top':{
             'swiperId' : 'swiper'
+        },
+        'pager-1': {
+            'tpl_url' : 'html/home/loaded_1.html',
+            'data_url' : {}
+        },
+        'pager-2': {
+            'tpl_url' : 'html/home/loaded_1.html',
+            'data_url' : {}
+        },
+        'pager-3': {
+            'tpl_url' : 'html/home/guang.html',
+            'data_url' : {}
         }
-        XO.plugin.bootup(this, {
-            'pager-1': plugin_page_1,
-            'pager-2': plugin_page_2,
-            'pager-3': plugin_page_3,
-            'swiper': plugin_swiper,
-            'menu-top': plugin_menu
-
-        });
-
     }
 });
