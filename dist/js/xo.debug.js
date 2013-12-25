@@ -2195,7 +2195,8 @@ XO('Controller',function($,C){
      */
     this.invoke = function(pid,vid,param){
         //获取用户定义的action，如果没有则使用默认的action。参考defineDefaultAction
-        var action = XO.Controller[pid][vid]||XO.Controller[pid][XO.CONST.DEFAULT.DEFAULT_ACTION_PREFIX+vid];
+        var controller = XO.Controller[pid],
+            action =controller?(controller[vid]||controller[XO.CONST.DEFAULT.DEFAULT_ACTION_PREFIX+vid]):null;
         
         //如果用户没有写view的js，则自动使用默认action显示静态模板。适用于纯静态app
         if( !action && XO.App.opts.autoControllerAction ){
