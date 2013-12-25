@@ -33,6 +33,7 @@ XO('App',function($,C){
             defaultPage:C.DEFAULT.PAGE,
             defaultView:C.DEFAULT.VIEW,
             defaultControllerAction:null,
+            autoControllerAction:true,          //如果用户没有写view的js，则自动使用默认action显示静态模板。适用于纯静态app
             viewDir:XO.$body[0].getAttribute('data-viewdir')||'assets/html/'
         },opts||{});
 
