@@ -3057,7 +3057,7 @@ XO('App',function($,C){
             baseView:XO.Base.View,              //custom view implementation
             useFastTouch:true,
             useAnimations:true,
-            defaultAnimation:'slideleft',
+            defaultAnimation:'none',
             trackScrollPositions:true,
             useTouchScroll:true,
             tapBuffer:100, // High click delay = ~350, quickest animation (slide) = 250
