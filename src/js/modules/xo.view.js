@@ -132,6 +132,18 @@ XO('View',function($,C){
         }
     };
 
+    this.autoView = function(opts){
+        var id = this.getId(opts.pid,opts.vid),
+            view = this.caches[id];
+        if(!view){
+            view = this.define(opts,true);
+        }else{
+            //update version property
+            view.version = opts.version||view.version;
+        }
+        return view;
+    };
+
     this._init = function(viewOpts){
         if(XO.App&&XO.App.opts){
             viewOpts.dir = viewOpts.dir===null?null:XO.App.opts.viewDir;

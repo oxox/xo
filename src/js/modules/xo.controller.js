@@ -79,8 +79,16 @@ XO('Controller',function($,C){
      * @param {Function} fnAction action
      */
     this.defineDefaultAction = function(pid,vid,fnAction){
-        var action = {};
-        action[XO.CONST.DEFAULT.DEFAULT_ACTION_PREFIX+vid] = fnAction || XO.App.opts.defaultControllerAction || (function(param){
+        var actions = {},
+            actionId = XO.CONST.DEFAULT.DEFAULT_ACTION_PREFIX+vid,
+            action = null;
+
+        //是否已经定义过
+        if( XO.Controller[pid] && ( action = XO.Controller[pid][actionId] ) ){
+            return action;
+        }
+
+        action = fnAction || XO.App.opts.defaultControllerAction || (function(param){
             this.renderView(vid,{
                 param:param,
                 data:function(params,cbk){
@@ -89,8 +97,9 @@ XO('Controller',function($,C){
                 }
             });
         });
-        this.define(pid,action);
-        return action[XO.CONST.DEFAULT.DEFAULT_ACTION_PREFIX+vid];
+        actions[actionId] = action;
+        this.define(pid,actions);
+        return action;
     };
     /**
      * 调用指定action
@@ -103,8 +112,14 @@ XO('Controller',function($,C){
         var controller = XO.Controller[pid],
             action =controller?(controller[vid]||controller[XO.CONST.DEFAULT.DEFAULT_ACTION_PREFIX+vid]):null;
         
-        //如果用户没有写view的js，则自动使用默认action显示静态模板。适用于纯静态app
-        if( !action && XO.App.opts.autoControllerAction ){
+        ////如果用户没有写controller的js，也没有写view的js，则自动生成controller和view，使用默认action显示静态模板。适用于纯静态app
+        if( !action && XO.App.opts.autoControllerAndView ){
+            //TODO:这里是否有优化空间
+            XO.View.autoView({
+                pid:pid,
+                vid:vid,
+                version:(param&&param.version)||new Date().getTime()
+            });
             action = this.defineDefaultAction(pid,vid);
         }
 
