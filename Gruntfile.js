@@ -133,13 +133,17 @@ module.exports = function(grunt) {
         files:['<%=resources.js%>'],
         tasks:['concat:js','uglify:dist_xo']
       },
-      js_yxmall:{
-        files:['<%=resources.js_yxmall%>'],
-        tasks:['concat:js_yxmall','uglify:dist_yxmall']
-      },
       css_xo:{
         files:['<%=resources.css%>'],
         tasks:['concat_css:xo_core','cssmin:xo_core']
+      },
+      xo:{
+        files:['<%=resources.js%>','<%=resources.css%>'],
+        tasks:'xo'
+      },
+      js_yxmall:{
+        files:['<%=resources.js_yxmall%>'],
+        tasks:['concat:js_yxmall','uglify:dist_yxmall']
       },
       css_yxmall:{
         files:['<%=resources.css_yxmall%>'],
@@ -162,5 +166,7 @@ module.exports = function(grunt) {
 
   // Default task.
   grunt.registerTask('default', ['concat','concat_css',"cssmin", 'uglify']);
+  // xo task
+  grunt.registerTask('xo',['concat:js','uglify:dist_xo','concat_css:xo_core','cssmin:xo_core']);
 
 };

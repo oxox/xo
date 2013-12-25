@@ -2629,7 +2629,7 @@ XO('Router',function($,C){
                 console.log('showPopup',{pid:pageId,popId:popId,param:param});
             },
             isGoback:false,         //whether is back route
-            rIndex:this.defaultRouteIndex,              //route index
+            rIndex:-1,              //route index
             onRoute:function(actions,param){
                 console.log('onRoute',actions,param);
             },
