@@ -142,8 +142,8 @@ input, textarea{
 
 /* animating style 动画进行中的样式处理 
 ===========================================*/
-.animating .xo_scroll{overflow: hidden;}.supports3d .xo_page,.supports3d .xo_section,.supports3d .xo_aside,.supports3d .xo_popup,.supports3d .xo_mask{
-    -webkit-perspective: 1000;
+.animating .xo_scroll{overflow: hidden;}.supports3d{-webkit-perspective: 1000;}
+.supports3d .xo_page,.supports3d .xo_section,.supports3d .xo_aside,.supports3d .xo_popup,.supports3d .xo_mask{
     -webkit-transform: translate3d(0, 0, 0) rotate(0) scale(1);
     -webkit-backface-visibility: hidden;
     -moz-backface-visibility: hidden;
@@ -225,6 +225,7 @@ input, textarea{
     -webkit-animation-fill-mode: both;
     -webkit-animation-timing-function: ease-in-out;/*cubic-bezier(.645,.045,.355,1);ease-in-out*/;
 }
+.in:after,.out:after,.inmotion:after{content:"";position:absolute;display:block;top:0;left:0;bottom:0;right:0}
 .in,.back-out {
     z-index: 10;
 }
