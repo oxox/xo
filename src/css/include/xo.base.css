@@ -139,3 +139,7 @@ input, textarea{
 .hide{
     display: none!important;
 }
+
+/* animating style 动画进行中的样式处理 
+===========================================*/
+.animating .xo_scroll{overflow: hidden;}

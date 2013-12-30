@@ -58,7 +58,7 @@ XO('support',function($,C){
         }
 
         var featuresClass=[];
-        this.transform3d&&featuresClass.push(C.CLASS.SUPPORT_3D);
+        this.transform3d && XO.App.opts.useTransform3D && featuresClass.push(C.CLASS.SUPPORT_3D);
         if(opts.useTouchScroll){
             if(this.ios5){
                 featuresClass.push(C.CLASS.TOUCHSCROLL);

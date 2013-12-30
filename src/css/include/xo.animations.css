@@ -1,5 +1,5 @@
 .in, .out, .inmotion {
-    -webkit-animation-duration: 9250ms;
+    -webkit-animation-duration: 350ms;
     -webkit-animation-fill-mode: both;
     -webkit-animation-timing-function: ease-in-out;/*cubic-bezier(.645,.045,.355,1);ease-in-out*/;
 }
@@ -223,10 +223,6 @@
     100% {
         -webkit-transform: translateY(100%);
     }
-}
-
-.slideleft, .slideright, .slideup, .slidedown {
-    -webkit-animation-timing-function: ease-in-out;
 }
 
 /* Flip Left */

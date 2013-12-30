@@ -37,6 +37,9 @@ XO('Router',function($,C){
                         XO.Router.instance.isGoback = false;
                     if (href && href.slice(0, protocol.length) !== protocol && href.indexOf("javascript") !== 0) {
                         evt.preventDefault();
+
+                        if(XO.Animate.isAnimating()) return;
+
                         rIdx = this.getAttribute('data-ridx');
                         rIdx = rIdx ? (parseInt(rIdx)||0): XO.Router.defaultRouteIndex;
                         isBack = this.getAttribute('data-back');
@@ -57,6 +60,8 @@ XO('Router',function($,C){
                     XO.Router.instance.linkClicked = true;
                     XO.Router.instance.isGoback = this.getAttribute('data-back');
                     if(!XO.Router.instance.isGoback) return;
+                    evt.preventDefault();
+                    if(XO.Animate.isAnimating()) return;
                     XO.history.navigate(XO.Router.instance.isGoback, true);
                 });
             },

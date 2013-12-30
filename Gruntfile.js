@@ -20,6 +20,7 @@ module.exports = function(grunt) {
             'src/js/base/history.js',
             'src/js/base/router.js',
             'src/js/base/view.js',
+            'src/js/modules/xo.raf.js',
             'src/js/modules/xo.constants.js',
             'src/js/modules/xo.media.js',
             'src/js/modules/xo.support.js',

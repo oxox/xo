@@ -120,10 +120,15 @@
     <script>
         XO.App.init({
             debug:true,
+            useTransform3D:false,
             defaultAnimation:'slideleft'
         });
         $('#J_navslide').navSlide({
-            index:0
+            index:0,
+            onBeforeNav:function(){
+                if(XO.Animate.isAnimating()) return false;
+                return true;
+            }
         });
         document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
             //WeixinJSBridge.call('hideToolbar');

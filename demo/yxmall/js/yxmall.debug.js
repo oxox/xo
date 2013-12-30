@@ -453,6 +453,9 @@ XO.View.define({
                 if ($this.hasClass(me.opts.currentCls)) {
                     return ;
                 }
+                if(me.opts.onBeforeNav()===false){
+                    return;
+                }
                 var index = $this.index(this.$items);
                 me.setCurrent(index);
             });
@@ -614,6 +617,7 @@ XO.View.define({
         use3d:true,
         useCss3:true,
         swipeThreshold:5,
+        onBeforeNav:function(){return true;}, //onBeforeNav callback,return false to prevent navigating
         swipeToNav:false //swipe to navigation 
     };
     $.NavSlide.cache = {};
