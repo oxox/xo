@@ -3,7 +3,6 @@
     -webkit-animation-fill-mode: both;
     -webkit-animation-timing-function: ease-in-out;/*cubic-bezier(.645,.045,.355,1);ease-in-out*/;
 }
-.in:after,.out:after,.inmotion:after{content:"";position:absolute;display:block;top:0;left:0;bottom:0;right:0}
 .in,.back-out {
     z-index: 10;
 }
