@@ -2940,8 +2940,16 @@ XO('Animate',function($,C){
                 $to.css('top', window.pageYOffset - ($to.data('lastScroll') || 0));
             }
             */
-
-            $el.removeClass(C.CLASS.HIDE).addClass([finalAnimationName,C.CLASS.ANIMATION_IN,C.CLASS.ACTIVE].join(' '));
+            if($.os.iphone){
+                //解决ios动画不同步或者animationEnd事件在动画结束之前触发的bug
+                setTimeout(function(){
+                    $el.removeClass(C.CLASS.HIDE).addClass([finalAnimationName,C.CLASS.ANIMATION_IN,C.CLASS.ACTIVE].join(' '));
+                },0);
+            }else{
+                $el.removeClass(C.CLASS.HIDE).addClass([finalAnimationName,C.CLASS.ANIMATION_IN,C.CLASS.ACTIVE].join(' '));
+            }
+            
+            
             XO.Animate.isAnimatingIn = true;
             /*
             if (XO.App.opts.trackScrollPositions === true) {
@@ -3088,8 +3096,16 @@ XO('Animate',function($,C){
                 $to.css('top', window.pageYOffset - ($to.data('lastScroll') || 0));
             }
             */
-
-            $el.removeClass(C.CLASS.ACTIVE).addClass([finalAnimationName,C.CLASS.ANIMATION_OUT, C.CLASS.ANIMATION_INMOTION].join(' '));
+            if($.os.iphone){
+                //解决ios动画不同步或者animationEnd事件在动画结束之前触发的bug
+                setTimeout(function(){
+                    $el.removeClass(C.CLASS.ACTIVE).addClass([finalAnimationName,C.CLASS.ANIMATION_OUT, C.CLASS.ANIMATION_INMOTION].join(' '));
+                },0);
+            }else{
+                $el.removeClass(C.CLASS.ACTIVE).addClass([finalAnimationName,C.CLASS.ANIMATION_OUT, C.CLASS.ANIMATION_INMOTION].join(' '));
+            }
+            
+            
             XO.Animate.isAnimatingOut  = true;
             /*
             if (XO.App.opts.trackScrollPositions === true) {
