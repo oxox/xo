@@ -6,7 +6,6 @@
     top:0;
     bottom:0;
     overflow: hidden;
-    -webkit-backface-visibility:hidden;
 }
 .xo_loader_animate {
     position: absolute; 

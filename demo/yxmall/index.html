@@ -120,10 +120,14 @@
     <script>
         XO.App.init({
             debug:true,
-            useTransform3D:false,
+            useTransform3D:true,
+            useFastTouch:false,
             defaultAnimation:'slideleft'
         });
         $('#J_navslide').navSlide({
+            useCss3:false,
+            useAnimation:false,
+            swipe:false,
             index:0,
             onBeforeNav:function(){
                 if(XO.Animate.isAnimating()) return false;

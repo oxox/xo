@@ -2795,6 +2795,7 @@ XO('Router',function($,C){
  * Animation module
  */
 XO('Animate',function($,C){
+
     this.exposeEvent([
         'Start',
         'End'
@@ -2894,7 +2895,7 @@ XO('Animate',function($,C){
             return false;
         }
 
-        XO.View.uiLogger&&XO.View.uiLogger.log('animateIn:'+JSON.stringify(aniObj),view.id);
+        //XO.View.uiLogger&&XO.View.uiLogger.log('animateIn:'+JSON.stringify(aniObj),view.id);
 
         // Collapse the keyboard
         $(':focus').trigger('blur');
@@ -3004,6 +3005,8 @@ XO('Animate',function($,C){
             view.onAnimated&&view.onAnimated.call(view,eventData);
             //framework callback
             cfg.onEnd&&cfg.onEnd.call(view);
+
+            XO.View.uiLogger&&XO.View.uiLogger.log('animatedInHandler:'+JSON.stringify(aniObj),view.id)
         }
         return true;
     };
@@ -3043,7 +3046,7 @@ XO('Animate',function($,C){
         // Collapse the keyboard
         //$(':focus').trigger('blur');
 
-        XO.View.uiLogger&&XO.View.uiLogger.log('animateOut:'+JSON.stringify(aniObj),view.id);
+        //XO.View.uiLogger&&XO.View.uiLogger.log('animateOut:'+JSON.stringify(aniObj),view.id);
 
         XO.Event.trigger(view,XO.EVENT.Animate.Start, [eventData]);
         //user's custom view callback
