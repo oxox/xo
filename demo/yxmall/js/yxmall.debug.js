@@ -451,10 +451,12 @@ XO.View.define({
             this.$items.on(click, function(e){
                 var $this = $(this);
                 if ($this.hasClass(me.opts.currentCls)) {
-                    return ;
+                    e.preventDefault();
+                    return false;
                 }
                 if(me.opts.onBeforeNav()===false){
-                    return;
+                    e.preventDefault();
+                    return false;
                 }
                 var index = $this.index(this.$items);
                 me.setCurrent(index);
