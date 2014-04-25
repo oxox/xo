@@ -1,6 +1,6 @@
 {
   "name": "xo",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "keywords": [
     "framework",
     "webapp",
@@ -18,13 +18,22 @@
   "license": [{"type": "MIT"}],
   "devDependencies": {
     "connect": "*",
-    "grunt":"*",
-    "grunt-contrib-uglify":"*",
     "grunt-contrib-jshint":"*",
     "grunt-contrib-qunit":"*",
-    "grunt-contrib-watch":"*",
-    "grunt-contrib-concat":"*",
-    "grunt-concat-css":"*",
-    "grunt-css":"*"
+    "grunt":"*",
+    "grunt-contrib-concat": "*",
+    "grunt-contrib-watch": "*",
+    "grunt-concat-css": "*",
+    "grunt-css": "*",
+    "grunt-contrib-uglify": "*",
+    "grunt-contrib-imagemin": "*",
+    "grunt-concurrent": "*",
+    "grunt-contrib-copy": "*",
+    "load-grunt-config": "*",
+    "grunt-newer": "*",
+    "grunt-contrib-less": "~0.11.0"
+  },
+  "dependencies": {
+    "time-grunt": "*"
   }
 }

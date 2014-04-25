@@ -1,3 +1,8 @@
+/*!
+ *  xo v1.0.1 - 4/25/2014
+ *  http://oxox.io/xo
+ *  Copyright (c) 2014 oxox.io - Licensed MIT 
+ */
 /**
  * @preserve FastClick: polyfill to remove click delays on browsers with touch UIs.
  *
