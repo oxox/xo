@@ -1,7 +1,7 @@
 XO
 ==
 
-A lightweight MVC webapp framework developed by [TENCENT ECC_UX_OS Team](http://ecd.tencent.com)
+A lightweight MVC webapp framework
 
 Basic architecture
 ===
