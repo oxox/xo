@@ -1,11 +1,4 @@
-.navbar-header {
-  position: absolute;
-  left: 50%;
-}
-.navbar-header .navbar-brand {
-  margin-left: -50%;
-}
-
+.bg1{background:#ddd;}
 .c_tx1{color:#FF0000;}
 /*===== 组件 =====*/
     /*===== 轮播 =====*/
@@ -80,7 +73,7 @@
     .mod_list_item{display:block; position:relative; padding:10px; border-top:1px solid #F7F7F7; border-bottom:1px solid #CCC;}
         .mod_list_item:first-child{border-top:none;}
         .mod_list_item:last-child{border-bottom:none;}
-        .mod_list_item:after{content:" "; position:absolute; right:10px; top:50%; margin-top:-4px; width:4px; height:8px; background:url("../img/ico_arrow.png") no-repeat 0 0;}
+        .mod_list_item:after{content:" "; position:absolute; right:10px; top:50%; margin-top:-4px; width:4px; height:8px; background:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAICAYAAADeM14FAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyBpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBXaW5kb3dzIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOjdGQkNDOUQxQkY4NDExRTFCMEJCQzMxMjlCRUIwRTM0IiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOjdGQkNDOUQyQkY4NDExRTFCMEJCQzMxMjlCRUIwRTM0Ij4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6N0ZCQ0M5Q0ZCRjg0MTFFMUIwQkJDMzEyOUJFQjBFMzQiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6N0ZCQ0M5RDBCRjg0MTFFMUIwQkJDMzEyOUJFQjBFMzQiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz7Lk7j8AAAALUlEQVR42mJkYGD4DwSMDDAA5ECp/zA2qiBcACaIoZUBCUC0oBvKiG4tQIABAIfaMdM2zFlyAAAAAElFTkSuQmCC") no-repeat 0 0;}
         .mod_list_info{font-size:12px;}
         .mod_list_info p{margin-top:5px;}
         
@@ -102,16 +95,7 @@
     }
     .b_back,.btn_back{margin-left:10px;}
 
-    /*===== 背景 =====*/
-    .bg1{
-        background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,rgb(240,239,239)), color-stop(100%,rgb(204,204,204))); /* Chrome,Safari4+ */
-        background:-webkit-linear-gradient(top, rgb(240,239,239) 0%,rgb(204,204,204) 100%); /* Chrome10+,Safari5.1+ */
-        background:-o-linear-gradient(top, rgb(240,239,239) 0%,rgb(204,204,204) 100%); /* Opera 11.10+ */
-        background:-ms-linear-gradient(top, rgb(240,239,239) 0%,rgb(204,204,204) 100%); /* IE10+ */
-        background:linear-gradient(top, rgb(240,239,239) 0%,rgb(204,204,204) 100%); /* W3C */
-    }
-
-
+    
     /*===== 价格 =====*/
         .mod_price{font-family:"tahoma"; font-size:14px;}
         .mod_price span{margin-right:15px;}
@@ -138,23 +122,13 @@
         /*===== 客服热线 =====*/
         .sy_tel{
             overflow:hidden;
-            margin-bottom:10px;
+            margin-bottom:15px;
             height:40px;
             line-height:40px;
             text-align:center;
+            background:#eee;
+            box-shadow:0 1px 4px #bbb;
         }
-
-
-        /*===== 导航 =====*/
-        .sy_nav a{display:inline-block; width:33%; height:80px; text-align:center;}
-        .sy_nav a:nth-child(3n-1){width:34%;}
-        .sy_nav i{display:block; margin:10px auto; width:32px; height:32px;}
-        .sy_nav .ico_search{background:url("../img/ico_search.png") no-repeat 50% 50%;}
-        .sy_nav .ico_browser{background:url("../img/ico_browser.png") no-repeat 50% 50%;}
-        .sy_nav .ico_fav{background:url("../img/ico_fav.png") no-repeat 50% 50%;}
-        .sy_nav .ico_account{background:url("../img/ico_account.png") no-repeat 50% 50%;}
-        .sy_nav .ico_about{background:url("../img/ico_about.png") no-repeat 50% 50%;}
-
 
 
 /*===== 浏览 sb =====*/
@@ -168,7 +142,7 @@
 
 
 /*===== 详情 sd =====*/
-    .sd_carousel img{display:block; height:100px;}
+    .sd_carousel img{display:block; height:150px;}
     
     .sd_title{padding:10px;}
     .sd_title h3{margin-bottom:5px;}

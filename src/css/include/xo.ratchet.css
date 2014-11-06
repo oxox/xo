@@ -1,0 +1,13 @@
+.bar .icon{
+    padding:5px;
+    margin-top:5px;
+    font-size:26px;
+    margin-right:-5px;
+}
+.navigate-right .media-object{
+    max-width:25%;
+}
+.media-body h3{
+    font-size:18px;
+    font-weight:normal;
+}

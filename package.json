@@ -18,6 +18,7 @@
   "license": [{"type": "MIT"}],
   "devDependencies": {
     "connect": "*",
+    "serve-static":"*",
     "grunt-contrib-jshint":"*",
     "grunt-contrib-qunit":"*",
     "grunt":"*",

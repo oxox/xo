@@ -1,8 +1,8 @@
 ﻿var connect = require('connect')
-  , http = require('http');
+  , http = require('http')
+  , serveStatic = require('serve-static');
 
 var app = connect()
-  .use(connect.static(__dirname))
-  .use(connect.directory(__dirname));
+  .use(serveStatic(__dirname));
 
-http.createServer(app).listen(3000);
+app.listen(3000);

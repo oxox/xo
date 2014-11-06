@@ -13,9 +13,9 @@
 
 			this._isInActive = false;
 			this._idx = 0;
-			this.$_inner = $($el.find('.mod_nav_inner'));
-			this.$_item = $el.find('li');
-			this.$_inner.width((this.$_item.length + 1) * 72);
+			this.$_inner = $el.find('.mod_nav_inner');
+			this.$_item = $el.find('a');
+			this.$_inner.width((this.$_item.length + 1) * 80);
 			this._ow = this.$_inner.width();       	
         	this._maxIdx = this.$_item.length - 1;
         	this._minIdx = 0;

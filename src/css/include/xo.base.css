@@ -1,54 +1,19 @@
-/*===== RESET =====*/
-*{
-    margin:0;
-    padding:0;
-    border:0 none;
-    background:transparent;
-    vertical-align:baseline;
-}
-html,body{display: block;height:100%;}
-article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block;}
-
 body{
     -webkit-text-size-adjust:100%;
     -webkit-user-select:none;
     -webkit-tap-highlight-color:rgba(0,0,0,0);
     -webkit-touch-callout:none;
     word-break:break-word;
-    color:#666;
-    min-width: 320px;
-    margin:0 auto;
-    /*position: relative;*/
 }
-
-body,input,button,select,textarea,table{
-    font:14px/1.5 Helvetica,Arial,sans-serif;
-}
-
-li{list-style:none;}
-
 input,select,textarea{
     -webkit-user-select:auto;
     -webkit-appearance:none;
 }
-
-a{
-    color:#666;
-    text-decoration:none;
-}
-    
-
-h1{font-size:20px;}
-h2,h3,h4,h5,h6{font-size:14px;}
-
 *, ::after, ::before {
     -webkit-tap-highlight-color: transparent;
     -webkit-user-select: none;
     -webkit-touch-callout: none;
     -webkit-user-drag: none;
-}
-::-webkit-input-placeholder {
-    color: #E0E0E0;
 }
 input, textarea{
     -webkit-user-select: text;
@@ -56,14 +21,14 @@ input, textarea{
 }
 
 /*===== S 页面框架 =====*/
-.xo_page,.xo_page_inner{
+.xpage,.xpage_inner{
     position:absolute;
     left:0;
     top:0;
     width: 100%;
     height:100%;
     overflow: hidden;
-    z-index: 10;
+    z-index: 8;
     /*
     -webkit-transition-property: -webkit-transform;
     -webkit-transform-origin-x: 0;
@@ -73,10 +38,10 @@ input, textarea{
     -webkit-backface-visibility: hidden;
     */
 }
-.xo_page_inner{
+.xpage_inner{
     background-color: #fff;
 }
-.xo_section {
+.xsection {
     position: absolute;
     left: 0;
     right: 0;
@@ -84,10 +49,10 @@ input, textarea{
     bottom: 0;
 }
 /* 无header页面 */
-.xo_page1 .xo_section{
+.xpage1 .xsection{
     top:0;
 }
-.xo_scroll {
+.xscroll {
     overflow: auto; 
     -webkit-overflow-scrolling: touch;
     -moz-overflow-scrolling: touch;
@@ -95,14 +60,14 @@ input, textarea{
     -o-overflow-scrolling: touch;
     overflow-scrolling: touch;
 }
-.xo_scrollx {
+.xscrollx {
     overflow-y: hidden;
 }
-.xo_scrolly {
+.xscrolly {
     overflow-x: hidden;
 }
 
-.xo_mask{
+.xmask{
     position:absolute;
     z-index: 11;
     left:0;
@@ -113,16 +78,10 @@ input, textarea{
     -webkit-backface-visibility:hidden;
 }
 
-.xo_page,.xo_section,.xo_aside,.xo_popup{display: none;}
+.xpage,.xsection,.xaside,.xpopup{display: none;}
 .current,.inmotion{display: block!important;}
-.current{z-index: 11;}
-.pull-right {
-  float: right !important;
-}
+.current{z-index: 9;}
 
-.pull-left {
-  float: left !important;
-}
 .show {
   display: block !important;
 }

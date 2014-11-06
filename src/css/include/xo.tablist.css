@@ -1,0 +1,22 @@
+.tabitem{
+    display:inline-block;
+    width:33%;
+    text-align:center;
+    margin-bottom:15px;
+}
+.tabitem:nth-child(3n-1) {
+    width: 34%;
+}
+.tabicon{
+    display:block;
+    font-style:normal;
+    margin:0 auto 5px;
+}
+.tabtitle{
+    display:block;
+    height:22px;
+    line-height:22px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
