@@ -36,7 +36,7 @@ XO('View',function($,C){
 
             // local inline template
             if(!this.isRemote){
-                this.tpl = document.getElementById(this.dir);
+                this.tpl = document.getElementById(this.dir).innerHTML;
                 XO.Event.trigger(XO.EVENT.View.InitedTemplate,[this]);
                 cbk&&cbk(null,this);
                 return;
@@ -71,6 +71,10 @@ XO('View',function($,C){
                 }
             });
         },
+        destroy:function(){
+            this.remove();
+            this.isRendered = false;
+        }, 
         //render a page with specified data
         render:function(data){
             
@@ -95,6 +99,8 @@ XO('View',function($,C){
             if(XO.Animate.animateIn(this,aniObj,cfg)&&!noReplaceCurrentView){
                 XO.View.setCurView(this,this.pid);
             }
+
+            XO.ViewManager.push(this);
         },
         /**
          * 隐藏视图
@@ -157,6 +163,7 @@ XO('View',function($,C){
         };
         tempView.isInited = true;
         this.caches[tempView.id] = tempView;
+        
         if(tempView.alias){
             (!this[tempView.alias]) && (this[tempView.alias]=tempView);
         }

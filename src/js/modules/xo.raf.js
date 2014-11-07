@@ -9,8 +9,8 @@
         length,
         currTime,
         timeToCall,
-        requestAnimFrame0,
-        cancelAnimFrame0;
+        requestAnimFrame0 = W['requestAnimationFrame'],
+        cancelAnimFrame0 = W['cancelAnimationFrame'];
  
     for(x = 0, length = vendors.length; x < length && !requestAnimFrame0; ++x) {
         requestAnimFrame0 = W[vendors[x]+'RequestAnimationFrame'];

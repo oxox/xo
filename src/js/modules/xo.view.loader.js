@@ -4,6 +4,7 @@ XO.View.define({
     alias:'uiLoader',
     dir:null,//dir为null说明为页面中已经存在的视图
     isLoading:false,
+    excludeFromViewManager:true,
     show:function(){
         if(this.isLoading)
             return;

@@ -3,6 +3,7 @@ XO.View.define({
     vid:'mask',
     alias:'uiMask',
     dir:null,//dir为null说明为页面中已经存在的视图
+    excludeFromViewManager:true,
     isMasking:false,
     show:function(){
         if(this.isMasking)

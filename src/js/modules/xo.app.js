@@ -29,6 +29,7 @@ XO('App',function($,C){
             defaultAnimation:'none',
             trackScrollPositions:true,
             useTouchScroll:true,
+            maxViewSizeInDom:2,
             debug:false,
             defaultPage:C.DEFAULT.PAGE,
             defaultView:C.DEFAULT.VIEW,

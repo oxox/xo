@@ -23,12 +23,14 @@
     //extensions
     $.extend(XO,{
         $:$,
-        version:'1.0.0',
-        author:'http://oxox.io',
+        version:'1.0.1',
+        id:'XO',
+        author:'XSin Studio',
         $doc:$(document),
         $body:$(document.body),
         $win:$(window),
-        EVENT:{},//EVENT namespace
+        EVENT:{},//EVENT literary
+        EVENT_NS:'.XO',//name
         Base:{},//Base namespace
         LS:localStorage,
         toHtml:function(tpl,obj,ext){
@@ -52,11 +54,11 @@
         exposeEvent : function(name){
             if($.isArray(name)){
                 for(var i=0,j=name.length;i<j;i++){
-                    XO.EVENT[this.id][name[i]]='on'+this.id+name[i];//+'.XO';;
+                    XO.EVENT[this.id][name[i]]='on'+this.id+name[i]+XO.EVENT_NS;
                 }
                 return;
             };
-            XO.EVENT[this.id][name]='on'+this.id+name;//+'.XO';//zepto不支持命名空间
+            XO.EVENT[this.id][name]='on'+this.id+name+XO.EVENT_NS;
         },
         disposeEvent : function(name){
             XO.$body.off(XO.EVENT[this.id][name]);
@@ -68,7 +70,7 @@
             };
         },
         getLSKey:function(privateKey){
-            return (['XO',this.id,privateKey].join('.'));
+            return ([XO.id,this.id,privateKey].join('.'));
         }
     };
 
