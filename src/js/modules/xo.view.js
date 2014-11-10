@@ -22,6 +22,10 @@ XO('View',function($,C){
         },
         initFromDom:function(){
             this.el = document.getElementById(this.id);
+            if( this.el === null ){
+                XO.warn('View404','View with id "'+this.id+'" not found!');
+                return;
+            };
             this.$el = $(this.el);
             this.animation = this.animation||(this.el.getAttribute[C.ATTR.ANIMATION]||XO.App.opts.defaultAnimation);
             XO.Event.trigger(this,XO.EVENT.View.Inited,[this]);
