@@ -36,7 +36,7 @@
     .mod_carousel_dots,.mod_carousel_dotbg{
         position: relative;
         z-index: 2;
-        width: 56px;
+        width: 44px;
         height: 16px;
         margin: 0px auto;
         overflow: hidden;
@@ -46,23 +46,25 @@
         z-index: 1;
         top:0;
         left:50%;
-        margin-left:-28px;
+        margin-left:-22px;
     }
-    .mod_carousel_dotbg_inner{width:60px;height:16px;}
+    .mod_carousel_dotbg_inner{width:48px;height:16px;}
     .mod_carousel_dotbg_inner i{
         display: inline-block;
         float:left;
         margin-right: 4px;
-        width: 16px;
-        height: 16px;
-        border-radius: 8px;
+        width: 12px;
+        height: 12px;
+        margin-top:2px;
+        border-radius: 6px;
         background: #eee;
     }
     .mod_carousel_dot{
         position: absolute;
-        width: 16px;
-        height: 16px;
-        border-radius: 8px;
+        width: 12px;
+        height: 12px;
+        border-radius: 6px;
+        top:2px;
         background: #1d7ad9;
     }
     .mod_carousel_control span{overflow:hidden; display:inline-block; margin:0 2px; width:8px; height:8px; border-radius:4px; background-color:#000; line-height:200px;}

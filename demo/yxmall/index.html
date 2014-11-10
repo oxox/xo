@@ -45,7 +45,7 @@
 
     <!--S 遮罩-->
     <!--页面切换过程中遮罩用于屏蔽用户操作-->
-    <div id="xoview-common-mask" class="xo_mask hide"></div>
+    <div id="xoview-common-mask" class="xmask hide"></div>
     <!--E 遮罩-->
 
     <!--S loader-->
@@ -69,13 +69,6 @@
     </div>
 
     <!--<script src="http://weinre.qq.com/target/target-script-min.js#levinhuang"></script>-->
-    <!--3party libs-->
-    <!--
-    <script src="../../src/js/libs/fastclick.js"></script>
-    <script src="../../src/js/libs/zepto.min.js"></script>
-    <script src="../../src/js/libs/underscore-min.js"></script>
-    <script src="../../src/js/libs/backbone-min.js"></script>
-    <script src="../../src/js/libs/hogan-2.0.0.js"></script>
     
     <!--XO framework-->
     <!--
@@ -87,12 +80,13 @@
     <script src="../../src/js/modules/xo.plugin.js"></script>
     <script src="../../src/js/modules/xo.controller.js"></script>
     <script src="../../src/js/modules/xo.view.js"></script>
+    <script src="../../src/js/modules/xo.viewManager.js"></script>
     <script src="../../src/js/modules/xo.view.mask.js"></script>
     <script src="../../src/js/modules/xo.view.loader.js"></script>
     <script src="../../src/js/modules/xo.router.js"></script>
     <script src="../../src/js/modules/xo.animate.js"></script>
     <script src="../../src/js/modules/xo.app.js"></script>
-    
+    -->
     
     <!--app biz code-->
     <!--
@@ -113,7 +107,7 @@
     -->
 
     <script src="../../src/js/libs/zepto.min.js"></script>
-    <script src="../../src/js/libs/hogan-2.0.0.js"></script>
+    <script src="../../src/js/libs/hogan-3.0.1.js"></script>
     <script src="../../dist/js/xo.debug.js"></script>
     <script src="js/yxmall.debug.js"></script>
 
@@ -122,7 +116,7 @@
             debug:true,
             useTransform3D:true,
             useFastTouch:true,
-            defaultAnimation:'pokerleft'
+            defaultAnimation:'slideleft'
         });
         $('#J_navslide').navSlide({
             useCss3:true,

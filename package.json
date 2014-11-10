@@ -9,11 +9,11 @@
     "xojs"
   ],
   "description": "HTML5 WebApp Framework.",
-  "repository": "git://github.com/oxox/xo.git",
-  "homepage": "http://oxox.io/xo",
+  "repository": "git://github.com/xsin/xo.git",
+  "homepage": "http://xsin.in/xo",
   "author": {
-    "name": "oxox.io",
-    "site": "http://oxox.io"
+    "name": "XSIN Studio",
+    "site": "http://xsin.in"
   },
   "license": [{"type": "MIT"}],
   "devDependencies": {

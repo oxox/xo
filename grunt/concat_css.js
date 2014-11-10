@@ -1,6 +1,7 @@
 module.exports = {
     dist: {
         src: [
+            'src/css/ratchet.css',
             'src/css/include/xo.base.css',
             'src/css/include/xo.3dspec.css',
             'src/css/include/xo.loader.css',

@@ -20,6 +20,7 @@ module.exports = {
             'src/js/modules/xo.plugin.js',
             'src/js/modules/xo.controller.js',
             'src/js/modules/xo.view.js',
+            'src/js/modules/xo.viewManager.js',
             'src/js/modules/xo.view.mask.js',
             'src/js/modules/xo.view.loader.js',
             'src/js/modules/xo.view.logger.js',

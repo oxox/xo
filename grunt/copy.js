@@ -4,5 +4,23 @@ module.exports = {
         cwd:'../../js/PreloadJS/lib/',
         src:'preloadjs-0.4.1.combined.js',
         dest:'src/js/libs/'
+    },
+    ratchet_css:{
+        expand:true,
+        cwd:'../../ui/ratchet/dist/css/',
+        src:'*.css',
+        dest:'src/css/'
+    },
+    ratchet_fonts:{
+        expand:true,
+        cwd:'../../ui/ratchet/dist/fonts/',
+        src:'ratchicons.*',
+        dest:'src/fonts/',
+    },
+    dist_ratchet_fonts:{
+        expand:true,
+        cwd:'../../ui/ratchet/dist/fonts/',
+        src:'ratchicons.*',
+        dest:'dist/fonts/'
     }
 };
