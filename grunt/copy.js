@@ -22,5 +22,12 @@ module.exports = {
         cwd:'../../ui/ratchet/dist/fonts/',
         src:'ratchicons.*',
         dest:'dist/fonts/'
+    },
+    //https://github.com/lepture/yue.css
+    yue_css:{
+        expand:true,
+        cwd:'../../ui/yue.css/',
+        src:'yue.css',
+        dest:'src/css/'
     }
 };

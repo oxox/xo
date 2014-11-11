@@ -19,7 +19,9 @@ input, textarea{
     -webkit-user-select: text;
     outline:none;
 }
-
+.content-pullin{
+    padding:10px;
+}
 /*===== S 页面框架 =====*/
 .xpage,.xpage_inner{
     position:absolute;

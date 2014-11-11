@@ -1,19 +1,145 @@
-.page-header {
-  padding-bottom: 9px;
-  margin: 40px 0 20px;
-  border-bottom: 1px solid #eee;
+.yue {
+    position: relative;
+    z-index: 1;
 }
-p {
-  margin: 0 0 10px;
+
+/* 修复顶部带有Fixed导航锚点定位不准确问题 */
+.yue h2,
+.yue h3,
+.yue h4,
+.yue h5,
+.yue h6 {
+    position: relative;
+/*    -webkit-background-clip:padding-box;
+    -moz-background-clip:padding;
+    background-clip:padding-box;
+    border-top: 80px solid transparent;
+    margin-top: -70px; */
 }
-.lead {
-  margin-bottom: 20px;
-  font-size: 16px;
-  font-weight: 200;
-  line-height: 1.4;
+
+/* ==========================================================================
+   CSS 自动生成标题编号
+   ========================================================================== */
+
+/**
+ * 传统中文排版有『章』『节』『卷』『篇』『辑』『集』『部』等概念，
+ * 在网页排版中.yue.css 选取如下规则：
+ * 第1级--------章--------1
+ * 第2级--------节--------1.1
+ * 第3级--------节--------1.1.1
+ * 第4级--------节--------1.1.1.1
+ * -----------------------条--------1.
+ * -----------------------款--------1)
+ * -----------------------项--------(1)
+ * 所有标点均为西文标点
+ * 需要注意的是「条」比「章」后面多了「.」，「章」亦可用汉字代替，例如：「一、」
+ * Firefox 有私有属性分别实现简体和繁体的汉字编号，
+   -moz-simp-chinese-formal(大写)/-moz-simp-chinese-informal(小写)，
+   -moz-trad-chinese-formal(大写)/-moz-trad-chinese-informal(小写)，
+   参照：http://lists.w3.org/Archives/Public/public-html-ig-zh/2010Sep/0011.html
+   生成类似如下格式：
+
+   壹、章
+   ----壹之一、节
+   ----壹之二、节
+
+   贰、章
+   ----贰之一、节
+   ----贰之二、节
+   --------贰之二之一、节
+   --------贰之二之二、节
+
+ * @doc: 《科技文献的章节编号方法》（CY/T35-2001）
+ */
+
+.yue h2:before,
+.yue h3:before,
+.yue h4:before,
+.yue h5:before,
+.yue h6:before {
+    margin-right: .5em;
+    color: #888;
 }
-@media (min-width: 768px) {
-  .lead {
-    font-size: 21px;
-  }
+
+.yue {
+    counter-reset: chapter section subsection;
 }
+
+/* --------------------------------------------------------------------------
+   标题自动生成编号
+   -------------------------------------------------------------------------- */
+/**
+ * 提供从h2-h4 三个级别的标题序号
+ * 最终生成如下格式编号：
+        1.
+        1.1
+        1.1.1
+ * 或者在容器上加上 class="cjk"
+ * 将生成如下格式编号：
+        一、
+        1.1
+        1.1.1
+ */
+
+/**
+ * 一级标题（章）
+ * 输出 1
+ */
+.yue h2 {
+    counter-reset: section;
+}
+
+.yue h2:before {
+    content: counter(chapter);
+    counter-increment: chapter;
+}
+
+/**
+ * 一级标题(汉字)
+ * 输出 一、
+ */
+
+.cjk h2 {
+    counter-increment: section;
+}
+
+.cjk h2:before {
+    content: counter(chapter, cjk-ideographic)'、';
+    content: counter(chapter, cjk-cjk-decimal)'、';
+    margin-right: .25em;
+}
+
+/**
+ * 二级标题（节）
+ * 输出 1.1
+ */
+.yue h3 {
+    counter-reset: subsection;
+}
+
+.yue h3:before {
+    content: counter(chapter) "." counter(section);
+    counter-increment: section;
+}
+
+/**
+ * 三级标题（子节）
+ * 输出 1.1.1
+ */
+.yue h4:before {
+    content: counter(chapter) "." counter(section) "." counter(subsection);
+    counter-increment: subsection;
+}
+
+
+
+/**
+ * 移动端阅读优化
+ */
+
+@media (max-width: 800px) {
+    .yue {
+        font-size: 16px;
+    }
+}
+
