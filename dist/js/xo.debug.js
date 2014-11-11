@@ -842,7 +842,7 @@
         $body:$(document.body),
         $win:$(window),
         EVENT:{},//EVENT literary
-        EVENT_NS:'.XO',//name
+        EVENT_NS:'_XO',//name
         Base:{},//Base namespace
         LS:localStorage,
         toHtml:function(tpl,obj,ext){
@@ -2071,10 +2071,10 @@ XO('support',function($,C){
 XO('Event',function($){
     this.on= function(fullName,handler){
         if(arguments.length<=2){
-            XO.$body.bind(fullName,handler);
+            XO.$body.on(fullName,handler);
             return;
         }
-        $(arguments[0]).bind(arguments[1],arguments[2]);
+        $(arguments[0]).on(arguments[1],arguments[2]);
     };
     this.trigger = function(fullName,args){
         if(arguments.length<=2){
@@ -2095,6 +2095,7 @@ XO('Event',function($){
     };
 
 });
+
 //plugin base module
 XO('plugin',function($,C){
     //插件的公共方法

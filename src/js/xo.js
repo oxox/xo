@@ -30,7 +30,7 @@
         $body:$(document.body),
         $win:$(window),
         EVENT:{},//EVENT literary
-        EVENT_NS:'.XO',//name
+        EVENT_NS:'_XO',//name
         Base:{},//Base namespace
         LS:localStorage,
         toHtml:function(tpl,obj,ext){

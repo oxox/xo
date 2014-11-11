@@ -1,10 +1,10 @@
 XO('Event',function($){
     this.on= function(fullName,handler){
         if(arguments.length<=2){
-            XO.$body.bind(fullName,handler);
+            XO.$body.on(fullName,handler);
             return;
         }
-        $(arguments[0]).bind(arguments[1],arguments[2]);
+        $(arguments[0]).on(arguments[1],arguments[2]);
     };
     this.trigger = function(fullName,args){
         if(arguments.length<=2){
