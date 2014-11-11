@@ -28,7 +28,8 @@ XO('View',function($,C){
             };
             this.$el = $(this.el);
             this.animation = this.animation||(this.el.getAttribute[C.ATTR.ANIMATION]||XO.App.opts.defaultAnimation);
-            XO.Event.trigger(this,XO.EVENT.View.Inited,[this]);
+            //XO.Event.trigger(this,XO.EVENT.View.Inited,[this]);
+            XO.Event.trigger(XO.EVENT.View.Inited,[this]);
             this.onRender&&this.onRender.call(this);
         },
         initFromRemote:function(cbk){

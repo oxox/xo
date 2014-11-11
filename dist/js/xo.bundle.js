@@ -1,5 +1,5 @@
 /*!
- *  xo v1.0.1 - 11/10/2014
+ *  xo v1.0.1 - 11/11/2014
  *  http://xsin.in/xo
  *  Copyright (c) 2014 XSIN Studio - Licensed MIT 
  */
@@ -5152,7 +5152,8 @@ XO('View',function($,C){
             };
             this.$el = $(this.el);
             this.animation = this.animation||(this.el.getAttribute[C.ATTR.ANIMATION]||XO.App.opts.defaultAnimation);
-            XO.Event.trigger(this,XO.EVENT.View.Inited,[this]);
+            //XO.Event.trigger(this,XO.EVENT.View.Inited,[this]);
+            XO.Event.trigger(XO.EVENT.View.Inited,[this]);
             this.onRender&&this.onRender.call(this);
         },
         initFromRemote:function(cbk){
