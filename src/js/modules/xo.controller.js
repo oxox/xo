@@ -110,7 +110,9 @@ XO('Controller',function($,C){
     this.invoke = function(pid,vid,param){
         //获取用户定义的action，如果没有则使用默认的action。参考defineDefaultAction
         var controller = XO.Controller[pid],
-            action =controller?(controller[vid]||controller[XO.CONST.DEFAULT.DEFAULT_ACTION_PREFIX+vid]):null;
+            action =controller?(controller[vid]||controller[XO.CONST.DEFAULT.DEFAULT_ACTION_PREFIX+vid]):null,
+            now = new Date(),
+            todayStr = now.getFullYear()+"-"+now.getMonth()+"-"+now.getDate()+"";
         
         ////如果用户没有写controller的js，也没有写view的js，则自动生成controller和view，使用默认action显示静态模板。适用于纯静态app
         if( !action && XO.App.opts.autoControllerAndView ){
@@ -118,7 +120,7 @@ XO('Controller',function($,C){
             XO.View.autoView({
                 pid:pid,
                 vid:vid,
-                version:(param&&param.version)||new Date().getTime()
+                version:(param&&param.version)||todayStr
             });
             action = this.defineDefaultAction(pid,vid);
         }
